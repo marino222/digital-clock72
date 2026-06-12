@@ -1,0 +1,62 @@
+# ─────────────────────────────────────────────────────────────
+# Digital Kinetic Clock Array — .gitignore
+# Covers: .NET (Master_Engine), PlatformIO/C++ (Slave_Firmware),
+#         KiCad (Node_PCB), and common OS/editor cruft.
+# ─────────────────────────────────────────────────────────────
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Editors / IDEs ----
+.vscode/
+.vs/
+.idea/
+*.swp
+*~
+
+# ---- .NET / C# (Master_Engine) ----
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+project.lock.json
+artifacts/
+.nuget/
+
+# ---- PlatformIO / C++ (Slave_Firmware) ----
+.pio/
+.pioenvs/
+.piolibdeps/
+*.elf
+*.bin
+*.uf2
+*.hex
+*.map
+
+# ---- KiCad (Node_PCB) ----
+# Keep source: .kicad_pro, .kicad_sch, .kicad_pcb, symbol/footprint libs.
+# Ignore backups, caches, and generated outputs.
+*-backups/
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.kicad_prl
+fp-info-cache
+*.000
+*.net
+# Generated fabrication outputs (regenerated from source on demand)
+gerbers/
+production/
+*.zip
+
+# ---- Docker ----
+*.env
+.env.local
+
+# ---- Logs / temp ----
+*.log
+tmp/
+temp/
