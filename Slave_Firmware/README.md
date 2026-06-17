@@ -26,5 +26,5 @@ Firmware for a single **Pixel Node** — one **RP2040** driving one **GC9A01** r
 
 `power rails (3.3 V, 1.1 V) → BOOTSEL/USB enumeration → flash blink → display init → 60 FPS DMA render → RS485 loopback`
 
-See [`docs/PROJECT_OVERVIEW.md`](../docs/PROJECT_OVERVIEW.md) §3.2 and
-[`docs/PCB_ARCHITECTURE.md`](../docs/PCB_ARCHITECTURE.md) for full context.
+See the root [`README.md`](../README.md) (system architecture) and
+[`Node_PCB/README.md`](../Node_PCB/README.md) (hardware this firmware runs on) for full context.

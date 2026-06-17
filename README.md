@@ -1,176 +1,153 @@
-# Digital Kinetic Clock Array (`digital-clock72`)
+# Digital Kinetic Art Clock 
 
-A wall-mounted **array of round LCD displays** that act as a single coordinated canvas —
-showing the time, geometric/animated patterns, and array-wide games (e.g. Snake crawling
-across the whole grid) at a smooth, **synchronized 60 FPS** on every display.
+This project is the digital successor to my [ClockClock24 Project](https://github.com/marino222/clockclock24-replica), a replica of the kinetic art piece by [Humans Since 1982](https://www.humanssince1982.com/en-int). The original features physical clock hands driven by stepper motors, which brings challenges around power supply and makes scaling difficult.
 
-It is the **digital successor** to a completed mechanical kinetic clock (a ClockClock-style
-144-stepper / 72-clock array). Trading moving parts for pixels removes mechanical wear and
-massively expands what the array can show — any graphic, not just clock hands.
+This version replaces the clock hands with round LCD displays, which opens up new possibilities beyond just showing the time: animations, a snake game across all displays, or custom widgets. Since the digital version draws significantly less current and is expected to cost less overall, the target scale is a 12×6 display array rather than the 8×3 clocks of the predecessor.
 
 > **Status:** In active design / hardware bring-up. The software components are conceptual;
-> the node PCB is in design. See [Roadmap](#roadmap) and [Status](#component-status).
+> the node PCB is in design. See [Roadmap](#roadmap) and [Component status](#repository-layout--component-status).
 
 ---
 
 ## Table of contents
 
+- [Vision](#vision)
 - [Concept at a glance](#concept-at-a-glance)
-- [System architecture](#system-architecture)
-- [The core idea — state broadcast, not pixel streaming](#the-core-idea--state-broadcast-not-pixel-streaming)
-- [Repository layout](#repository-layout)
-- [Component status](#component-status)
 - [Key decisions](#key-decisions)
+- [How it works](#how-it-works)
+- [Repository layout & component status](#repository-layout--component-status)
 - [Roadmap](#roadmap)
 - [Open questions](#open-questions)
-- [Documentation](#documentation)
-- [Getting started](#getting-started)
-- [License](#license)
+
+---
+
+## Vision
+
+My goal is to build a wall mounted array of round LCD displays that act together as one big synchronized screen. Each display sits in its own spot in a grid, similar to the clocks in the predecessor, but instead of physical hands every spot now has its own small screen.
+
+At first, the array will simply show the time. But since every spot is now a real screen and not just a pair of clock hands, I plan to add more features over time. This includes smooth animations where the hands ease in and out instead of jumping, geometric patterns that move across the whole grid, a snake game that can be played across all displays at once, and small widgets like weather or notifications.
+
+One central computer (likely a Raspberry Pi) will control the whole array and decide what should be shown. It sends this information to every display, and each display takes care of showing its own part of the picture.
 
 ---
 
 ## Concept at a glance
 
+Here is the short version, before going into the details.
+
 | | |
 |---|---|
-| **What** | A scalable grid of 1.28" round LCD "pixels," each its own microcontroller node |
-| **Brain** | One Raspberry Pi 3 running C# / .NET 8, broadcasting global state at 60 Hz |
-| **Node** | 1× bare RP2040 + 1× GC9A01 round LCD on a small custom PCB |
-| **Bus** | Wired half-duplex **RS485** multidrop, daisy-chained node to node |
-| **Scale** | **3×3 (9-node) pilot → 24 → 72**, architecturally scalable to ~250 with no redesign |
+| **What** | A scalable grid of 1.28" round LCD displays, each with its own microcontroller |
+| **Master controller** | One Raspberry Pi 3 running C# / .NET 8, broadcasting global state at 60 FPS |
+| **Slave node** | 1× bare RP2040 + 1× GC9A01 round LCD on a small custom PCB |
+| **Bus** | Wired half-duplex **RS485**, daisy-chained node to node |
 | **Principle** | One identical, fully JLCPCB-assembleable board, replicated N times |
-
----
-
-## System architecture
-
-A hybrid **"brain + many renderers"** design. High-level logic lives in one capable
-computer; pixel rendering is distributed to one small microcontroller per display.
-
-```
-        ┌───────────────────────────────────────────────┐
-        │  MASTER — "The Brain"  (Raspberry Pi 3)         │
-        │  • Headless Linux, C# / .NET 8 (Dockerized)     │
-        │  • Time sync, global vector math, game logic    │
-        │  • Web UI for control/config                     │
-        │  • Read-only filesystem (OverlayFS) for power-   │
-        │    cut resilience (appliance behaviour)          │
-        └───────────────────────┬───────────────────────-┘
-                                │  RS485 bus (broadcast)
-                                │  tiny state packets @ 60 Hz
-        ┌───────────┬───────────┼───────────┬───────────┐
-        ▼           ▼           ▼           ▼           ▼
-     ┌──────┐    ┌──────┐    ┌──────┐    ┌──────┐    ┌──────┐
-     │ NODE │    │ NODE │    │ NODE │    │ NODE │ …  │ NODE │   (9 → 24 → 72)
-     │RP2040+│   │  +   │    │  +   │    │  +   │    │  +   │
-     │GC9A01 │    │ LCD  │    │ LCD  │    │ LCD  │    │ LCD  │
-     └──────┘    └──────┘    └──────┘    └──────┘    └──────┘
-   Each node renders its own pixels locally from the shared global state.
-```
-
-- **Master ("Brain") — Raspberry Pi 3.** Owns everything *global*: wall-clock time and
-  sync, the math deciding what the whole array does, game state, and a web UI. A read-only
-  OverlayFS root makes random power cuts safe — it behaves like an appliance, not a PC.
-- **Slaves ("Renderers") — one MCU per display.** Each node holds a full double framebuffer
-  locally, renders at 60 FPS over SPI + DMA, reads its own address from the daisy chain,
-  and draws only its slice of the global picture.
-
-**Why the split:** a Linux Pi can't do real-time microsecond pixel timing across many
-displays; a microcontroller can't comfortably host the global C#/web/game logic. Splitting
-the two plays to each one's strength.
-
-Full system context → [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md).
-Full node hardware spec → [`docs/PCB_ARCHITECTURE.md`](docs/PCB_ARCHITECTURE.md).
-
----
-
-## The core idea — state broadcast, not pixel streaming
-
-The single most important architectural decision: **the master does not stream pixels.**
-It broadcasts **tiny state packets** (e.g. `[Global_Angle: 45]`, `[Snake_X: 12, Snake_Y: 2]`)
-at 60 Hz over the bus. Each node intercepts the global state, reads its own ID, and
-**renders the actual pixels locally**.
-
-- **Bandwidth:** streaming full frames to dozens of 240×240 displays is enormous; a state
-  packet is a handful of bytes.
-- **Sync:** synchronization lives at the *state* layer, so adding nodes doesn't hurt sync —
-  every node receives the same broadcast at the same instant.
-- **Scalability:** going from 9 to 72 renderers changes nothing about the broadcast.
-
-Everything the array displays — time, patterns, games — is just a different *global state*
-the master broadcasts; nodes render whatever slice matches their position.
-
----
-
-## Repository layout
-
-```
-digital-clock72/
-├── README.md                 ← you are here (system & vision entry point)
-├── LICENSE                   ← MIT
-├── CONTRIBUTING.md
-├── docs/
-│   ├── PROJECT_OVERVIEW.md   ← system- & vision-level context (canonical)
-│   ├── PCB_ARCHITECTURE.md   ← node hardware spec, BOM, cost, bring-up (canonical)
-│   ├── DECISIONS.md          ← consolidated decision log (system + hardware)
-│   ├── ROADMAP.md            ← combined roadmap + hardware bring-up phases
-│   └── OPEN_QUESTIONS.md     ← open questions & items to resolve before production
-├── Master_Engine/            ← Gen-2 C#/.NET 8 Dockerized "brain" + web UI (conceptual)
-├── Slave_Firmware/           ← Gen-2 RP2040 rendering firmware, PlatformIO (conceptual)
-└── Node_PCB/                 ← Gen-2 single-node KiCad project (in design)
-```
-
-The two files in `docs/` are the **canonical, live source documents**; the sections in this
-README summarize them and link out. `DECISIONS.md`, `ROADMAP.md`, and `OPEN_QUESTIONS.md`
-consolidate material that is split across both source docs into single readable views.
-
-> **Gen-1 (mechanical) predecessor.** The completed ClockClock-style mechanical array
-> (`clockclock24-replica/` — 144 steppers / 72 clocks, full KiCad + PlatformIO + STLs) is
-> referenced as the project's predecessor but is **not** imported here; it lives in its own
-> project. This repository is Gen-2 (digital).
-
----
-
-## Component status
-
-| Component | Tech | Role | Status |
-|---|---|---|---|
-| **Master_Engine/** | C# / .NET 8, Docker, on Pi 3 | Global logic, time sync, vector math, games, web UI, RS485 broadcast | Conceptual |
-| **Slave_Firmware/** | C++ (PlatformIO), RP2040 | Framebuffer + SPI/DMA rendering, RS485 receive, local draw, auto-addressing | Conceptual |
-| **Node_PCB/** | KiCad | Single-node board (RP2040 + GC9A01 FPC + RS485 + power + USB-C/SWD) | In design |
-| Gen-1 mechanical | KiCad, PlatformIO, STL | Predecessor (144 steppers / 72 clocks) | Complete & functional (separate repo) |
-
-> **Architecture note:** the earlier "Smart Tile" concept (one MCU driving six displays)
-> was **superseded** by the **one-MCU-per-display** model — six full framebuffers don't fit
-> in one MCU's SRAM. The node-PCB design reflects the simpler, more scalable approach.
-> Rationale in [`docs/PCB_ARCHITECTURE.md`](docs/PCB_ARCHITECTURE.md) §1.
 
 ---
 
 ## Key decisions
 
-The highest-leverage choices, summarized. Full rationale and the complete log live in
-[`docs/DECISIONS.md`](docs/DECISIONS.md).
+The highest-leverage project-level choices. Hardware-specific decisions (MCU, display,
+comms transceiver, power rails, assembly method, etc.) are logged in
+[`Node_PCB/README.md`](Node_PCB/README.md) next to the rationale they belong to.
 
 | Decision | Choice | Primary reason |
 |---|---|---|
-| Topology | 1 MCU per display | Framebuffer RAM; trivial firmware; modular scaling |
-| MCU | Bare RP2040 (LCSC C2040) | No radio → no RF/cert; cheap; JLC-placeable; enough RAM |
-| Display | GC9A01 1.28", **FPC tail** | No 2nd PCB; flat mount; clean assembly |
-| Frame rate | 60 FPS, DMA + double buffer | Free per-display once RAM pressure is gone |
-| Comms | RS485, **1/8-unit-load transceiver** | Deterministic, native broadcast, scales to ~256 |
-| Master | Raspberry Pi 3, C#/.NET 8, Docker | Global logic awkward on an MCU, comfortable on a Pi |
-| Coordination | State broadcast, not pixel streaming | Tiny packets; sync at the state layer; scales cleanly |
-| Addressing | Daisy-chain auto-address (firmware) | No DIP switches; scales to any count |
-| Flashing | USB-C + BOOT (+ SWD pads) | PlatformIO workflow; SWD for recovery/debug |
-| Assembly | Full JLCPCB turnkey SMT | All parts in LCSC; no hand soldering |
+| Overall architecture | Hybrid **"brain + many renderers"** (master/slave) | Real-time pixel timing and global C#/web/game logic each belong on different hardware |
+| Master platform | **Raspberry Pi 3**, headless Linux, C# / .NET 8, Dockerized | Heavy global logic + web UI is awkward on an MCU, comfortable on a Pi |
+| Master resilience | **Read-only filesystem (OverlayFS)** | Random power cuts must not corrupt the SD card — appliance behaviour |
+| Coordination model | **State broadcast, not pixel streaming** | Tiny packets vs. huge frame streams; sync lives at the state layer; scales cleanly from 9 → 72 |
+| Broadcast rate | **60 Hz** global-state packets | Frame-locked smooth animation across the array |
+| Applications | Time, geometric/animated patterns, array-wide games (Snake) | All are just different *global states* the master broadcasts |
+| Target scale | **3×3 (9) pilot → 24 → 72** | "One identical node, replicated" — scale is a quantity decision, not a redesign |
+
+---
+
+## How it works
+
+To make the vision above work, the project splits the thinking and the drawing onto different controllers. One controller calculates the global image/animation and broadcasts these to the nodes. Each node controller then renders its individual pixels and displays them.
+
+```
+        ┌───────────────────────────────────────────────┐
+        │  MASTER (Raspberry Pi 3)                      │
+        │  • Headless Linux, C#                         │
+        │  • Time sync, global vector math, game logic  │
+        │  • Web UI for control/config                  │ 
+        └───────────────────────┬───────────────────────┘
+                                │  RS485 bus (broadcast)
+                                │  tiny state packets @ 60 FPS
+        ┌───────────┬───────────┼───────────┬───────────┐
+        ▼           ▼           ▼           ▼           ▼
+     ┌──────┐    ┌──────┐    ┌──────┐    ┌──────┐    ┌──────┐
+     │ NODE │    │ NODE │    │ NODE │    │ NODE │    │ NODE │  
+     │RP2040│    │  +   │    │  +   │    │  +   │    │  +   │
+     │GC9A01│    │ LCD  │    │ LCD  │    │ LCD  │    │ LCD  │
+     └──────┘    └──────┘    └──────┘    └──────┘    └──────┘
+   Each node renders its own pixels locally from the shared global state.
+```
+
+### The master and the slave nodes
+
+One computer, the master controller, runs the whole show. It keeps track of time, decides what the array should be displaying, and runs a simple web page so it can be controlled.
+
+Every screen has its own slave controller, together they make up a node. Each node holds the picture for its own screen and draws it fast enough to keep up with all the others. It also knows its own position in the grid, so it only draws its own little piece of the bigger picture.
+
+The work is split this way because one controller can think for the whole array, but it cannot draw fast enough on dozens of screens by itself. And a tiny slave controller is fast enough to draw one screen, but it is too small to run all the planning logic. Splitting the work lets both sides do what they are good at.
+
+There is also a hard numeric reason the nodes have to render locally, not just aconvenience. One screen is 240×240 pixels at 16-bit color (RGB565), so one full frame is 240 × 240 × 2 bytes ≈ **112.5 KiB**. The RP2040 on each node has 264 KiB of SRAM, so it comfortably fits a double buffer for its *own* screen (≈225 KiB) with room to spare. An earlier design idea was to create a cluster PCB, holding six displays and one MCU. This wouldn't work since the six buffer frames needed, would exceed the RP2040s SRAM. That is the actual reason the project is one MCU per display rather than one MCU per several displays. 
+
+Read more about the master controller in [`Master_Engine/README.md`](Master_Engine/README.md), about the nodes in [`Slave_Firmware/README.md`](Slave_Firmware/README.md), and about the
+hardware behind them in [`Node_PCB/README.md`](Node_PCB/README.md).
+
+### How the data is sent to the nodes
+
+Here is the idea that makes the whole array possible. The brain does not send a full picture to every screen, sixty times a second. That would be far too much data. Instead, it sends a tiny instruction, something like "the hand should now point at 45 degrees" or "the snake is now at position 12, 2." Every node controller receives the exact same tiny instruction at the exact same moment, and draws its own piece of the picture from it.
+
+The numbers explain why this is not just a nice idea but the only one that works. Streaming one full frame to one screen at 60 FPS is 112.5 KiB × 60 ≈ **6.6 MB/s**, for a single
+screen alone. For 9 nodes that is already ≈ 60 MB/s, at the full 72-node array it is ≈ 475 MB/s. A wired RS485 bus, the kind of connection this project uses, realistically carries somewhere in the low single-digit Mbit/s over a long daisy chain, several hundred times too little. A state instruction, on the other hand, is a handful of bytes sent once, at 60 Hz, no matter how many screens are listening. That gap is the entire reason the master only ever sends instructions, never pixels.
+
+This has three nice side effects. It needs very little data, since an instruction is just a handful of bytes instead of a full image. It keeps everything in sync automatically, since every screen hears the same instruction at the same time. And it scales easily, since adding more screens does not change how much data the brain has to send.
+
+To reliably send state instruction a Data Protocol needs to be defined. Read more about this in [`Master_Engine/README.md`](Master_Engine/README.md) and [`Slave_Firmware/README.md`](Slave_Firmware/README.md).
+
+### What actually will be displayed
+
+This instruction can describe anything, which is what makes the project exciting. So far the plan includes:
+
+- **Time:** the original purpose, digits and clock faces drawn across the grid.
+- **Geometric and animated patterns:** motion across the whole grid, with easing animations instead of sudden jumps.
+- **A snake game:** one game played across the entire array at once.
+- **Small widgets:** controlled from the brain's simple web page.
+
+---
+
+## Repository layout & component status
+
+```
+digital-clock72/
+├── README.md                 ← you are here (project-wide entry point & live doc)
+├── LICENSE                   ← MIT
+├── Master_Engine/             ← Gen-2 C#/.NET 8 Dockerized "brain" + web UI (conceptual)
+├── Slave_Firmware/            ← Gen-2 RP2040 rendering firmware, PlatformIO (conceptual)
+├── Node_PCB/                  ← Gen-2 single-node KiCad project + full hardware doc (in design)
+└── docs/                      ← images & datasheets only (created once the first asset exists)
+```
+
+| Path | Tech | Role | Status |
+|---|---|---|---|
+| **Master_Engine/** | C# / .NET 8, Docker, on Pi 3 | Global logic, time sync, vector math, games, web UI, RS485 broadcast | Conceptual |
+| **Slave_Firmware/** | C++ (PlatformIO), RP2040 | Framebuffer + SPI/DMA rendering, RS485 receive, local draw, auto-addressing | Conceptual |
+| **Node_PCB/** | KiCad | Single-node board (RP2040 + GC9A01 FPC + RS485 + power + USB-C/SWD) | In design |
+
+Each component folder has its own README. `Master_Engine/` and `Slave_Firmware/` keep
+theirs short (status + intended scope) since both are still conceptual; `Node_PCB/` carries
+the full hardware architecture write-up since that design work is actually underway.
 
 ---
 
 ## Roadmap
 
-Project-level milestones (detailed hardware bring-up phases in
-[`docs/ROADMAP.md`](docs/ROADMAP.md)):
+This is the project's running progress tracker — extend it as phases complete.
 
 1. **Prove a single display** at 60 FPS (Pico + dev board) and **measure power**.
 2. **Prove the bus** — two MCUs over RS485, master→slave state broadcast.
@@ -180,55 +157,28 @@ Project-level milestones (detailed hardware bring-up phases in
 6. **Scale** to 24, then 72, applying measured power and injection-point rules.
 7. **Add applications** (patterns, Snake) and the web UI on top of the proven transport.
 
-**Bring-up sequence at a glance:**
-`1a display perf → 1b RS485 link (+ measure power) → 2 FPC samples → 3 single-node board → 4 3×3 pilot → 5 scale`
+The detailed, phase-by-phase **hardware bring-up plan** (breadboard → FPC samples →
+single-node board → 3×3 pilot → scale, each with its own pass/fail gate) lives in
+[`Node_PCB/README.md`](Node_PCB/README.md), since it's specific to the node hardware.
 
 ---
 
 ## Open questions
 
-Tracked in full (with hardware checklist) in
-[`docs/OPEN_QUESTIONS.md`](docs/OPEN_QUESTIONS.md). The big ones:
+- **Final scope / scale commitment.** Pilot → 24 → 72 is confirmed as the path; the full 72
+  is **gated on pilot results and assembly capacity**.
+- **Power at scale.** The dominant unknown. Resolved by *early measurement* (Phase 1a) —
+  see the hardware checklist in [`Node_PCB/README.md`](Node_PCB/README.md). Every power
+  figure in that doc is a placeholder until then.
+- **Broadcast protocol definition.** Exact packet format and per-mode state schema (clock,
+  pattern, Snake) — to be designed alongside `Master_Engine` and `Slave_Firmware`.
+- **Addressing scheme.** Daisy-chain auto-addressing chosen over DIP switches; to be
+  *implemented* in firmware.
+- **Time-sync precision.** How tightly nodes must align for visually seamless animation.
 
-- **Power at scale** — the dominant unknown; resolved by *early measurement*. All power
-  numbers in the docs are placeholders until measured in Phase 1a.
-- **Broadcast protocol definition** — exact packet format and per-mode state schema (clock,
-  pattern, Snake), to be designed alongside Master_Engine and Slave_Firmware.
-- **Time-sync precision** — how tightly nodes must align for visually seamless animation.
-- **GC9A01 FPC tail spec** — pin count / pitch / contact orientation must be confirmed from
-  *physical samples* before the PCB is finalized (the most common mistake on this board type).
-- **Final scope** — pilot → 24 → 72 is the path; full 72 gated on pilot results and
-  assembly capacity.
-
----
-
-## Documentation
-
-| Document | What it covers |
-|---|---|
-| [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md) | System- and vision-level context: history, architecture, software, roadmap |
-| [`docs/PCB_ARCHITECTURE.md`](docs/PCB_ARCHITECTURE.md) | Node hardware spec: topology, MCU, display, comms, power, BOM/cost, assembly, bring-up |
-| [`docs/DECISIONS.md`](docs/DECISIONS.md) | Consolidated decision log with rationale (system + hardware) |
-| [`docs/ROADMAP.md`](docs/ROADMAP.md) | Combined project milestones and phased hardware bring-up plan |
-| [`docs/OPEN_QUESTIONS.md`](docs/OPEN_QUESTIONS.md) | Open questions and the checklist of items to resolve before production |
+The hardware-specific pre-production checklist (FPC tail confirmation, transceiver part
+number, bus connector, power distribution plan, etc.) lives in
+[`Node_PCB/README.md`](Node_PCB/README.md).
 
 ---
 
-## Getting started
-
-The hardware and firmware are still in design — there is nothing to build or flash yet.
-For now this repo is the **design home**. To follow or contribute to the design:
-
-1. Read [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md) for the vision and system model.
-2. Read [`docs/PCB_ARCHITECTURE.md`](docs/PCB_ARCHITECTURE.md) for the node hardware.
-3. See [`docs/OPEN_QUESTIONS.md`](docs/OPEN_QUESTIONS.md) for what still needs deciding.
-
-Each component folder (`Master_Engine/`, `Slave_Firmware/`, `Node_PCB/`) has its own README
-describing its intended scope and current status.
-
----
-
-## License
-
-[MIT](LICENSE) — see the `LICENSE` file. Applies to the software, firmware, and hardware
-design files in this repository.
