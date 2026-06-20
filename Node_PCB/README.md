@@ -10,7 +10,25 @@ over a shared wired bus. The full installation is simply this identical board re
 **full JLCPCB turnkey SMT assembly — no hand soldering**.
 
 For the system-level picture (why a master/slave split, what the master does, what this
-node fits into) see the root [`README.md`](../README.md).
+node fits into) see the root [`README.md`](../README.md). The hardware bring-up plan and
+test phases also live there, in the [Roadmap](../README.md#roadmap) — this README covers
+the board design only.
+
+---
+
+## Table of contents
+
+- [What's on the board](#whats-on-the-board)
+- [Key decisions](#key-decisions)
+- [Hardware deep dive](#hardware-deep-dive)
+- [Power](#power)
+- [Block diagram](#block-diagram)
+- [Cost estimate](#cost-estimate)
+- [Assembly](#assembly)
+- [Decision log](#decision-log)
+- [Open items before production](#open-items-before-production)
+
+---
 
 ## What's on the board
 
@@ -26,7 +44,7 @@ node fits into) see the root [`README.md`](../README.md).
 | Flashing | **USB-C** (+ 2×5.1 kΩ CC pulldowns + BOOT button) and **3 SWD pads** |
 | Protection | TVS across A/B (recommended) |
 
-## ⚠️ Before finalizing the layout
+### Before finalizing the layout
 
 - **Confirm the GC9A01 FPC tail** (pin count / pitch / contacts-up vs -down) from *physical
   samples* — it defines the FPC footprint and is the single most common mistake on this board.
@@ -36,127 +54,64 @@ node fits into) see the root [`README.md`](../README.md).
 
 ---
 
-## 1. Topology — One MCU per Display
+## Key decisions
 
-**Choice:** Each display gets its own dedicated microcontroller on its own small board.
-This replaces the earlier "Smart Tile" concept (one Pico 2 driving six displays).
+| Aspect | Choice | Why |
+|---|---|---|
+| Topology | One MCU per display | A 240×240 RGB565 frame is 112.5 KiB; six displays sharing one MCU (675 KiB) would exceed even an RP2350's 520 KiB SRAM and force fragile partial-buffer firmware. One MCU per display fits a full double buffer (225 KiB) easily. |
+| MCU | Bare RP2040 (LCSC C2040, QFN-56) | The wired bus means no radio is needed — deleting RF engineering, antenna design, and FCC/CE certification. 264 KiB SRAM comfortably double-buffers one display, and the part is fully JLCPCB-assembleable. |
+| Display | GC9A01 1.28", FPC-tail version | The bare FPC version skips a second carrier PCB and protruding pin header, so the display sits flat against the enclosure face. |
+| Flashing | USB-C + BOOT button + SWD pads | Matches the intended PlatformIO drag-and-drop workflow; the near-free SWD pads add a recovery path if USB enumeration ever breaks and enable real hardware debugging. |
+| Comms | RS485, 1/8-unit-load transceiver (e.g. THVD1450) | Deterministic and natively broadcast over a long daisy chain. A 1/8-UL part lets the *same* board scale from 24 → 72 → ~250 nodes with no respin — a standard 1-UL transceiver caps out around 32 nodes per segment. |
+| Power rail split | 3.3 V LDO for logic only; backlight on raw 5 V | The backlight is the dominant current draw; routing it through the 3.3 V LDO would make the regulator dissipate (5 − 3.3) V × I as heat and cook it. |
 
-**Why:**
-
-- **The framebuffer RAM math kills the multi-display approach.** One GC9A01 frame in
-  RGB565 = 240 × 240 × 2 = **112.5 KiB**. Six displays single-buffered = **675 KiB**,
-  which exceeds the RP2350's 520 KiB SRAM. The original "hold 6 full framebuffers"
-  premise was never feasible; it would have forced fragile scanline/partial-buffer
-  firmware. One display per MCU makes a full **double buffer (225 KiB)** trivially fit.
-- **Firmware becomes trivial:** render one buffer, DMA it out over one SPI bus. No
-  multi-display scheduling, SPI arbitration, or RAM contention.
-- **True modular scalability:** the 4-display desk version and the 72-display array are
-  *the same board* repeated. Scaling is a quantity change, not a redesign.
-- **Field-replaceable:** a dead node is one cheap board swap, not a 6-display tile.
-- **Cheaper, simpler boards:** a tiny single-MCU board is dirt-cheap to fab and route,
-  versus a tile fanning out six length-matched high-speed SPI buses.
-
-**Trade-off accepted:** higher MCU *count* (72 × RP2040 ≈ $50 vs 12 × RP2350 ≈ $13),
-but the savings come from drastically simpler boards, easier assembly, and trivial
-firmware. For a project paused by *assembly capacity*, this is the right trade.
+**Trade-off accepted:** one MCU per display means a higher MCU *count* (72 × RP2040 ≈ $50
+vs. 12 × RP2350 ≈ $13 for a six-display "tile" board), but the savings come from drastically
+simpler boards, easier assembly, and trivial firmware — the right trade for a project
+bottlenecked on assembly capacity rather than part cost.
 
 ---
 
-## 2. Microcontroller — Bare RP2040 (QFN-56)
+## Hardware deep dive
 
-**Choice:** Bare RP2040 silicon placed directly on the node board (not a dev board,
-not an ESP32 module).
+### One MCU per display
 
-**Why:**
+Beyond the framebuffer math above, splitting one MCU per display keeps firmware trivial:
+render one buffer, DMA it out over one SPI bus — no multi-display scheduling, SPI
+arbitration, or RAM contention. It also keeps the system modular: the same board serves a
+4-display desk version and the 72-display array, scaling is a quantity change rather than a
+redesign, and a dead node is a single cheap board swap rather than a multi-display tile.
 
-- **No radio = no RF engineering.** The wired bus (Section 5) means WiFi is dead weight.
-  Deleting the radio deletes the hardest parts of a custom board: impedance-controlled
-  RF traces, a tuned matching network, antenna geometry, and **FCC/CE certification**.
-  A bare ESP32 would force all of that onto us; the RP2040 is a plain digital chip.
-- **Forgiving design:** plain 12 MHz crystal (CPU/USB reference only, not an RF
-  reference), ordinary digital decoupling, and a published Raspberry Pi reference
-  layout that is hand-solderable and clone-able.
-- **Enough RAM:** 264 KiB SRAM double-buffers one display (225 KiB) with headroom;
-  code runs from external flash (XIP), so RAM is almost all data.
-- **Fully JLCPCB-assembleable:** stocked as LCSC **C2040**, QFN-56, SMT assembly type —
-  pick-and-placed automatically.
-- **Second-cheapest option** (only bare ESP32 silicon is cheaper, and that's the one we
-  reject for RF/cert reasons).
+### Bare RP2040
 
-**One added part:** RP2040 has no internal flash, so an external **QSPI flash** chip
-(2 MB is plenty) is added. Trivial SPI device, no RF implications.
+A plain 12 MHz crystal (CPU/USB reference only, not an RF reference), ordinary digital
+decoupling, and the published Raspberry Pi reference layout make this a forgiving, hand-
+clonable design. Since the RP2040 has no internal flash, an external 2 MB QSPI chip is
+added — a trivial SPI device with no RF implications. The RP2040 also generates its 1.1 V
+core rail from an internal switcher, which needs one small external inductor plus caps
+(documented in the reference design).
 
-**Note:** RP2040 generates its 1.1 V core rail with an internal switcher → requires one
-small external inductor + caps (well documented in the reference design).
+### Display performance and FPC risk
 
----
+240 × 240 × 16 bits = 900 kbit/frame. At ~62.5 MHz SPI that's a ~14.4 ms transfer; with DMA
+and double buffering the CPU renders the next frame during the transfer, making 60 FPS
+comfortably achievable for a single display. The one real risk is the FPC tail itself: pin
+count, pitch, and contact orientation (contacts-up vs. -down) vary by supplier, and the
+on-board FPC connector footprint can't be cloned from a reference — it's defined entirely by
+the display that actually arrives (see [Before finalizing the layout](#before-finalizing-the-layout)).
 
-## 3. Display — 1.28" GC9A01, FPC-Tail Version
+### Flashing and debug access
 
-**Choice:** 1.28" round GC9A01 LCD (240 × 240, RGB565, SPI), the **bare display with an
-FPC ribbon tail** — *not* the breakout-board version with a 7-pin header.
+A USB-C port that actually enumerates needs **2 × 5.1 kΩ CC pulldown resistors** (CC1/CC2 to
+GND — omitting these is the #1 cause of a dead custom USB-C port) and a short, roughly
+length-matched ~90 Ω D+/D− differential pair. A **BOOT button** (or shorting pads) is
+required because a blank or crashed RP2040 won't present for flashing on its own. The 3 bare
+SWD pads (SWCLK, SWDIO, GND) cost essentially nothing and give a recovery path when USB
+enumeration breaks, plus real hardware debugging (breakpoints, stepping) that UF2-over-USB
+can't offer. All of these — USB-C connector, CC resistors, BOOT button — are in JLC's
+library and pick-and-placed automatically.
 
-**Why:**
-
-- **No second PCB** behind each display; the breakout's carrier board and protruding
-  pin row waste enclosure depth and add 24×/72× assembly tedium.
-- The FPC tail plugs into an **FPC connector placed directly on the node board**. The
-  display sits flat against the enclosure face. Assembly is "slide ribbon in, flip latch."
-
-**Performance budget:** 240 × 240 × 16 bits = 900 kbit/frame. At ~62.5 MHz SPI that's
-~14.4 ms transfer; with **DMA + double buffering** the CPU renders the next frame during
-the transfer, making **60 FPS comfortably achievable** for a single display.
-
-**⚠️ Must verify before finalizing PCB:** GC9A01 FPC tails vary by supplier in **pin
-count, pitch, and contact orientation (contacts-up vs contacts-down)**. The on-board FPC
-connector must match all three. **Order 1–2 sample displays first** and confirm the tail
-matches the datasheet before committing the layout — cheap displays sometimes ship a
-different tail than advertised. This is the single most common mistake on this board type.
-
----
-
-## 4. Firmware Flashing — USB-C + BOOTSEL, with SWD Pads
-
-**Choice:** A **USB-C** connector and **BOOT button** on each node for convenient
-PlatformIO flashing, plus **3 SWD pads** for recovery and hardware debug.
-
-**Why USB-C:** matches the intended PlatformIO drag-and-drop / picotool workflow. After
-the first manual BOOTSEL flash, the Arduino-Pico core auto-resets into the bootloader on
-each upload (one click) as long as the running firmware enumerates USB serial.
-
-**Required for a USB-C port that actually enumerates:**
-
-- **2 × 5.1 kΩ CC pulldown resistors** (CC1 and CC2 to GND). *The #1 cause of a dead
-  custom USB-C port is omitting these.*
-- **BOOT button** (or two shorting pads): a blank or crashed RP2040 won't present for
-  flashing on its own; BOOTSEL is needed for the first flash and for un-bricking.
-- **D+/D− as a short ~90 Ω differential pair**, kept short and roughly length-matched.
-
-**Why SWD pads too (near-free, recommended):** 3 bare pads (SWCLK, SWDIO, GND) cost
-essentially nothing and give a **recovery path** when USB enumeration breaks (so a bad
-firmware push never permanently bricks a board) and enable **real hardware debugging**
-in PlatformIO (breakpoints, stepping) — which UF2-over-USB cannot do.
-
-**Assembly note:** USB-C connector, CC resistors, and BOOT button are all in JLC's
-library and pick-and-placed automatically — none of this forces hand soldering.
-
----
-
-## 5. Communication — RS485 Wired Bus
-
-**Choice:** Half-duplex **RS485** multidrop bus, daisy-chained node to node. The master
-(Pi 3) broadcasts tiny state packets at 60 Hz; each node renders pixels locally.
-
-**Why wired RS485 over WiFi:**
-
-- **Determinism:** frame-locked 60 Hz sync needs predictable, low-jitter timing. WiFi's
-  tens-of-ms jitter, retries, and channel contention are poison for sync.
-- **Native broadcast:** one differential transmit reaches all nodes at once — exactly the
-  state-broadcast model. (WiFi multicast is unreliable/rate-limited.)
-- **Robust & cheap:** a multidrop differential pair beats N radios contending for
-  2.4 GHz, and 5 V + GND already runs to every node, so the comms pair is nearly free.
-
-**Per-node RS485 components:**
+### RS485 bus details
 
 | Item | Detail |
 |---|---|
@@ -167,23 +122,19 @@ library and pick-and-placed automatically — none of this forces hand soldering
 | Fail-safe bias | Pull A high / B low (~560 Ω–1 kΩ), **once on the bus** (master end), to define a clean idle level. |
 | Protection (recommended) | **TVS diode** across A/B for ESD/surge, important on a long 72-node chain. |
 
-**Why the 1/8-UL transceiver is chosen up front:** standard transceivers are 1 UL and the
-spec allows only **32 UL per segment** → 72 standard nodes overruns the bus. A 1/8-UL
-part costs the same and lets the **exact same board scale from 24 → 72 → ~250** with no
-respin. This is the key future-proofing decision.
-
-**Layout rule:** keep the A/B stub from the bus connectors to the transceiver **short**.
-Run the bus only as fast as needed — tiny state packets don't need megabaud, and lower
-baud buys far more distance/noise tolerance.
+**Layout rule:** keep the A/B stub from the bus connectors to the transceiver **short**. Run
+the bus only as fast as needed — tiny state packets don't need megabaud, and lower baud buys
+far more distance/noise tolerance.
 
 ---
 
-## 6. Power
+## Power
 
-> Power is the **least-known quantity** in the design and the one to *measure early*
-> (see Phase 1a below). Numbers below are placeholders until measured.
+> Power is the **least-known quantity** in the design and the one to *measure early* (see
+> the main README's [Phase 1a](../README.md#phase-1a--display-performance-breadboard)).
+> Numbers below are placeholders until measured.
 
-### 6.1 Local (on-PCB) regulation — two separate rails
+### Local regulation — two separate rails
 
 Each node must split power into two paths. Getting this split wrong is a common mistake:
 
@@ -196,24 +147,24 @@ Each node must split power into two paths. Getting this split wrong is a common 
   and cook it.
 - **RP2040 core:** internal 1.1 V switcher → one external inductor + caps.
 
-### 6.2 Bus power distribution — the part that scales badly
+### Bus power distribution — the part that scales badly
 
-5 V + GND are carried node-to-node alongside A/B on the daisy chain. Two effects grow
-with node count and **must be watched even on the 3×3 pilot**:
+5 V + GND are carried node-to-node alongside A/B on the daisy chain. Two effects grow with
+node count and **must be watched even on the 3×3 pilot**:
 
 - **Voltage droop:** each node pulls current *through* the previous node's connectors and
   traces. The last node sees less than 5 V (dimmer backlight, brownout risk). Measurable
   directly: 5 V at node 1 vs. the last node under full white.
 - **Connector/trace current:** current near the feed-in end is the *sum* of all downstream
-  nodes. 9 nodes × ~250 mA ≈ 2.25 A through the first connector; 72 nodes ≈ 18 A — a
-  single feed is impossible at scale.
+  nodes. 9 nodes × ~250 mA ≈ 2.25 A through the first connector; 72 nodes ≈ 18 A — a single
+  feed is impossible at scale.
 
 **Mitigation = power injection:** feed 5 V/GND at multiple points along the chain rather
 than from one end. Build a **mid-chain injection point** into the pilot board (a second
-5 V/GND input) to test how it flattens droop — that experiment yields the rule for the
-full array.
+5 V/GND input) to test how it flattens droop — that experiment yields the rule for the full
+array.
 
-### 6.3 System power budget (placeholder — replace with measured per-node value)
+### System power budget (placeholder — replace with measured per-node value)
 
 | Nodes | Typical @ 5 V | Peak @ 5 V (all white) | PSU approach |
 |---|---|---|---|
@@ -225,7 +176,7 @@ full array.
 
 ---
 
-## 7. Single-Node Block Summary
+## Block diagram
 
 ```
         ┌──────────────────────────────────────────────┐
@@ -251,13 +202,13 @@ full array.
 
 ---
 
-## 8. Rough Cost Estimate
+## Cost estimate
 
 > ⚠️ **Estimates, not a quote.** JLCPCB fab/assembly fees and part prices shift over time.
 > Pull a live quote with your finalized BOM before committing. Display price dominates and
 > varies most by supplier.
 
-### Per-node Bill of Materials (electronics)
+### Per-node bill of materials (electronics)
 
 | Item | Est. unit cost |
 |---|---|
@@ -294,13 +245,13 @@ full array.
 | 24 | ~$160 | ~$40 | **≈ $200** |
 | 72 | ~$475 | ~$45 | **≈ $520** |
 
-Not included: 5 V PSU(s), 3D-printed enclosures, inter-node cabling/connectorized
-harness, the Raspberry Pi 3 master, and a ~$12 Raspberry Pi Debug Probe (one tool flashes
-the whole fleet via SWD if needed).
+Not included: 5 V PSU(s), 3D-printed enclosures, inter-node cabling/connectorized harness,
+the Raspberry Pi 3 master, and a ~$12 Raspberry Pi Debug Probe (one tool flashes the whole
+fleet via SWD if needed).
 
 ---
 
-## 9. Assembly Method
+## Assembly
 
 **Full JLCPCB turnkey SMT assembly — no hand soldering.**
 
@@ -320,80 +271,13 @@ the whole fleet via SWD if needed).
   - Optionally leave USB-C unpopulated on fleet boards if cost/space matters later
     (SWD pads still allow flashing) — though current plan is USB-C on all nodes.
 
-**Recommended bring-up order:**
-
-1. Order **1–2 sample GC9A01 FPC displays**; confirm tail pin count/pitch/orientation.
-2. Finalize node layout cloning the Raspberry Pi minimal-RP2040 reference for the core.
-3. Order a **small first batch (e.g. 5 boards)** fully assembled by JLC.
-4. Bring up one board: power rails (3.3 V, 1.1 V) → BOOTSEL/USB enumeration → flash blink
-   → display init → 60 FPS DMA render test → RS485 loopback.
-5. Validate a **2-node RS485 link**, then a short chain, before committing to 24 or 72.
+The phase-by-phase bring-up order (sample displays → layout → first batch → single-board
+bring-up → multi-node validation) is detailed in the main README's
+[Roadmap](../README.md#roadmap).
 
 ---
 
-## 10. Implementation & Bring-up Plan
-
-**Philosophy:** prove the riskiest cheap thing first; spend money on PCBs only after the
-unknowns are gone. The design is intentionally scalable, so the pilot is a **3×3 (9-node)**
-array — large enough to exercise the multi-node bus, daisy-chain addressing, sync, and
-power sharing, but cheap and debuggable. Each phase has a clear pass/fail gate.
-
-### Phase 1a — Display performance (breadboard)
-- One GC9A01 **dev board** driven by a **Pico**.
-- **Gate:** hit the real target — **60 FPS, DMA, double-buffered**. This validates the
-  performance budget the whole architecture rests on. If 60 FPS isn't comfortable, find
-  out here, not after 10 PCBs.
-- **Also measure power here** (see Phase below) — this is the cheapest place to get it.
-
-### Phase 1b — RS485 link (breadboard)
-- Two **Picos** + two cheap RS485 breakout modules (MAX3485 / THVD1450).
-- **Gate:** master broadcasts state packets, slave renders locally; packet format and the
-  60 Hz broadcast loop proven before anything is on a PCB.
-
-### Phase 1-power — Measurement protocol (run during 1a)
-Put a USB power meter or bench supply (with current readout) inline and record:
-- **Idle / typical content** (clock face, sparse pixels)
-- **Full white** (worst case: backlight + all pixels)
-- **Inrush** at power-on (spike when displays light)
-
-→ Replace all placeholder power numbers (Section 6) with **measured per-node value × N**.
-This turns PSU sizing, connector ratings, and trace widths from guesses into facts.
-
-### Phase 2 — FPC display samples
-- Order **~10 GC9A01 FPC-tail displays** *before finalizing any PCB*.
-- **Gate:** physically confirm tail **pin count / pitch / contact orientation** against
-  the datasheet. The FPC connector footprint is the one thing on the board that can't be
-  cloned from a reference — it's defined by the display that actually arrives.
-
-### Phase 3 — Single-node board (the key insurance step)
-- Order **~5 of a single-node board** and fully bring up **one**.
-- **Why:** the QFN-56 RP2040 core + FPC connector are the only genuinely new/risky parts
-  to solder. Prove one board powers up, enumerates, flashes, and drives a display before
-  multiplying by 10. A footprint bug is then a ~$30 lesson, not a ~$150 one.
-- **Bring-up order:** power rails (3.3 V, 1.1 V) → BOOTSEL/USB enumeration → flash blink
-  → display init → 60 FPS DMA render → RS485 loopback.
-
-### Phase 4 — 3×3 pilot (system test)
-- Order **~10 boards** (9 nodes + spare). This is now a *system* test, not a board test.
-- **Test:** daisy-chain bus, auto-addressing, 9-node sync, and **power as a deliberate
-  experiment** — measure 5 V droop node 1 → node 9 under full white, and test the
-  **mid-chain injection point** to see how it flattens droop.
-- **Also prove the mechanical chain here:** the real inter-board connector, cable, strain
-  relief, and polarization (so a board can't be plugged in backwards). Don't defer the
-  harness to "later" — it's a real source of pain. Pick the production connector now.
-- **Pilot PSU:** ~9 × measured peak with margin (≈ 5 V / 5 A if peak ≈ 250 mA/node).
-
-### Phase 5 — Scale
-- With measured power numbers, a proven board, and a validated bus, scale to 24 → 72.
-- Apply the injection-point rule learned in Phase 4; treat 72-node power distribution as
-  its own design pass (multiple supplies, injection points, trace/connector currents).
-
-**Refined sequence at a glance:**
-`1a display perf → 1b RS485 link (+ measure power) → 2 FPC samples → 3 single-node board → 4 3×3 pilot → 5 scale`
-
----
-
-## 11. Decision Log (Quick Reference)
+## Decision log
 
 | Decision | Choice | Primary reason |
 |---|---|---|
@@ -422,10 +306,11 @@ capacity.
 
 ---
 
-## 12. Open Items Before Production
+## Open items before production
 
 - [ ] Confirm GC9A01 FPC tail spec (pin count / pitch / orientation) from physical samples.
-- [ ] **Measure real per-node power** (idle / full white / inrush) in Phase 1a; replace placeholders.
+- [ ] **Measure real per-node power** (idle / full white / inrush) — see the main README's
+      [Phase 1a](../README.md#phase-1a--display-performance-breadboard); replace placeholders.
 - [ ] Verify local rail split: backlight on raw 5 V, logic-only through the 3.3 V LDO.
 - [ ] Choose exact transceiver P/N and confirm LCSC stock (THVD1450 vs SN65HVD75).
 - [ ] Finalize bus connector (pin count, current rating, polarization, strain relief).
