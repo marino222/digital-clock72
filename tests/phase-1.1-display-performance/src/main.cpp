@@ -1,34 +1,30 @@
-
 #include "LGFX_Config.hpp"
-
+#include "ClockFace.hpp"
 
 LGFX display;
+ClockFace clockFace(display, 110, TFT_RED, TFT_WHITE, TFT_CYAN, 6, 4, 2);
 
+uint32_t frameCount = 0;
+uint32_t lastFpsReport = 0;
 
 void setup() {
-
-  pinMode(LED_BUILTIN, OUTPUT);
-
+  Serial.begin(115200);
   display.init();
   display.setRotation(0);
   display.setBrightness(255);
-
-  display.fillScreen(TFT_BLACK);
-  display.setTextColor(TFT_WHITE);
-  display.setTextSize(2);
-  display.setCursor(40, 110);
-  display.println("Hello GC9A01");
-
-  display.fillCircle(120, 60, 20, TFT_RED);
-
+  clockFace.begin();
+  lastFpsReport = millis();
 }
 
 void loop() {
+  uint32_t now = millis();
+  float t = now / 1000.0f;                    // 1 real second == 1 virtual minute
+  clockFace.update(t / 60.0f, t, t * 60.0f);
 
-  // simple pulse to prove it's alive and not just a static init
-  static uint8_t hue = 0;
-  display.fillCircle(120, 180, 15, display.color565(hue, 255 - hue, 128));
-  hue += 4;
-  delay(50);
+  frameCount++;
+  if (now - lastFpsReport >= 1000) {
+    Serial.printf("FPS: %.1f\n", frameCount * 1000.0f / (now - lastFpsReport)); 
+    frameCount = 0;
+    lastFpsReport = now;
+  }
 }
-
