@@ -1,54 +1,34 @@
 
 #include "LGFX_Config.hpp"
-#include "angle_source.h"
-#include "clock_face.h"
-#include "fps_counter.h"
 
-namespace {
+
 LGFX display;
-ClockFace clockFace(display);
-AngleSource angleSource;
-FpsCounter fps;
-uint32_t lastFrameUs = 0;
 
-void runFrame() {
-  float targetAngle;
-  if (angleSource.poll(targetAngle)) {
-    clockFace.setTargetAngle(targetAngle);
-  }
-
-  uint32_t now = micros();
-  uint32_t dt = now - lastFrameUs;
-  lastFrameUs = now;
-
-  clockFace.update(dt);
-  clockFace.render();
-}
-}  // namespace
 
 void setup() {
-  Serial.begin(115200);
-  uint32_t waitStartMs = millis();
-  while (!Serial && millis() - waitStartMs < 3000) {
-    // give a USB serial monitor a few seconds to attach, but don't block forever
-  }
+
+  pinMode(LED_BUILTIN, OUTPUT);
 
   display.init();
   display.setRotation(0);
+  display.setBrightness(255);
 
-  clockFace.begin();
-  angleSource.begin();
-  lastFrameUs = micros();
+  display.fillScreen(TFT_BLACK);
+  display.setTextColor(TFT_WHITE);
+  display.setTextSize(2);
+  display.setCursor(40, 110);
+  display.println("Hello GC9A01");
 
-  Serial.println("Phase 1.1 display performance test");
-  Serial.println("Send 'A<degrees>' (e.g. A135) on Serial to set the hand angle manually.");
+  display.fillCircle(120, 60, 20, TFT_RED);
 
-  fps.runBenchmarkWindow(10000, "hand-animation", runFrame);
 }
 
 void loop() {
-  fps.beginFrame();
-  runFrame();
-  fps.endFrame();
-  fps.maybeReport(1000);
+
+  // simple pulse to prove it's alive and not just a static init
+  static uint8_t hue = 0;
+  display.fillCircle(120, 180, 15, display.color565(hue, 255 - hue, 128));
+  hue += 4;
+  delay(50);
 }
+
