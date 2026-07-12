@@ -15,6 +15,6 @@ constexpr int PIN_BL = -1;  // backlight tied to a fixed rail on this breakout
 // Starting point for the GC9A01 SPI write clock. No datasheet-guaranteed
 // max exists for this exact breakout + breadboard wiring, so raise this
 // (e.g. 60/80 MHz) and re-measure if the hand-animation benchmark falls
-// short of 60 FPS.
+// short of 60 FPS. SPI bus clock speed on pico is max. 62.5 MHz. But 40 MHz is regared as the sweet spot.
 constexpr uint32_t SPI_WRITE_HZ = 40'000'000;
 

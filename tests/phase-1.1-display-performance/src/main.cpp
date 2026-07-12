@@ -2,10 +2,15 @@
 #include "ClockFace.hpp"
 
 LGFX display;
-ClockFace clockFace(display, 110, TFT_RED, TFT_WHITE, TFT_CYAN, 6, 4, 2);
+ClockFace clockFace(display, 110, TFT_RED, TFT_CYAN, 8, 4);
 
-uint32_t frameCount = 0;
-uint32_t lastFpsReport = 0;
+constexpr float SPEED = 1.0f;
+constexpr float HAND1_RATE_DEG_S = 20.0f;
+constexpr float HAND2_RATE_DEG_S = 90.0f;
+
+float virtualTime = 0.0f;
+uint32_t lastFrameTime = 0;
+uint32_t lastReport = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -13,18 +18,24 @@ void setup() {
   display.setRotation(0);
   display.setBrightness(255);
   clockFace.begin();
-  lastFpsReport = millis();
+
+  lastFrameTime = micros();
+  lastReport = millis();
 }
 
 void loop() {
-  uint32_t now = millis();
-  float t = now / 1000.0f;                    // 1 real second == 1 virtual minute
-  clockFace.update(t / 60.0f, t, t * 60.0f);
+  uint32_t nowMicros = micros();
+  float dtSeconds = (nowMicros - lastFrameTime) / 1e6f;
+  lastFrameTime = nowMicros;
 
-  frameCount++;
-  if (now - lastFpsReport >= 1000) {
-    Serial.printf("FPS: %.1f\n", frameCount * 1000.0f / (now - lastFpsReport)); 
-    frameCount = 0;
-    lastFpsReport = now;
+  virtualTime += dtSeconds * SPEED;
+  float angle1 = fmodf(virtualTime * HAND1_RATE_DEG_S, 360.0f);
+  float angle2 = fmodf(virtualTime * HAND2_RATE_DEG_S, 360.0f);
+  clockFace.update(angle1, angle2);
+
+  uint32_t nowMillis = millis();
+  if (nowMillis - lastReport >= 500) {
+    Serial.printf("FPS: %.1f\n", 1.0f / dtSeconds);
+    lastReport = nowMillis;
   }
 }
