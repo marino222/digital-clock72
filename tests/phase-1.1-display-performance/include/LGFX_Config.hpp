@@ -15,7 +15,7 @@ public:
 
       cfg.spi_host   = 0;        // PICO_DEFAULT_SPI or which SPI peripheral (0 or 1)
       cfg.spi_mode   = 0;
-      cfg.freq_write = 66500000; // 66.5MHz, GC9A01 can usually handle this
+      cfg.freq_write = 70'000'000; // 66.5MHz, GC9A01 can usually handle this
       cfg.freq_read  = 16000000;
 
       //pin definitions in board_pins.h

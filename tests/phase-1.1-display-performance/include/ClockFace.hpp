@@ -37,7 +37,6 @@ public:
     expandForHand(b, angle2Deg, _hand2Length, _hand2Thickness);
 
     _frame.fillScreen(TFT_BLACK);
-    _frame.drawCircle(_cx, _cy, _radius, TFT_DARKGREY);
     drawHand(angle1Deg, _hand1Length, _hand1Thickness, _hand1Color);
     drawHand(angle2Deg, _hand2Length, _hand2Thickness, _hand2Color);
 
