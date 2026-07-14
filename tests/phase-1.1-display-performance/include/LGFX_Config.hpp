@@ -15,12 +15,13 @@ public:
 
       cfg.spi_host   = 0;        // PICO_DEFAULT_SPI or which SPI peripheral (0 or 1)
       cfg.spi_mode   = 0;
-      cfg.freq_write = SPI_WRITE_HZ; // 40MHz, GC9A01 can usually handle this
+      cfg.freq_write = 66500000; // 66.5MHz, GC9A01 can usually handle this
       cfg.freq_read  = 16000000;
 
-      cfg.pin_sclk = PIN_SCLK;         // adjust to your wiring
+      //pin definitions in board_pins.h
+      cfg.pin_sclk = PIN_SCLK;         
       cfg.pin_mosi = PIN_MOSI;
-      cfg.pin_miso = PIN_MISO;         // not used, GC9A01 is write-only
+      cfg.pin_miso = PIN_MISO;         
       cfg.pin_dc   = PIN_DC;
 
       _bus_instance.config(cfg);
@@ -34,13 +35,15 @@ public:
       cfg.pin_rst  = PIN_RST;
       cfg.pin_busy = -1;
 
+      //Display resolution
       cfg.panel_width  = 240;
       cfg.panel_height = 240;
+      
       cfg.offset_x = 0;
       cfg.offset_y = 0;
       cfg.offset_rotation = 0;
       cfg.readable   = false;
-      cfg.invert     = true;    // GC9A01 usually needs inverted colors
+      cfg.invert     = true;   
       cfg.rgb_order  = false;
       cfg.dlen_16bit = false;
       cfg.bus_shared = false;
