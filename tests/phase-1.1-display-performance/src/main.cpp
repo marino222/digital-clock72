@@ -28,9 +28,6 @@ uint32_t lastFrameTime = 0; //track time elapsed since last frame
 // Track the time the reporting block itself takes
 uint32_t lastReportDuration = 0; 
 
-// Track the size of the sprite data payload in bytes
-uint32_t spriteSizeBytes = 0;
-
 void setup() {
   // 1. MUST BE FIRST: Route the peripheral clock to 133 MHz for high-speed SPI
   clock_configure(clk_peri,
@@ -45,6 +42,8 @@ void setup() {
   display.init();
   display.setRotation(0);
   display.setBrightness(255);
+  
+  // Initialize the clock face (this triggers the first fillScreen)
   clockFace.begin();
 
   lastReport = millis();
@@ -61,10 +60,13 @@ void loop() {
   
   uint32_t t0 = micros();
 
-  //draw to sprite
-  clockFace.update(angle_1, angle_2);
+  // 1. Calculate bounding box and draw to sprite (CPU Time)
+  clockFace.prepareFrame(angle_1, angle_2);
 
   uint32_t t1 = micros();
+
+  // 2. Push ONLY the bounding box to the display (DMA/SPI Time)
+  clockFace.pushFrame();
 
   uint32_t t2 = micros();
 
@@ -87,6 +89,9 @@ void loop() {
     float avgDraw = sumDraw / (float)frameCount;
     float avgPush = sumPush / (float)frameCount;
 
+    // Get the dynamic payload size from the clockFace class
+    uint32_t dynamicPayloadBytes = clockFace.getLastPayloadSize();
+
     // We print the duration of the PREVIOUS report block here, along with the payload size
     Serial.printf("FPS:%.1f  draw avg:%.2fms max:%.2fms  push avg:%.2fms max:%.2fms  [prev report: %.2fms, payload: %lu kB]\n",
                   fps, 
@@ -95,7 +100,7 @@ void loop() {
                   avgPush / 1000.0f, 
                   maxPush / 1000.0f, 
                   lastReportDuration / 1000.0f, 
-                  spriteSizeBytes / 1024);
+                  dynamicPayloadBytes / 1024);
     
     //clear accumulated values              
     frameCount = 0;
