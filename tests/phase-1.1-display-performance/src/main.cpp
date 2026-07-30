@@ -14,8 +14,8 @@ constexpr uint8_t HAND1_THICK = 8, HAND2_THICK = 4;
 ClockFace clockFace(display, RADIUS, TFT_RED, TFT_WHITE, HAND1_THICK, HAND2_THICK);
 
 // Hand rotation speeds in degrees per second
-constexpr float HAND1_DEG_S = 20.0f;
-constexpr float HAND2_DEG_S = 90.0f;
+constexpr float HAND1_DEG_S = 40.0f;
+constexpr float HAND2_DEG_S = 120.0f;
 
 float angle_1 = 0.0f, angle_2 = 0.0f;
 
@@ -65,7 +65,7 @@ void loop() {
 
   uint32_t t1 = micros();
 
-  // 2. Push ONLY the bounding box to the display (DMA/SPI Time)
+  // 2. Push ONLY the bounding box to the display (SPI Time)
   clockFace.pushFrame();
 
   uint32_t t2 = micros();

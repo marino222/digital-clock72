@@ -8,21 +8,28 @@
 #endif
 
 // ---------------------------------------------------------------------------
-// ClockFace (master-sprite / pushRotateZoom variant)
+// ClockFace
 //
-// Instead of rasterising an anti-aliased wedge line every frame (soft-float,
-// no FPU on RP2040 -> ~20 ms), each hand is rasterised ONCE at startup into a
-// small "master" sprite. Every frame the master is rotate-blitted onto the
-// full-frame canvas with pushRotateZoom(). That turns per-pixel soft-float AA
-// into an integer inverse-affine + source lookup, which is memory-bound rather
-// than math-bound.
+// Draws two rotating clock hands and pushes only the pixels that changed to
+// the display, so a 240x240 display can keep up with 60 FPS over SPI.
 //
-// Erase model (Phase 1.1): background is solid black, so old hand positions are
-// cleared with fillRect(). A setBackground() hook is provided for when a static
-// face (ticks / bezel) is added later -- see the caveat there.
+// Why not just redraw everything, every frame?
+//  - drawWedgeLine() (an anti-aliased line) is slow on the RP2040: it uses
+//    floating point math and the chip has no hardware FPU. Drawing both
+//    hands with it every frame took 20+ ms, which alone blows the ~16.6 ms
+//    frame budget for 60 FPS.
+//  - Sending the whole 240x240 frame over SPI every frame is also too slow.
 //
-// Display push: per-hand dirty rectangles (old-box UNION new-box), so the empty
-// quadrant between the hands is never shipped over SPI.
+// How this class avoids both costs:
+//  1. Each hand is drawn ONCE at startup with drawWedgeLine(), into its own
+//     small sprite (see createHand()). That sprite is reused every frame.
+//  2. Every frame, that small sprite is rotated into place on the full-size
+//     frame buffer (see blitHand()). Rotating an already-drawn image is far
+//     cheaper than re-drawing an anti-aliased line from scratch.
+//  3. Only the small rectangle of the screen a hand touches -- its old spot
+//     plus its new spot -- is cleared and re-sent over SPI, not the whole
+//     screen (see prepareFrame() / pushFrame()).
+//
 // ---------------------------------------------------------------------------
 class ClockFace {
 public:
@@ -34,15 +41,6 @@ public:
       _hand1Thickness(hand1Thickness), _hand2Thickness(hand2Thickness)
   {}
 
-  // Optional: attach a static background sprite (face graphics). Must be the
-  // same size as the display and called BEFORE begin(). When set, erase
-  // restores from it instead of solid black.
-  // CAVEAT: the master hands are chroma-keyed on black, so their anti-aliased
-  // edges fade to black. Against a non-black face this leaves a faint dark
-  // fringe. For a real face, switch blitHand() to pushRotateZoomWithAA (which
-  // blends edges against the destination) -- see blitHand().
-  void setBackground(LGFX_Sprite* bg) { _bg = bg; }
-
   void begin() {
     _cx = _gfx.width()  / 2;
     _cy = _gfx.height() / 2;
@@ -52,45 +50,54 @@ public:
 
     _frame.setColorDepth(16);
     _frame.createSprite(_gfx.width(), _gfx.height());
-    if (_bg) _bg->pushSprite(&_frame, 0, 0);
-    else     _frame.fillScreen(TFT_BLACK);
+    _frame.fillScreen(TFT_BLACK);
 
     createHand(_h1, _hand1Length, _hand1Thickness, _hand1Color);
     createHand(_h2, _hand2Length, _hand2Thickness, _hand2Color);
   }
 
+  // Advances both hands to the given angles and updates the off-screen
+  // frame buffer (_frame) to match. Does NOT touch the display yet -- that
+  // happens in pushFrame(). Also records, in _push1/_push2, which parts of
+  // the screen need to be sent this frame.
   void prepareFrame(float angle1Deg, float angle2Deg) {
-    // Output AABBs of the hands at their NEW angles
+    // Where each hand will be after this update.
     Bounds new1 = boundsFor(_h1, angle1Deg);
     Bounds new2 = boundsFor(_h2, angle2Deg);
 
     if (_hasPrevFrame) {
-      // Erase both OLD positions first, THEN draw both NEW hands on top.
-      // (Erasing both before drawing keeps overlaps correct.)
-      Bounds old1 = boundsFor(_h1, _prevAngle1);
-      Bounds old2 = boundsFor(_h2, _prevAngle2);
-      restoreRegion(old1);
-      restoreRegion(old2);
+      // Clear each hand from where it was last frame. _lastBounds1/2 were
+      // saved the previous time this ran, so there's no need to redo the
+      // rotation math to find them again.
+      restoreRegion(_lastBounds1);
+      restoreRegion(_lastBounds2);
 
-      // Per-hand display region = where it was UNION where it now is.
-      _push1 = new1; _push1.unite(old1);
-      _push2 = new2; _push2.unite(old2);
+      // The screen area to redraw for a hand is "where it used to be" plus
+      // "where it is now" -- otherwise either its old trail or its new
+      // position would be missed.
+      _push1 = new1; _push1.unite(_lastBounds1);
+      _push2 = new2; _push2.unite(_lastBounds2);
     } else {
+      // Nothing on screen to erase yet, so just draw the new position.
       _push1 = new1;
       _push2 = new2;
     }
 
-    // Composite the new hands (integer rotate-blit, chroma-keyed on black)
+    // Draw both hands at their new angle on top of the (now erased) canvas.
     blitHand(_h1, angle1Deg);
     blitHand(_h2, angle2Deg);
 
-    _prevAngle1 = angle1Deg;
-    _prevAngle2 = angle2Deg;
+    // Remember this frame's boxes so next frame knows what to erase.
+    _lastBounds1 = new1;
+    _lastBounds2 = new2;
   }
 
+  // Sends the parts of the frame buffer that changed to the real display.
   void pushFrame() {
     if (!_hasPrevFrame) {
-      // First frame: push everything (display contents unknown at init)
+      // First frame ever: the display's current contents are unknown, so
+      // the whole screen has to be sent once. After this, only dirty
+      // rectangles are pushed.
       _gfx.startWrite();
       _frame.pushSprite(&_gfx, 0, 0);
       _gfx.endWrite();
@@ -102,13 +109,14 @@ public:
     _push1.clampTo(_gfx.width(), _gfx.height());
     _push2.clampTo(_gfx.width(), _gfx.height());
 
-    _gfx.startWrite();                 // single SPI transaction for both windows
+    _gfx.startWrite();                 // one SPI transaction for both rectangles
     pushRegion(_push1);
     pushRegion(_push2);
     _gfx.endWrite();
 
-    // Note: overlapping pixels are counted (and pushed) twice. Harmless, and it
-    // keeps the payload figure honest about bytes actually sent over SPI.
+    // If the two rectangles overlap, the shared pixels get sent twice. This
+    // is harmless (both hands still draw correctly) and keeps this payload
+    // number an honest count of bytes actually put on the wire.
     _lastPayloadBytes = uint32_t(_push1.width() * _push1.height()
                                + _push2.width() * _push2.height()) * 2;
   }
@@ -116,15 +124,16 @@ public:
   uint32_t getLastPayloadSize() const { return _lastPayloadBytes; }
 
 private:
-  // -------------------------------------------------------------------------
+  // A rectangle on the display, defined by its corners. Used to track which
+  // area a hand occupies, so only that area needs to be erased/redrawn.
   struct Bounds {
     int16_t minX = INT16_MAX, minY = INT16_MAX;
     int16_t maxX = INT16_MIN, maxY = INT16_MIN;
 
     bool valid() const { return maxX >= minX && maxY >= minY; }
 
-    // Expand outward: floor for the min side, ceil for the max side, so a
-    // fractional rotated corner is never clipped.
+    // Grow the rectangle just enough to include point (x, y). Rounds
+    // outward (floor/ceil) so a fractional corner is never cut off.
     void expand(float x, float y) {
       minX = std::min<int16_t>(minX, int16_t(floorf(x)));
       minY = std::min<int16_t>(minY, int16_t(floorf(y)));
@@ -132,6 +141,7 @@ private:
       maxY = std::max<int16_t>(maxY, int16_t(ceilf(y)));
     }
 
+    // Grow this rectangle to also cover another one.
     void unite(const Bounds& o) {
       if (!o.valid()) return;
       minX = std::min(minX, o.minX);
@@ -140,11 +150,13 @@ private:
       maxY = std::max(maxY, o.maxY);
     }
 
+    // Grow the rectangle by p pixels on every side (a small safety margin).
     void pad(int16_t p) {
       if (!valid()) return;
       minX -= p; minY -= p; maxX += p; maxY += p;
     }
 
+    // Cut the rectangle down so it fits inside a w x h screen.
     void clampTo(int16_t w, int16_t h) {
       minX = std::max<int16_t>(minX, 0);
       minY = std::max<int16_t>(minY, 0);
@@ -156,74 +168,75 @@ private:
     int16_t height() const { return valid() ? int16_t(maxY - minY + 1) : 0; }
   };
 
-  // A pre-rasterised hand plus the geometry needed to compute its footprint.
+  // One clock hand, pre-drawn once into its own small sprite.
   struct Hand {
     LGFX_Sprite spr;
-    int16_t w = 0, h = 0;      // master sprite size
-    float   px = 0, py = 0;    // pivot within the master (base of the hand)
+    int16_t w = 0, h = 0;      // size of the sprite
+    float   px = 0, py = 0;    // pivot point within the sprite (where the hand attaches to the clock center)
   };
 
-  // -------------------------------------------------------------------------
-  // Rasterise one hand ONCE, pointing "up" (toward -y), pivot at the base cap.
+  // Draws one hand ONCE, pointing straight up, into its own small sprite.
   void createHand(Hand& hd, int16_t length, uint8_t thickness, uint16_t color) {
-    const int16_t m = 2;                         // AA safety margin (px)
+    const int16_t m = 2;                         // margin around the line, for AA (px)
     hd.w = int16_t(thickness + 2 * m);
-    hd.h = int16_t(length + thickness + 2 * m);  // + tip cap + base cap + margin
+    hd.h = int16_t(length + thickness + 2 * m);  // tip + base + margin
     hd.px = hd.w / 2.0f;
-    hd.py = hd.h - thickness / 2.0f - m;         // base cap centre
+    hd.py = hd.h - thickness / 2.0f - m;         // pivot = center of the base
 
     hd.spr.setColorDepth(16);
     hd.spr.createSprite(hd.w, hd.h);
-    hd.spr.fillScreen(kChroma);                  // chroma key == TFT_BLACK
-    // Capsule from base (pivot) up to the tip. AA is baked in here, once.
+    hd.spr.fillScreen(kChroma);                  // fill with the "transparent" color
+    // A rounded line (capsule) from the pivot up to the tip.
     hd.spr.drawWedgeLine(hd.px, hd.py,
                          hd.px, hd.py - length,
                          thickness / 2.0f, thickness / 2.0f, color);
     hd.spr.setPivot(hd.px, hd.py);
   }
 
-  // Exact AABB of the master's four corners after rotation about the pivot,
-  // placed at the clock centre. Matches the transform pushRotateZoom applies
-  // for a positive (clockwise, screen-space) angle.
+  // Works out the rectangle of the screen a hand covers once rotated to
+  // angleDeg and placed at the clock's center.
+  //
+  // How: a hand sprite is a small rectangle with 4 corners. Rotating the
+  // hand means rotating those 4 corners around the pivot point by angleDeg,
+  // then placing them at the clock center. The smallest rectangle that
+  // contains all 4 rotated corners is the hand's on-screen bounding box.
+  // A 1px margin is added at the end, since the rotate function resamples
+  // pixels and can touch a pixel just outside that exact box.
   Bounds boundsFor(const Hand& hd, float angleDeg) const {
     float rad = angleDeg * DEG_TO_RAD;
     float c = cosf(rad), s = sinf(rad);
 
-    const float ox[4] = { -hd.px, hd.w - hd.px, hd.w - hd.px, -hd.px };
-    const float oy[4] = { -hd.py, -hd.py, hd.h - hd.py, hd.h - hd.py };
+    // The 4 corners of the hand sprite, measured from the pivot point.
+    const float cornerX[4] = { -hd.px, hd.w - hd.px, hd.w - hd.px, -hd.px };
+    const float cornerY[4] = { -hd.py, -hd.py, hd.h - hd.py, hd.h - hd.py };
 
     Bounds b;
     for (int i = 0; i < 4; ++i) {
-      float dx = ox[i] * c - oy[i] * s + _cx;
-      float dy = ox[i] * s + oy[i] * c + _cy;
-      b.expand(dx, dy);
+      // Standard 2D rotation of (cornerX, cornerY) by angleDeg, then shift
+      // so the pivot lands on the clock center (_cx, _cy).
+      float x = cornerX[i] * c - cornerY[i] * s + _cx;
+      float y = cornerX[i] * s + cornerY[i] * c + _cy;
+      b.expand(x, y);
     }
-    b.pad(1);   // 1 px slack against rounding in the rotate resampler
+    b.pad(1);
     return b;
   }
 
-  // Rotate-blit a hand onto the frame canvas, keying out the black filler.
+  // Rotates a hand's pre-drawn sprite onto the frame buffer at angleDeg.
   void blitHand(Hand& hd, float angleDeg) {
-    // If rotation runs the wrong way on your LGFX build, negate angleDeg.
-    hd.spr.pushRotateZoom(&_frame, _cx, _cy, angleDeg, 1.0f, 1.0f, kChroma);
-    // Quality alternative (softer edges against a non-black face, ~2-3x cost):
-    // hd.spr.pushRotateZoomWithAA(&_frame, _cx, _cy, angleDeg, 1.0f, 1.0f, kChroma);
+    // If the hands appear to spin the wrong way on your LGFX build, negate
+    // angleDeg here.
+    hd.spr.pushRotateZoomWithAA(&_frame, _cx, _cy, angleDeg, 1.0f, 1.0f, kChroma);
   }
 
-  // Erase a region back to background (solid black, or from _bg if attached).
+  // Restores one rectangle of the frame buffer back to plain black.
   void restoreRegion(Bounds b) {
     b.clampTo(_gfx.width(), _gfx.height());
     if (!b.valid()) return;
-    if (_bg) {
-      _frame.setClipRect(b.minX, b.minY, b.width(), b.height());
-      _bg->pushSprite(&_frame, 0, 0);
-      _frame.clearClipRect();
-    } else {
-      _frame.fillRect(b.minX, b.minY, b.width(), b.height(), TFT_BLACK);
-    }
+    _frame.fillRect(b.minX, b.minY, b.width(), b.height(), TFT_BLACK);
   }
 
-  // Push one clipped rectangle of the frame canvas to the display.
+  // Sends one rectangle of the frame buffer to the real display.
   void pushRegion(const Bounds& b) {
     if (!b.valid()) return;
     _gfx.setClipRect(b.minX, b.minY, b.width(), b.height());
@@ -232,15 +245,15 @@ private:
   }
 
   // -------------------------------------------------------------------------
-  static constexpr uint16_t kChroma = 0x0000;  // TFT_BLACK, used as transparent key
+  static constexpr uint16_t kChroma = 0x0000;  // TFT_BLACK, treated as "transparent" when rotating a hand in
 
   LGFX_Device& _gfx;
-  LGFX_Sprite  _frame;
-  LGFX_Sprite* _bg = nullptr;
+  LGFX_Sprite  _frame;          // full-size off-screen buffer we draw into
 
   Hand _h1, _h2;
 
-  Bounds _push1, _push2;   // display regions carried from prepare -> push
+  Bounds _push1, _push2;        // this frame's screen regions to send, set in prepareFrame(), used in pushFrame()
+  Bounds _lastBounds1, _lastBounds2; // each hand's box from the last frame, so next frame knows what to erase
 
   int16_t _radius, _cx = 0, _cy = 0;
   int16_t _hand1Length = 0, _hand2Length = 0;
@@ -248,6 +261,5 @@ private:
   uint8_t _hand1Thickness, _hand2Thickness;
 
   bool  _hasPrevFrame = false;
-  float _prevAngle1 = 0.0f, _prevAngle2 = 0.0f;
   uint32_t _lastPayloadBytes = 0;
 };
