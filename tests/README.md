@@ -68,3 +68,18 @@ FPS:87.2  draw avg:8.83ms max:9.44ms  push avg:2.61ms max:3.27ms  [prev report: 
 ```
 
 </details>
+
+
+<details>
+<summary><strong>2.1 RS485 link</strong></summary>
+
+**Onjective**
+Test the RS485 connection by having a slave and a master talking to each other. The goal is to send a very barebone protocol via RS485 to a receiver. The receiver side utilizes the same test setup as in phase 1.1 and then uses the received package to display something. Both picos are connected and powered by separate USB-C cables. That way we can read both individual serial monitors. However, for RS485 to work reliabl they need to share a common ground.
+
+**Wiring**
+
+![GC9A01 Test](/docs/images/RS485_wiring_sender.PNG)
+![GC9A01 Test](/docs/images/RS485_wiring_receiver.PNG)
+
+
+</details>
