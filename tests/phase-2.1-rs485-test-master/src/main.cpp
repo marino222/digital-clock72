@@ -3,7 +3,7 @@
 #include "protocol.h"
 
 
-const unsigned long SEND_INTERVAL_MS = 8; // Send a packet every 16 ms (~60 Hz)
+const unsigned long SEND_INTERVAL_MS = 16; // Send a packet every 16 ms (~60 Hz)
 
 // Hand rotation speeds, matching the phase-1.1 display test (40 and 120 deg/s).
 //

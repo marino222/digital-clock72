@@ -130,7 +130,7 @@ This roadmap tracks the project progress. The approach is to test cheap, risky p
 | Phase | Goal | Status |
 |---|---|---|
 | 1 | Test a single display at 60 FPS and measure power | ⚙️ In progress|
-| 2 | Prove the RS485 link with a disposable test sender | ⬜ Not started |
+| 2 | Prove the RS485 link with a disposable test sender | ✅ Completed |
 | 3 | Prove the state protocol and slave firmware on breadboards | ⬜ Not started |
 | 4 | Confirm the display hardware | ⬜ Not started |
 | 5 | Build small prototype | ⬜ Not started |
