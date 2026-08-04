@@ -154,3 +154,24 @@ Slave ready. Listening for packets...
 ```
 
 </details>
+
+<details>
+<summary><strong>3.1 protocol design</strong></summary>
+
+**Objective**
+
+Design the state protocol that can carry all the necessary data over the RS485 bus.
+
+**Considerations**
+
+We decided not to add support for generic drawing methods (e.g. for a snake game) for now, since this would add substantial complexity. Instead, priority lies on the Clock and Widget modes. To support both, it was decided not to use one fixed protocol, but to split communication into two phases: Init and Update. Init is a heavier protocol that carries configuration data, such as the color and length of the clock hands or the background image of a widget. It can be triggered by the master controller, which interrupts all other RS485 communication and thereby frees up enough bandwidth to push the heavier config data. The Update protocol, on the other hand, carries updated angles for clocks or updated values for widgets. These packets are smaller than the Init data, since the goal is to broadcast them at 60 Hz.
+
+To keep packet sizes as small as possible, we defined four distinct protocol types: `CLOCK_INIT`, `WIDGET_INIT`, `CLOCK_UPDATE`, and `WIDGET_UPDATE`. The protocol header includes an enum, shared by master and slave, that identifies which protocol type is being transmitted.
+
+The protocol header design was already discussed in phase 2. However, the sync bytes `0xAA` and `0x55` proposed there, generate more overhead than necessary. Our protocol therefore implements Consistent Overhead Byte Stuffing (COBS) instead. COBS works by finding every `0x00` byte in the data and replacing it with a count of how many bytes lie until the next `0x00`. It also prepends one extra byte at the start of the packet, indicating the distance to the first `0x00`. This guarantees the encoded payload never contains a `0x00` byte, so that byte can reliably be used as an end-of-packet marker. This also fixes a problem with the old method, where `0xAA` and `0x55` could still appear inside the payload by chance and cause data misalignment. COBS also has one byte less overhead than the two sync bytes it replaces. A nice property of COBS is that a single `0x00` byte marks both the end of the current packet and the start of the next one.
+
+The XOR checksum, already implemented in phase 2, verifies that all data was transmitted correctly. If the checksum doesn't match, the receiver discards everything that follows until it sees the next `0x00`, which marks the end of the corrupted packet. So it knows the following byte starts a new packet. The header also includes the packetSequence field from phase 2, downgraded from `uint32_t` to `uint8_t` to save three bytes. It's simply a counter rolling from 0 to 255, which should be enough to detect missing packets.
+
+As mentioned, all other RS485 communication is halted while the master sends a `CLOCK_INIT` or `WIDGET_INIT` packet, to prevent a bus overload. `CLOCK_UPDATE` packets are sent 60 times per second to ensure smooth animations. To make sure all slaves receive their data at the same time, each `CLOCK_UPDATE` packet carries the update data for all 72 nodes at once. This is far more efficient than sending individual packets, which would multiply the protocol overhead drastically. The data sits in a continuous array and is read by each slave at the position matching its address. Addresses will be assigned automatically later on. `WIDGET_UPDATE` packets, by contrast, will most likely be sent only periodically, and never target all nodes at once. For this reason, the protocol header includes a target-node byte that specifies which address a packet should be sent to.
+
+</details>
