@@ -166,9 +166,11 @@ A slave can't be tested without something transmitting packets, so a sender has 
 
 Develop and test the state protocol and rendering pipeline on breadboards before committing to custom PCBs. Use a Pico as a sender.
 
-**3.1 Protocol & slave firmware bring-up**
+**3.1 Protocol design**
 - Define and implement the state protocol: time display, basic drawing instructions, interface to implement widgets later
 - Build the slave display-list executor: the firmware loop that parses commands, calls into a graphics library (TFT_eSPI or LovyanGFX) and displays pictures
+
+**3.2 Physical testing**
 - Test sync accross multiple nodes on 2–3 Picos: one sender, two slaves rendering the same broadcast
 - Addressing here is manual, daisy-chain auto-addressing comes later
 
