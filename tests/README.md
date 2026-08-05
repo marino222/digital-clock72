@@ -5,6 +5,13 @@ All tests carried out are described in this directory. The tests are split into 
 | Folder | Description |
 |---|---|
 | [`phase-1.1-display-performance/`](phase-1.1-display-performance/) | Single GC9A01 dev board on a Pico, target 60 FPS |
+| [`phase-2.1-rs485-test-master/`](phase-2.1-rs485-test-master/) | Master code to send test-packets over RS485 |
+| [`phase-2.1-rs485-test-slave/`](phase-2.1-rs485-test-slave/) | Slave code to receive and process test-packets over RS485 |
+| [`phase-3.2-protocol-test-master/`](phase-3.2-protocol-test-master/) | Master code broadcasting the state protocol to all 72 nodes |
+| [`phase-3.2-protocol-test-slave/`](phase-3.2-protocol-test-slave/) | Slave code receiving the broadcast and rendering its own node |
+
+Phase 3.1 is a design phase with no code of its own; the protocol it produced lives in
+[`phase-3.2-protocol-test-master/include/protocol.h`](phase-3.2-protocol-test-master/include/protocol.h).
 
 <details>
 <summary><strong>1.1 Display performance</strong></summary>
@@ -173,5 +180,152 @@ The protocol header design was already discussed in phase 2. However, the sync b
 The XOR checksum, already implemented in phase 2, verifies that all data was transmitted correctly. If the checksum doesn't match, the receiver discards everything that follows until it sees the next `0x00`, which marks the end of the corrupted packet. So it knows the following byte starts a new packet. The header also includes the packetSequence field from phase 2, downgraded from `uint32_t` to `uint8_t` to save three bytes. It's simply a counter rolling from 0 to 255, which should be enough to detect missing packets.
 
 As mentioned, all other RS485 communication is halted while the master sends a `CLOCK_INIT` or `WIDGET_INIT` packet, to prevent a bus overload. `CLOCK_UPDATE` packets are sent 60 times per second to ensure smooth animations. To make sure all slaves receive their data at the same time, each `CLOCK_UPDATE` packet carries the update data for all 72 nodes at once. This is far more efficient than sending individual packets, which would multiply the protocol overhead drastically. The data sits in a continuous array and is read by each slave at the position matching its address. Addresses will be assigned automatically later on. `WIDGET_UPDATE` packets, by contrast, will most likely be sent only periodically, and never target all nodes at once. For this reason, the protocol header includes a target-node byte that specifies which address a packet should be sent to.
+
+**Frame layout**
+
+Putting all of the above together, a frame looks like this before COBS is applied:
+
+```
+[command][targetNode][sequence][ ...payload... ][xorChecksum]
+   0          1          2         3 .. N-1          N
+   |______ header ______|                            |
+                                              covers bytes 0..N-1
+```
+
+and this is what actually goes on the wire:
+
+```
+[ COBS( header + payload + checksum ) ][ 0x00 ]
+```
+
+Two things are worth calling out. First, there is deliberately no length field. An earlier draft
+carried a 2-byte payload length, but COBS framing already tells the receiver exactly where the
+frame ends, so the length is simply `decoded length - 3 header bytes - 1 checksum byte`. Sending it
+as well would waste two bytes on every one of the 60 packets per second.
+
+Second, the checksum sits at the *end* rather than in the header. That way its position is always
+"the last byte of the decoded frame", which the receiver can find without first knowing which
+command arrived and therefore how big the payload is meant to be.
+
+**Making the protocol safe to build on**
+
+The header defines the format, but a format alone does not stop the two sides drifting apart or a
+corrupted packet doing damage. Four measures address that:
+
+- **The layout is owned by code, not by convention.** `buildFrame()` and `parseFrame()` are the
+  entire public API. Nothing assembles a packet by hand, so master and slave cannot disagree about
+  where a field sits.
+- **Size assertions.** Every packed struct is followed by a `static_assert` on its size. Phase 2.1
+  noted that a padding mismatch between master and slave would be very hard to diagnose from a
+  serial log; these turn it into a build error on both sides instead.
+- **Payload length is validated against the command.** This matters more than it looks. Without it,
+  a single corrupted command byte could make the receiver reinterpret a 33-byte widget frame as a
+  288-byte `GlobalClockUpdate` and read 255 bytes past the end of its buffer. `parseFrame()` proves
+  the size is right before the receiving code is allowed to cast the payload.
+- **The COBS functions cannot overrun their destination.** Both take the destination capacity and
+  return 0 rather than writing past it, and the decoder rejects a `0x00` code byte, which can never
+  occur in a valid COBS frame.
+
+A parse either succeeds or reports why it failed, via `ParseResult`: `PARSE_ERR_COBS` (broken
+framing), `PARSE_ERR_SHORT`, `PARSE_ERR_CHECKSUM` (corrupt bytes), `PARSE_ERR_COMMAND` (unknown
+command), `PARSE_ERR_LENGTH` (payload size does not match the command) or `PARSE_ERR_TARGET`. The
+slave counts these and prints them once a second, which is what makes a marginal bus visible on the
+bench instead of just showing up as a stuttering display.
+
+Widget payloads are a special case, because the whole point of widgets is that their contents are
+not designed yet. `WidgetUpdateData` therefore holds a worst-case 32-byte buffer, but only the bytes
+actually in use are transmitted: the sender passes `1 + usedBytes` as the payload length and the
+receiver recovers `usedBytes` as `payloadLen - 1`. This keeps the packet small without adding a
+length field, staying consistent with the decision above.
+
+</details>
+
+<details>
+<summary><strong>3.2 physical testing</strong></summary>
+
+**Objective**
+
+Prove the phase 3.1 protocol on real hardware: one master broadcasting to two slaves, both rendering
+their own slot out of a single packet. Addressing is manual here; daisy-chain auto-addressing comes
+later.
+
+> **Status:** firmware is written and all three build targets compile clean. The hardware run has
+> not been carried out yet, so the results block below is empty.
+
+**Wiring**
+
+Same RS485 wiring as phase 2.1, extended to three boards on one bus. The master and both slaves share
+the A and B data lines and a common ground; each slave additionally drives its own GC9A01 over SPI,
+wired exactly as in phase 1.1.
+
+| Board | RS485 module | DE & RE (GP15) | Display |
+|---|---|---|---|
+| Master | A/B to the bus, common GND | HIGH (always transmitting) | none |
+| Slave 0 | A/B to the bus, common GND | LOW (always receiving) | as phase 1.1 |
+| Slave 1 | A/B to the bus, common GND | LOW (always receiving) | as phase 1.1 |
+
+The bus is a daisy chain with a 120 Ω termination resistor at each physical end, as is standard for
+RS485. All three boards are powered over their own USB-C cable so each can be watched on its own
+serial monitor, but they must still share a common ground for the link to be reliable.
+
+**Findings**
+
+The test deliberately sends the real payload rather than a reduced stand-in: a full 288-byte
+`GlobalClockUpdate` covering all 72 nodes, 60 times per second, exactly as the finished clock would.
+A smaller test packet would sail over the bus and prove nothing about whether the design actually
+fits the budget. After COBS the frame measures 295 bytes, which works out to
+
+```
+295 B x 60 Hz = 17.7 kB/s
+```
+
+against the ~100 kB/s ceiling established in phase 2.1, so the clock stream occupies roughly 18% of
+the bus. That is the whole point of batching all 72 nodes into one packet: sending each node its own
+packet would have meant 4'320 packets per second and, as phase 2.1 calculated, ~134 kB/s, which the
+bus cannot carry. `CLOCK_INIT` (every 5 s) and `WIDGET_UPDATE` (every 2 s) are mixed into the stream
+so those paths are exercised on real hardware too, not just the one hot path.
+
+Each node is given a fixed slice of a revolution as its starting offset, so no two displays sit at
+the same angle. This is what makes it visible on the bench that each slave really is reading *its
+own* slot: if the addressing were broken, both displays would move in unison instead.
+
+The slave's receive loop is markedly simpler than phase 2.1's. That version needed a three-state
+machine (`WAITING_FOR_SYNC1` / `WAITING_FOR_SYNC2` / `READING_PAYLOAD`) to find the `0xAA 0x55`
+marker and to handle the case where a repeated `0xAA` had to re-arm the search. With COBS there is
+no such ambiguity: `0x00` cannot occur inside an encoded frame, so the loop just collects bytes until
+it sees one, hands the buffer to `parseFrame()`, and resets. A receiver that gets lost mid-stream
+resynchronises automatically at the very next delimiter, with no state to unwind.
+
+The slave defers `ClockFace::begin()` until a `CLOCK_INIT` frame arrives, so the display stays blank
+until the master has actually configured it. That makes the init phase observable rather than
+something that silently no-ops, and since the master re-broadcasts the config every 5 s, a slave can
+be reset mid-test and will recover on its own.
+
+**How to test**
+
+- Keep the two copies of the protocol header in sync. They are duplicated per project by design, so
+  verify before every flash that they have not drifted:
+  ```bash
+  diff tests/phase-3.2-protocol-test-master/include/protocol.h \
+       tests/phase-3.2-protocol-test-slave/include/protocol.h
+  ```
+  This must print nothing. A layout change that reached only one side would also be caught at build
+  time by the `static_assert`s, but only if the change altered a struct size.
+- Build and flash the master -> `pio run -d ./tests/phase-3.2-protocol-test-master -t upload`
+- Flash the first slave as node 0 -> `pio run -d ./tests/phase-3.2-protocol-test-slave -e slave0 -t upload`
+- Flash the second slave as node 1 -> `pio run -d ./tests/phase-3.2-protocol-test-slave -e slave1 -t upload`
+- Open a serial monitor on each board, e.g. `pio device monitor -d ./tests/phase-3.2-protocol-test-slave`
+- Each slave should report `CLOCK_INIT` within 5 seconds, then ~60 good frames per second with no
+  bad frames and no sequence gaps.
+- Both displays should move in lockstep off the single broadcast, but at **different** hand angles.
+  Identical angles on both would mean the node addressing is being ignored.
+- Exercise the error path deliberately: briefly disconnect one of the A/B lines mid-run. The slave
+  should report `COBS framing error` or `checksum mismatch`, and then recover on its own once the
+  line is reconnected, rather than hanging or drawing garbage. The sequence-gap counter should show
+  the dropped frames.
+
+**Results**
+
+_Not yet measured -- pending the hardware run._
 
 </details>
