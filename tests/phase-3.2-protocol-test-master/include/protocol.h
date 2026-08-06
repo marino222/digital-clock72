@@ -26,19 +26,18 @@
  * well would just be two wasted bytes on every packet.
  *
  * The checksum sits at the END rather than in the header so that its position
- * is always "the last byte of the decoded frame" -- derivable without first
- * knowing which command, and therefore which payload size, came in.
+ * is always "the last byte of the decoded frame" 
  *
  * Nothing here should be assembled by hand. buildFrame() and parseFrame() at
- * the bottom of this file own the layout above; they are the only two
+ * the bottom of this file own the layout above. They are the only two
  * functions a caller needs.
  * ---------------------------------------------------------------------------
  */
 
 /*
  * Packed structs are memcpy'd straight onto the wire, so both ends must agree
- * on byte order. Every node is an RP2040, so this is a safety net rather than
- * a real portability concern -- but a silent assumption is worse than a loud one.
+ * on byte order. Since the master and the slave code run on different hardware,
+ * we enforce little-endian order at compile time for safety reasons.
  */
 #if defined(__BYTE_ORDER__) && __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__
 #error "protocol.h memcpy's packed structs onto the wire; little-endian target required."
@@ -50,12 +49,11 @@
  * ---------------------------------------------------------
  */
 
-// Not transmitted. This file is duplicated into the master and slave projects;
-// bump this on any wire-format change so a stale copy is obvious in a diff.
+// Not transmitted. This file is duplicated into the master and slave projects.
 constexpr uint8_t PROTOCOL_VERSION    = 1;
 
 constexpr uint8_t FRAME_DELIMITER     = 0x00;
-constexpr uint8_t GLOBAL_BROADCAST_ID = 0xFF;
+constexpr uint8_t GLOBAL_BROADCAST_ID = 0xFF; // targetNode value to address all nodes at once
 constexpr uint8_t TOTAL_MATRIX_NODES  = 72;
 
 // Largest widget payload we can carry today. Custom widgets are a future goal
@@ -67,8 +65,8 @@ constexpr size_t  MAX_WIDGET_DATA     = 32;
  * ---------------------------------------------------------
  * COMMAND ROUTING
  * ---------------------------------------------------------
- * Init commands are heavy and rare: the master halts all other bus traffic to
- * push them. Update commands are light and continuous (60 Hz).
+ * Init commands carry more data and are only sent once. Update commands
+ * are much smaller and sent repeatedly.
  */
 enum CommandType : uint8_t {
     CMD_CLOCK_INIT    = 0x01,
@@ -92,8 +90,7 @@ enum CommandType : uint8_t {
  *
  * Every struct below is followed by a static_assert on its size. Master and
  * slave each compile their own copy of this file, and a layout mismatch between
- * them is the failure mode that is hardest to spot in a serial log -- these turn
- * it into a build error on both sides instead.
+ * them is the failure mode that is hardest to spot in a serial log.
  */
 #pragma pack(push, 1)
 
@@ -103,7 +100,7 @@ struct ProtocolHeader {
     uint8_t targetNode;    // 0..71 for a specific node, 0xFF for all
     uint8_t sequence;      // rolling 0..255, so gaps reveal dropped packets
 };
-static_assert(sizeof(ProtocolHeader) == 3, "ProtocolHeader must be 3 bytes on the wire");
+static_assert(sizeof(ProtocolHeader) == 3, "ProtocolHeader must be 3 bytes");
 
 // --- CLOCK PAYLOADS ---
 
@@ -112,7 +109,7 @@ struct ClockNodeData {
     uint16_t angle1DeciDeg; // Hand 1: 0..3599
     uint16_t angle2DeciDeg; // Hand 2: 0..3599
 };
-static_assert(sizeof(ClockNodeData) == 4, "ClockNodeData must be 4 bytes on the wire");
+static_assert(sizeof(ClockNodeData) == 4, "ClockNodeData must be 4 bytes");
 
 // Payload for CMD_CLOCK_UPDATE. Every node's state in ONE broadcast, so all 72
 // displays step at the same instant and the per-packet overhead is paid once
@@ -132,7 +129,7 @@ struct ClockInitData {
     uint8_t  hand1Thickness; // px
     uint8_t  hand2Thickness; // px
 };
-static_assert(sizeof(ClockInitData) == 10, "ClockInitData must be 10 bytes on the wire");
+static_assert(sizeof(ClockInitData) == 10, "ClockInitData must be 10 bytes");
 
 // --- WIDGET PAYLOADS ---
 
@@ -143,7 +140,7 @@ struct WidgetInitData {
     uint8_t  fieldCount;     // how many addressable fields this widget has
     uint8_t  reserved[2];    // room to grow without a version bump
 };
-static_assert(sizeof(WidgetInitData) == 6, "WidgetInitData must be 6 bytes on the wire");
+static_assert(sizeof(WidgetInitData) == 6, "WidgetInitData must be 6 bytes");
 
 // Payload for CMD_WIDGET_UPDATE.
 //
@@ -203,10 +200,37 @@ inline uint8_t calculateChecksum(const uint8_t* data, size_t length) {
  * Both functions take the destination capacity and return 0 rather than
  * overrunning it. Neither writes to dst beyond the returned length.
  */
-
+ 
 /**
  * Encodes data into a COBS frame and appends FRAME_DELIMITER.
- * @return bytes written to dst (delimiter included), or 0 if dst is too small.
+ *
+ * COBS rewrites `src` so the result contains no 0x00 bytes, by replacing each
+ * zero with a "code byte" that says how many bytes away the next zero (or the
+ * end of data) is. This is what lets a receiver find frame boundaries just by
+ * scanning for 0x00, with no separate length field anywhere in the protocol.
+ *
+ * @param src    Bytes to encode. May contain 0x00 anywhere, that's the whole
+ *               point of COBS. Owned by the caller, read-only, untouched.
+ * @param length How many bytes of `src` to encode. NOT the size of the
+ *               buffer `src` points to. Callers may want to encode fewer
+ *               bytes than the buffer holds (e.g. buildFrame() only encodes
+ *               header + actual payload + checksum, not the whole 292-byte
+ *               scratch array it built that data in).
+ * @param dst    Caller-owned output buffer. Written into directly, no
+ *               intermediate copy. Content beyond the returned length is
+ *               left untouched (may contain stale/garbage bytes).
+ * @param dstCap Capacity of `dst` in bytes, i.e. how much room the caller
+ *               has actually allocated, NOT how much data will be written.
+ *               This is a ceiling only: every write is bounds-checked
+ *               against it, so cobsEncode() can never write past dst[dstCap-1].
+ *               Size it to at least MAX_ENCODED_FRAME to guarantee success
+ *               for any frame this protocol can produce.
+ *
+ * @return On success: the number of bytes actually written to `dst`,
+ *         INCLUDING the trailing FRAME_DELIMITER. This is a different,
+ *         dynamically-varying number from dstCap. dstCap is the ceiling
+ *         you supplied, this is how much of that ceiling got used.
+ *         On failure (dst too small to hold the encoded result)
  */
 inline size_t cobsEncode(const uint8_t* src, size_t length, uint8_t* dst, size_t dstCap) {
     if (dstCap < 2) return 0;   // no room for even a code byte and a delimiter
@@ -243,9 +267,36 @@ inline size_t cobsEncode(const uint8_t* src, size_t length, uint8_t* dst, size_t
 }
 
 /**
- * Decodes a COBS frame back into raw bytes.
- * @param src the bytes BETWEEN two delimiters (the 0x00 itself is not included).
- * @return the decoded length, or 0 on any framing error.
+ * Decodes a COBS frame back into raw bytes, the inverse of cobsEncode().
+ *
+ * Walks `src` one block at a time. Each block starts with a code byte saying
+ * how many bytes until the next implied zero (or the end of the frame), then
+ * that many literal data bytes follow. cobsDecode() copies the data bytes out
+ * and reinserts the zero itself.
+ *
+ * @param src      The encoded bytes BETWEEN two delimiter, the 0x00 itself
+ *                 is not included, and should already have been stripped by
+ *                 the caller's receive logic before this is called. Owned by
+ *                 the caller (the slave's RS485 receive buffer), read-only.
+ * @param length   How many bytes of `src` to decode. NOT the size of the
+ *                 buffer `src` points to, just how much of it is real,
+ *                 received data.
+ * @param dst      Caller-owned output buffer that the decoded bytes get
+ *                 written into. Starts out empty/uninitialized. Only the
+ *                 first N bytes (N = the return value) are meaningful once
+ *                 cobsDecode() returns.
+ * @param dstCap   Capacity of `dst` in bytes. How much room the caller has
+ *                 actually allocated, NOT how much data will be written.
+ *                 A ceiling only: every write is bounds-checked against it,
+ *                 so cobsDecode() can never write past dst[dstCap-1]. Size
+ *                 it to at least MAX_DECODED_FRAME to guarantee success for
+ *                 any frame this protocol can produce.
+ *
+ * @return On success: the decoded length, i.e. how many bytes were actually
+ *         written to `dst`.
+ *         On any framing error (a 0x00 appears where a code byte was
+ *         expected, a block claims more bytes than remain in `src`, or `dst`
+ *         is too small to hold the result): 0.
  */
 inline size_t cobsDecode(const uint8_t* src, size_t length, uint8_t* dst, size_t dstCap) {
     size_t read_index  = 0;
@@ -307,11 +358,50 @@ struct Frame {
 /**
  * Builds header + payload + checksum, COBS-encodes it, appends the delimiter.
  *
- * @param payloadLen bytes of `payload` to actually transmit. For a fixed-size
- *        payload this is sizeof(that struct); for a widget update it is
- *        1 + however many data bytes are in use.
- * @param outCap should be at least MAX_ENCODED_FRAME.
- * @return bytes written to out (delimiter included), or 0 on error.
+ * @param cmd         Which command this frame carries. Determines how the
+ *                    receiver interprets `payload` (see the CommandType enum
+ *                    and the switch in parseFrame()).
+ * @param targetNode  0..71 for a specific node, or GLOBAL_BROADCAST_ID (0xFF)
+ *                    for all nodes.
+ * @param sequence    Rolling 0..255 counter, caller's responsibility to
+ *                    increment. Lets a receiver notice dropped packets from
+ *                    gaps, but buildFrame() itself does nothing with it
+ *                    beyond writing it into the header.
+ * @param payload     Pointer to caller-owned data to send (e.g. a
+ *                    ClockInitData, GlobalClockUpdate, or WidgetUpdateData).
+ *                    Read-only to buildFrame(), copied via memcpy, never
+ *                    modified. May be nullptr only if payloadLen is 0.
+ * @param payloadLen  Bytes of `payload` to actually transmit, NOT
+ *                    necessarily sizeof(the struct). For a fixed-size
+ *                    payload this is sizeof(that struct) (e.g.
+ *                    sizeof(ClockInitData)). For CMD_WIDGET_UPDATE it is
+ *                    1 + however many data bytes are in use this call, since
+ *                    WidgetUpdateData is a storage type sized to the worst
+ *                    case but only its used prefix is meant to go on the
+ *                    wire. Must not exceed MAX_PAYLOAD_SIZE.
+ * @param out         Caller-owned destination buffer for the fully encoded
+ *                    frame (COBS-encoded header + payload + checksum, plus
+ *                    the trailing delimiter). Passed straight through to
+ *                    cobsEncode() and written into directly. buildFrame()
+ *                    does no buffering of its own beyond the internal `raw`
+ *                    staging array. Starts out empty/uninitialized. Only the
+ *                    first N bytes (N = the return value) are meaningful
+ *                    once buildFrame() returns.
+ * @param outCap      Capacity of `out` in bytes, i.e. how much room the
+ *                    caller has actually allocated, NOT how big the
+ *                    resulting frame will be. Used purely as a safety
+ *                    ceiling (forwarded to cobsEncode()'s own dstCap check)
+ *                    so a too-small buffer fails cleanly instead of
+ *                    overrunning. Should be at least MAX_ENCODED_FRAME to
+ *                    guarantee success for any frame this protocol can
+ *                    produce.
+ *
+ * @return On success: the number of bytes written to `out`, delimiter
+ *         included. This is the actual frame length and is what the
+ *         caller should hand to its RS485 write call (NOT outCap, which is
+ *         just the buffer's capacity and stays constant across calls).
+ *         On failure (payloadLen too large, payload null with nonzero
+ *         payloadLen, or out too small to hold the result): 0.
  */
 inline size_t buildFrame(CommandType cmd, uint8_t targetNode, uint8_t sequence,
                          const void* payload, size_t payloadLen,
@@ -339,14 +429,38 @@ inline size_t buildFrame(CommandType cmd, uint8_t targetNode, uint8_t sequence,
  * Validates and unpacks one received frame.
  *
  * Checks run most-fundamental first: framing, then size, then integrity, then
- * meaning. The payload-length check matters more than it looks -- it is what
- * makes the caller's cast to a payload struct safe. Without it, a corrupted
- * command byte could reinterpret a 33-byte widget frame as a 288-byte
- * GlobalClockUpdate and read 255 bytes off the end of the buffer.
+ * meaning.
  *
- * @param encoded bytes received between two delimiters (delimiter NOT included).
- * @param scratch caller-owned decode buffer, at least MAX_DECODED_FRAME bytes.
- *        out->payload points into it, so it must outlive the returned Frame.
+ * @param encoded     Bytes received between two delimiters, delimiter NOT
+ *                    included. Same as cobsDecode()'s `src`. Owned by the
+ *                    caller (the slave's RS485 receive buffer), read-only.
+ *                    Forwarded straight into cobsDecode() unmodified.
+ * @param encodedLen  How many bytes of `encoded` are valid. Forwarded
+ *                    straight into cobsDecode() as its `length`.
+ * @param scratch     Caller-owned decode workspace, at least
+ *                    MAX_DECODED_FRAME bytes. Starts out empty/uninitialized.
+ *                    parseFrame() fills it via cobsDecode(), then reads
+ *                    the header/checksum/payload back out of it.
+ *                    IMPORTANT: out->payload ends up pointing INTO this
+ *                    buffer, not a copy of it, so `scratch` must stay alive
+ *                    and unmodified for as long as the returned Frame is
+ *                    used.
+ * @param scratchCap  Capacity of `scratch` in bytes, i.e. how much room the
+ *                    caller has actually allocated, NOT how much of it
+ *                    will be used. A ceiling only, forwarded straight into
+ *                    cobsDecode() as its `dstCap`. Should be at least
+ *                    MAX_DECODED_FRAME to guarantee success for any frame
+ *                    this protocol can produce.
+ * @param out         Caller-owned Frame the parsed result is written into
+ *                    (an out-parameter, not a return value). Only
+ *                    meaningful if the function returns PARSE_OK. On any
+ *                    error return, `*out` is left untouched.
+ *
+ * @return PARSE_OK if the frame decoded, checksummed, and validated cleanly.
+ *         In that case `*out` now holds the parsed header plus a payload
+ *         pointer/length. Otherwise one of the PARSE_ERR_* values below,
+ *         telling the caller which layer rejected the frame (see
+ *         parseResultName() for a human-readable version, e.g. for logging).
  */
 inline ParseResult parseFrame(const uint8_t* encoded, size_t encodedLen,
                               uint8_t* scratch, size_t scratchCap,
