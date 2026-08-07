@@ -349,7 +349,5 @@ A run for a `CMD_CLOCK_INIT` frame addressed to node 5. Stages 1 and 5 are cut h
   round trip: payload matches the source byte for byte
 ```
 
-Switching the config to `CMD_CLOCK_UPDATE` shows the full 72-node broadcast: a 288 byte payload that reaches 294 bytes on the wire and eats 17.6 % of the bus at 60 Hz, which lines up with the budget the phase 3.2 master reports. That is one byte under the 295 byte worst case, because these sample angles happen to contain a few zero bytes, and zeros cost COBS less than other values.
-
 </details>
 
