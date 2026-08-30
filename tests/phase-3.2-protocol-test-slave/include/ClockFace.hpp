@@ -72,6 +72,23 @@ public:
 
     createHand(_h1, _hand1Length, _hand1Thickness, _hand1Color);
     createHand(_h2, _hand2Length, _hand2Thickness, _hand2Color);
+
+    // begin() runs again every time a fresh CMD_CLOCK_INIT reconfigures the
+    // face. The frame buffer above is blank again, but the DISPLAY still shows
+    // the hands from the old configuration -- so the next push has to be a
+    // full-screen one, or those old hands stay burned in everywhere the new
+    // dirty rectangles don't happen to cover.
+    invalidate();
+  }
+
+  // Forces the next pushFrame() to send the whole screen instead of just the
+  // hands' dirty rectangles. Call this whenever something drew over the display
+  // behind ClockFace's back -- a widget frame taking the screen over, or a
+  // re-init -- otherwise pushFrame() only repaints where it thinks a hand was.
+  void invalidate() {
+    _hasPrevFrame = false;
+    _lastBounds1 = Bounds();
+    _lastBounds2 = Bounds();
   }
 
   // Advances both hands to the given angles and updates the off-screen

@@ -351,3 +351,92 @@ A run for a `CMD_CLOCK_INIT` frame addressed to node 5. Stages 1 and 5 are cut h
 
 </details>
 
+
+<details>
+<summary><strong>3.2 Physical testing</strong></summary>
+
+### Objective
+
+Put the protocol from 3.1 on a real RS485 bus. One master broadcasts, two slaves each pick their own slot out of the same broadcast and render it. Phase 3.1 only ever ran the protocol on the host through the frame inspector, so nothing had yet proven it works against real hardware, real timing and a real UART. 
+
+`ClockFace.hpp` and `LGFX_Config.hpp` come from phase 1.1, `pin_definitions.h` from 2.1, and `protocol.h` is a byte-for-byte copy of the file the 3.1 unit tests cover. Only `src/main.cpp` on each side is new.
+
+### Wiring
+
+Three Picos on one bus, daisy chained A-to-A and B-to-B with a common ground. The master has no display. Both slaves have one wired exactly as in phase 1.1. Each Pico gets its own USB-C cable so all three can be watched on their own serial monitor. Per-board wiring is unchanged from phase 2.1 (RS485 module) and phase 1.1 (display):
+
+| Board | RS485 module | Display | Direction pin (GP15) |
+|---|---|---|---|
+| Master | as in phase 2.1 | none | driven HIGH (permanent transmit) |
+| Slave, node 0 | as in phase 2.1 | as in phase 1.1 | driven LOW (permanent receive) |
+| Slave, node 36 | as in phase 2.1 | as in phase 1.1 | driven LOW (permanent receive) |
+
+Only the master ever transmits, so the direction pins can stay fixed for the whole test and no turnaround timing is involved yet.
+
+### Findings
+
+**The slave needs both cores.** Drawing one frame takes about 11.6 ms (measured in phase 1.1), but a new `CLOCK_UPDATE` frame arrives roughly every 3 ms. So while one frame is being drawn, three or four more are already piling up on the wire. If reading and drawing happened in the same loop, the board simply wouldn't be listening to the bus for most of that 11.6 ms. The RP2040's UART buffer only holds 32 bytes by default, a tenth of one frame, so incoming bytes would get overwritten and lost. Worse, this would happen silently: the "frames/s" counter only counts what it manages to read, so it would keep reporting a clean number even while frames were being dropped.
+
+The fix is to split the work across the RP2040's two CPU cores. Core 0 does nothing but read bytes off the bus and parse them. Core 1 does nothing but draw. That way, drawing never blocks reading. As extra insurance, the UART buffer is also enlarged to 1 KB (`Serial1.setFIFOSize()`), enough to hold about three whole frames, so even a brief stall on core 0, like a USB print taking a moment, can't cost a frame either.
+
+**The two cores hand off data through a single slot.** Core 0 (reading) and core 1 (drawing) meet at one shared "mailbox" location, protected by a lock. Whenever core 0 has new data, it simply overwrites whatever is already sitting there, even if core 1 hasn't read it yet. This is on purpose: a queue would mean a node that falls behind has to work through a growing backlog of increasingly outdated angles. The hands would visibly lag. Overwriting instead means a slow node just skips straight to the latest position, which is what you actually want on a clock face. Every time this overwrite happens, it's counted as `superseded`. That count is how you tell "the bus lost a frame" apart from "this node just couldn't draw fast enough." Because each handoff only copies about 60 bytes and takes well under a microsecond, a simple lock is all that's needed here.
+
+**Core 1 has to wait for core 0 before touching the display.** On this chip, core 1 actually starts running *before* core 0 reaches its own setup code. That's a problem, because core 0's setup is what speeds up the internal clock the display connection depends on. If core 1 initializes the display too early, it would end up running at a much slower default speed instead. The fix is a simple flag: core 1 just waits until core 0 signals "I'm ready" before touching the display. Similarly, all debug messages are printed from core 0 only. Both cores could technically print without literally corrupting each other's data (each print is protected by its own lock), but their output would still land on the screen interleaved and unreadable.
+
+**The two slaves are nodes 0 and 36, not 0 and 1.** Each of the 72 nodes gets a starting angle 5 degrees apart from the next. If the two test boards were nodes 0 and 1, their hands would sit only 5 degrees apart, close enough that a wiring or addressing mistake (e.g. a board actually reading node 0's data instead of its own) could easily go unnoticed. Nodes 0 and 36 sit exactly opposite each other, so a mistake like that becomes obvious immediately: the two displays would move in perfect sync instead of independently.
+
+**Re-sending the config regularly has to be free when nothing changed.** The master re-sends the `CLOCK_INIT` configuration every 5 seconds, so that a slave that reboots mid-test can catch up without needing the master restarted too. But re-applying that same configuration would normally mean rebuilding the hand graphics and redrawing the whole screen every 5 seconds, on every node, even when nothing actually changed. To avoid that, the slave compares each incoming configuration against the one it already has, and does nothing if they match. Pressing `i` on the master sends a genuinely different configuration, so you can watch the hands visibly change color as instant proof it worked. A new `invalidate()` function was added to `ClockFace` for the cases where a full redraw really is needed.
+
+### How to test
+
+Flash all three boards. The two slave environments differ only in the `MY_NODE_ID` baked in at build time:
+
+```bash
+pio run -d ./tests/phase-3.2-protocol-test-slave  -e slave0 -t upload
+pio run -d ./tests/phase-3.2-protocol-test-slave  -e slave1 -t upload
+pio run -d ./tests/phase-3.2-protocol-test-master -t upload
+pio device monitor -d ./tests/phase-3.2-protocol-test-slave   # one terminal per slave
+```
+
+The master boots into `ALL` mode and rotates through every command type on its own, so it also works headless on a USB power brick. With a terminal attached, single keys steer it:
+
+| Key | Effect |
+|---|---|
+| `a` | ALL — rotate CLOCK ↔ WIDGET with widget frames mixed in, exercises all four command types |
+| `c` | CLOCK — `CLOCK_INIT` once, then `CLOCK_UPDATE` only, nothing else on the bus (the clean frame-rate run) |
+| `w` | WIDGET — `WIDGET_INIT` once, then `WIDGET_UPDATE` at 2 Hz, alternating the two node addresses |
+| `s` | STOP — the bus goes silent |
+| `i` | send one `CLOCK_INIT` now, advancing to the next preset (hands change colour) |
+| `I` | send one `WIDGET_INIT` now, next background colour |
+| `u` | send one `WIDGET_UPDATE` now |
+| `+` / `-` | step the `CLOCK_UPDATE` rate: 30 / 60 / 90 / 120 Hz |
+| `?` | print the list |
+
+What to check, in order:
+
+1. **Boot** — each slave prints its node ID and waits. The master prints the payload and frame sizes.
+2. **`c`** — both faces appear and turn smoothly, half a revolution out of phase. This is the addressing proof: two displays at the same angle would mean a slave is reading slot 0 instead of its own.
+3. **Stats** — `rx` and `render` both around 60 f/s, `superseded` near zero, `fifo ok`, no bad frames and no sequence gaps.
+4. **`i`** — the hands change colour and length instantly on both, with no ghosting from the previous face.
+5. **`w`**, then `I` and `u` — both displays switch to the widget background and show their own field text, each naming the node it was addressed to. Then `c` returns to a clean clock face with no widget pixels left behind.
+6. **`+` to 90 and 120 Hz** — `rx` should keep tracking the master while `render` plateaus near the ceiling measured in phase 1.1, with `superseded` climbing. That divergence is the point of the whole test: it separates a bus that cannot carry the traffic from a node that cannot draw it.
+7. **`s`** — both slaves fall to 0 f/s and freeze, and `c` resumes cleanly.
+
+The slave reports once a second:
+
+```
+[node 0] rx 60.1 f/s | render 59.8 f/s (avg 9.12ms max 9.94ms) | 0 bad | 0 gaps | 2 superseded | fifo ok
+```
+
+`rx` is what the protocol and the bus delivered, `render` is what this node actually drew. The two numbers answering differently is the useful result, not a fault.
+
+### Results
+
+```bash
+TX 60.0 frames/s | 17.6 kB/s of ~100 kB/s | CLOCK @ 60 Hz | seq 149
+[node 36] rx 60.0 f/s | render 60.0 f/s (avg 11.96ms max 12.30ms) | 0 bad | 0 gaps | 0 superseded | fifo ok
+```
+
+The steady-state clock run matches the master's 60 Hz TX rate, with render times consistent with the phase 1.1 baseline (~11.6 ms) and no bad frames, confirming the bus and node both handle the full 72-node broadcast at the design rate.
+
+</details>

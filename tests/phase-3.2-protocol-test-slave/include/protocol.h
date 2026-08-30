@@ -16,29 +16,20 @@
  *      |______ header ______|                            |
  *                                                  covers bytes 0..N-1
  *
- * ...and that whole thing is then COBS-encoded and followed by a single 0x00:
+ * The frame is COBS-encoded and terminated with a single 0x00 delimiter.
  *
- *   [ COBS( header + payload + checksum ) ][ 0x00 ]
- *
- * There is deliberately NO length field. COBS framing already tells the
- * receiver where the frame ends, so the payload length is simply
- * (decoded length - 3 header bytes - 1 checksum byte). Sending a length as
- * well would just be two wasted bytes on every packet.
- *
- * The checksum sits at the END rather than in the header so that its position
- * is always "the last byte of the decoded frame" -- derivable without first
- * knowing which command, and therefore which payload size, came in.
- *
- * Nothing here should be assembled by hand. buildFrame() and parseFrame() at
- * the bottom of this file own the layout above; they are the only two
- * functions a caller needs.
+ * Design Notes:
+ * - No explicit length field is transmitted. COBS framing implicitly defines 
+ *   the payload length: (decoded length - 3 header bytes - 1 checksum byte).
+ * - The checksum is placed at the end so it consistently represents the last 
+ *   byte of the decoded payload, regardless of the payload's size.
  * ---------------------------------------------------------------------------
  */
 
 /*
  * Packed structs are memcpy'd straight onto the wire, so both ends must agree
- * on byte order. Every node is an RP2040, so this is a safety net rather than
- * a real portability concern -- but a silent assumption is worse than a loud one.
+ * on byte order. Since the master and the slave code run on different hardware,
+ * we enforce little-endian order at compile time for safety reasons.
  */
 #if defined(__BYTE_ORDER__) && __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__
 #error "protocol.h memcpy's packed structs onto the wire; little-endian target required."
@@ -50,12 +41,11 @@
  * ---------------------------------------------------------
  */
 
-// Not transmitted. This file is duplicated into the master and slave projects;
-// bump this on any wire-format change so a stale copy is obvious in a diff.
+// Not transmitted. This file is duplicated into the master and slave projects.
 constexpr uint8_t PROTOCOL_VERSION    = 1;
 
 constexpr uint8_t FRAME_DELIMITER     = 0x00;
-constexpr uint8_t GLOBAL_BROADCAST_ID = 0xFF;
+constexpr uint8_t GLOBAL_BROADCAST_ID = 0xFF; // targetNode value to address all nodes at once
 constexpr uint8_t TOTAL_MATRIX_NODES  = 72;
 
 // Largest widget payload we can carry today. Custom widgets are a future goal
@@ -67,8 +57,8 @@ constexpr size_t  MAX_WIDGET_DATA     = 32;
  * ---------------------------------------------------------
  * COMMAND ROUTING
  * ---------------------------------------------------------
- * Init commands are heavy and rare: the master halts all other bus traffic to
- * push them. Update commands are light and continuous (60 Hz).
+ * Init commands carry more data and are only sent once. Update commands
+ * are much smaller and sent repeatedly.
  */
 enum CommandType : uint8_t {
     CMD_CLOCK_INIT    = 0x01,
@@ -81,19 +71,13 @@ enum CommandType : uint8_t {
  * ---------------------------------------------------------
  * PACKED STRUCTURES
  * ---------------------------------------------------------
- * #pragma pack(push, 1) stops the compiler inserting hidden padding bytes, so
- * the in-memory layout is exactly the wire layout.
- *
- * Packing to 1 also has a second, less obvious job: it tells the compiler these
- * structs may live at any address. parseFrame() hands back a payload pointer at
- * offset 3 of a byte buffer, which is not 2-byte aligned, and the RP2040's
- * Cortex-M0+ faults on unaligned halfword loads. Because the structs are packed,
- * the compiler emits byte-wise accesses instead, and the cast is safe.
- *
- * Every struct below is followed by a static_assert on its size. Master and
- * slave each compile their own copy of this file, and a layout mismatch between
- * them is the failure mode that is hardest to spot in a serial log -- these turn
- * it into a build error on both sides instead.
+ * #pragma pack(push, 1) serves two critical purposes here:
+ * 1. Wire Layout: Prevents the compiler from inserting hidden padding, 
+ *    ensuring the in-memory struct perfectly matches the byte layout on the wire.
+ * 2. Memory Alignment: Forces the compiler to emit safe, byte-wise accesses. 
+ *    Since parseFrame() returns a payload pointer at an unaligned offset (byte 3), 
+ *    this prevents hard alignment faults on architectures like the RP2040's 
+ *    Cortex-M0+, which cannot handle unaligned halfword/word loads natively.
  */
 #pragma pack(push, 1)
 
@@ -103,7 +87,7 @@ struct ProtocolHeader {
     uint8_t targetNode;    // 0..71 for a specific node, 0xFF for all
     uint8_t sequence;      // rolling 0..255, so gaps reveal dropped packets
 };
-static_assert(sizeof(ProtocolHeader) == 3, "ProtocolHeader must be 3 bytes on the wire");
+static_assert(sizeof(ProtocolHeader) == 3, "ProtocolHeader must be 3 bytes");
 
 // --- CLOCK PAYLOADS ---
 
@@ -112,7 +96,7 @@ struct ClockNodeData {
     uint16_t angle1DeciDeg; // Hand 1: 0..3599
     uint16_t angle2DeciDeg; // Hand 2: 0..3599
 };
-static_assert(sizeof(ClockNodeData) == 4, "ClockNodeData must be 4 bytes on the wire");
+static_assert(sizeof(ClockNodeData) == 4, "ClockNodeData must be 4 bytes");
 
 // Payload for CMD_CLOCK_UPDATE. Every node's state in ONE broadcast, so all 72
 // displays step at the same instant and the per-packet overhead is paid once
@@ -132,7 +116,7 @@ struct ClockInitData {
     uint8_t  hand1Thickness; // px
     uint8_t  hand2Thickness; // px
 };
-static_assert(sizeof(ClockInitData) == 10, "ClockInitData must be 10 bytes on the wire");
+static_assert(sizeof(ClockInitData) == 10, "ClockInitData must be 10 bytes");
 
 // --- WIDGET PAYLOADS ---
 
@@ -143,7 +127,7 @@ struct WidgetInitData {
     uint8_t  fieldCount;     // how many addressable fields this widget has
     uint8_t  reserved[2];    // room to grow without a version bump
 };
-static_assert(sizeof(WidgetInitData) == 6, "WidgetInitData must be 6 bytes on the wire");
+static_assert(sizeof(WidgetInitData) == 6, "WidgetInitData must be 6 bytes");
 
 // Payload for CMD_WIDGET_UPDATE.
 //
@@ -203,10 +187,23 @@ inline uint8_t calculateChecksum(const uint8_t* data, size_t length) {
  * Both functions take the destination capacity and return 0 rather than
  * overrunning it. Neither writes to dst beyond the returned length.
  */
-
+ 
 /**
- * Encodes data into a COBS frame and appends FRAME_DELIMITER.
- * @return bytes written to dst (delimiter included), or 0 if dst is too small.
+ * Encodes data into a COBS frame and appends the FRAME_DELIMITER.
+ *
+ * COBS replaces every 0x00 byte in the source with a "code byte" indicating 
+ * the distance to the next zero. This ensures 0x00 never appears in the payload, 
+ * allowing it to act as an unambiguous end-of-frame marker.
+ *
+ * @param src    Raw bytes to encode. May contain 0x00. Read-only.
+ * @param length Number of bytes from `src` to encode.
+ * @param dst    Caller-owned destination buffer. Written to directly.
+ * @param dstCap Capacity of `dst` in bytes. Used purely as a safety ceiling 
+ *               for bounds checking. Sizing this to >= MAX_ENCODED_FRAME 
+ *               guarantees success for any valid protocol frame.
+ *
+ * @return Bytes actually written to `dst` (including the 0x00 delimiter), 
+ *         or 0 if dstCap is insufficient to hold the result.
  */
 inline size_t cobsEncode(const uint8_t* src, size_t length, uint8_t* dst, size_t dstCap) {
     if (dstCap < 2) return 0;   // no room for even a code byte and a delimiter
@@ -244,8 +241,25 @@ inline size_t cobsEncode(const uint8_t* src, size_t length, uint8_t* dst, size_t
 
 /**
  * Decodes a COBS frame back into raw bytes.
- * @param src the bytes BETWEEN two delimiters (the 0x00 itself is not included).
- * @return the decoded length, or 0 on any framing error.
+ *
+ * Processes `src` one block at a time. Each block begins with a code byte 
+ * indicating the number of literal data bytes that follow, before the next 
+ * implied zero. This function extracts those data bytes and reinserts the 
+ * missing zeros.
+ *
+ * @param src      The encoded payload. Must NOT include the 0x00 frame 
+ *                 delimiters (the caller's receive logic must strip them prior 
+ *                 to calling). Read-only.
+ * @param length   Number of valid encoded bytes contained in `src`.
+ * @param dst      Caller-owned output buffer for the decoded bytes.
+ * @param dstCap   Capacity of `dst` in bytes. Used for strict bounds checking. 
+ *                 Should be >= MAX_DECODED_FRAME to guarantee success.
+ *
+ * @return The decoded payload length (number of bytes written to `dst`). 
+ *         Returns 0 on any framing error, specifically:
+ *         - An unexpected 0x00 byte is encountered in the encoded data.
+ *         - A code block claims more bytes than remain in `src`.
+ *         - `dstCap` is insufficient to hold the decoded result.
  */
 inline size_t cobsDecode(const uint8_t* src, size_t length, uint8_t* dst, size_t dstCap) {
     size_t read_index  = 0;
@@ -305,13 +319,18 @@ struct Frame {
 };
 
 /**
- * Builds header + payload + checksum, COBS-encodes it, appends the delimiter.
+ * Builds header + payload + checksum, COBS-encodes it, and appends the delimiter.
  *
- * @param payloadLen bytes of `payload` to actually transmit. For a fixed-size
- *        payload this is sizeof(that struct); for a widget update it is
- *        1 + however many data bytes are in use.
- * @param outCap should be at least MAX_ENCODED_FRAME.
- * @return bytes written to out (delimiter included), or 0 on error.
+ * @param cmd         Command identifier determining how the receiver interprets `payload`.
+ * @param targetNode  Specific node ID (0..71) or GLOBAL_BROADCAST_ID (0xFF).
+ * @param sequence    Rolling 0..255 sequence counter to detect dropped packets.
+ * @param payload     Pointer to payload data (may be nullptr if payloadLen is 0).
+ * @param payloadLen  Actual bytes of `payload` to transmit. For variable storage 
+ *                    types like WidgetUpdateData, this should only be the used prefix.
+ * @param out         Caller-owned destination buffer for the fully encoded frame.
+ * @param outCap      Capacity of `out`. Used for bounds checking.
+ *
+ * @return Total bytes written to `out` (ready for transmission), or 0 on error.
  */
 inline size_t buildFrame(CommandType cmd, uint8_t targetNode, uint8_t sequence,
                          const void* payload, size_t payloadLen,
@@ -338,15 +357,19 @@ inline size_t buildFrame(CommandType cmd, uint8_t targetNode, uint8_t sequence,
 /**
  * Validates and unpacks one received frame.
  *
- * Checks run most-fundamental first: framing, then size, then integrity, then
- * meaning. The payload-length check matters more than it looks -- it is what
- * makes the caller's cast to a payload struct safe. Without it, a corrupted
- * command byte could reinterpret a 33-byte widget frame as a 288-byte
- * GlobalClockUpdate and read 255 bytes off the end of the buffer.
+ * Validation is strictly layered: COBS framing -> minimum length -> 
+ * XOR checksum -> command/payload matching -> target node validation.
  *
- * @param encoded bytes received between two delimiters (delimiter NOT included).
- * @param scratch caller-owned decode buffer, at least MAX_DECODED_FRAME bytes.
- *        out->payload points into it, so it must outlive the returned Frame.
+ * @param encoded     COBS-encoded bytes received (excluding the 0x00 delimiter).
+ * @param encodedLen  Number of valid bytes in `encoded`.
+ * @param scratch     Decode workspace buffer. IMPORTANT: `out->payload` points 
+ *                    directly into this buffer upon success, so `scratch` must 
+ *                    remain alive and unmodified while the parsed frame is in use.
+ * @param scratchCap  Capacity of `scratch`.
+ * @param out         Populated with the parsed header and a payload pointer/length. 
+ *                    Left untouched if parsing fails.
+ *
+ * @return PARSE_OK on success, or a specific PARSE_ERR_* identifying the failure point.
  */
 inline ParseResult parseFrame(const uint8_t* encoded, size_t encodedLen,
                               uint8_t* scratch, size_t scratchCap,
