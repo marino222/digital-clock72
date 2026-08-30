@@ -75,6 +75,22 @@ FPS:87.2  draw avg:8.83ms max:9.44ms  push avg:2.61ms max:3.27ms  [prev report: 
 
 </details>
 
+<details>
+<summary><strong>1.2 power measurement</strong></summary>
+
+### Objective
+
+Measure how much power a Raspberry Pi Pico with an attached GC9A01 display and RS485 communication draws
+
+### Results
+
+The following average values were recorded:
+- 5.1 V
+- 0.06 A
+- 0.3 W
+
+</details>
+
 
 <details>
 <summary><strong>2.1 RS485 link</strong></summary>
