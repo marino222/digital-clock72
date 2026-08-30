@@ -129,10 +129,10 @@ This roadmap tracks the project progress. The approach is to test cheap, risky p
 
 | Phase | Goal | Status |
 |---|---|---|
-| 1 | Test a single display at 60 FPS and measure power | ✅ In progress|
+| 1 | Test a single display at 60 FPS and measure power | ✅ Completed|
 | 2 | Prove the RS485 link with a disposable test sender | ✅ Completed |
-| 3 | Prove the state protocol and slave firmware on breadboards | ✅ In progress|
-| 4 | Confirm the display hardware | ⬜ Not started |
+| 3 | Prove the state protocol and slave firmware on breadboards | ✅ Completed|
+| 4 | Confirm the display hardware | ⚙ In progress |
 | 5 | Build small prototype | ⬜ Not started |
 | 6 | Scale to 24, then 72 nodes | ⬜ Not started |
 | 7 | Add applications and the web UI | ⬜ Not started |
