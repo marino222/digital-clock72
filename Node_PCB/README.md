@@ -1,11 +1,9 @@
 # Node_PCB
 
 
-## The broad idea
+Each pixel node is one self contained board carrying one microcontroller and one round LCD, wired to its neighbors over a shared bus. The full array is this same board built N times, with a target of 72 nodes. This README describes one of the nodes.
 
-Each pixel node is one self contained board carrying one microcontroller and one round LCD, wired to its neighbors over a shared bus. The full array is this same board built N times, with a target of 72 nodes.
-
-## What the board should contain
+## What the board contains
 
 - An RP2040 microcontroller and an external flash chip
 - A connector for the GC9A01 round LCD
@@ -13,59 +11,49 @@ Each pixel node is one self contained board carrying one microcontroller and one
 - Power regulation, with separate rails for the logic and the display backlight
 - USB-C and/or SWD pads for flashing firmware
 
-## Manufacturing plan
-
-The board is meant for full JLCPCB turnkey SMT assembly, with no hand soldering. Since the install needs dozens of identical boards, every part needs to be one JLC can place automatically.
 
 ## Design reference
 
-Board layout will follow Raspberry Pi's RP2040 [hardware design guidelines](/docs/datasheets/hardware-design-with-rp2040.pdf).
+The board layout follows Raspberry Pi's RP2040 [hardware design guidelines](/docs/datasheets/hardware-design-with-rp2040.pdf), which include a minimal RP2040 example design. Its KiCad files are open source, so they are used as the starting reference.
 
-## Block diagram (rough)
+![RP2040 minimal design example](/docs/images/rp2040_minimal_design_example.png)
 
-```
-        ┌─────────────┐
-        │   RP2040    │
-        └──┬───┬───┬──┘
-           │   │   │
-     ┌─────▼┐ ┌▼───▼┐ ┌────────┐
-     │ LCD  │ │Power│ │ RS485  │
-     └──────┘ └─────┘ └───┬────┘
-                       BUS IN/OUT
-```
+The image above shows this minimal design. Core components like the crystal oscillator, flash chip, and voltage regulator should stay the same. From there:
 
-This is a placeholder. A cleaner diagram (image or PowerPoint export) can replace it later.
+- Remove unnecessary I/O pins
+- Add a 12-pin ZIF connector for the display
+- Add the components needed for RS485 communication
+- Add connectors for the power supply (power is not longer supplied via USB)
+- Replace the Bootsel jumper pins (J2) with a button
 
-## Cost estimate
+Only SMD components are used, so the boards can be assembled by machine.
 
-> Estimates, not a quote. JLCPCB fab/assembly fees and part prices shift over time. Pull a live quote with the finalized BOM before committing. Display price dominates and varies most by supplier.
 
-### Per node bill of materials (electronics)
+## Block diagram 
 
-| Item | Est. unit cost |
-|---|---|
-| RP2040 (C2040) | $0.70 |
-| QSPI flash, 2 MB | $0.12 |
-| 12 MHz crystal | $0.12 |
-| 3.3 V LDO | $0.12 |
-| Core switcher inductor | $0.04 |
-| USB-C connector | $0.12 |
-| BOOT button | $0.03 |
-| RS485 transceiver (THVD1450) | $0.50 |
-| 2 bus connectors | $0.20 |
-| FPC connector | $0.15 |
-| Passives (CC resistors, decoupling, bias, term, ~25 parts) | $0.25 |
-| **MCU/board electronics subtotal** | **≈ $2.35** |
-| GC9A01 1.28" FPC display | $3.00 to $4.00 |
-| Bare PCB (2 layer, at volume) | $0.30 to $0.50 |
-| SMT assembly (per board share) | $0.20 to $0.40 |
-| **Estimated total per node** | **≈ $6.00 to $7.50** |
+![Block diagram of PCB components](/docs/images/pcb_block_diagram.png)
 
+## List of components
+
+> All components need to be available in the JLCPCB parts library so they can be used for automatic assembly. Should they not be available, a suitable alternative has to be found.
+
+Common parts like resistors and capacitors are not shown in this list. They may be viewed on the BOM of the final PCB design.
+
+| Part | Manufacturer number | JLCPCB part number |  used in reference design |
+| --- | --- | --- | --- | 
+| MCU | RP2040 | C2040 | ✅ |
+| Flash, 4 MB | W25Q32JVS | C97521 | ✅ |
+| Crystal, 12 MHz | ABM8-272-T3 | C20625731 | ✅ |
+| USB-C connector | TYPE-C-31-M-12 | C165948 | ❌ |
+| BOOTSEL button | TS-1187A-B-A-B | C318884 | ❌ |
+| RS485 transceiver | THVD1450DR | C2671361 | ❌ |
+| ZIF, bottom contact | AFC07-S12FCC-00 | C11051 | ❌ |
+
+> Note that the listed flash chip isn't the same as in the reference design. There a 16 Mb chip is used, which is very likely overkill for this project. To save costs this is scaled down to a 4 Mb chip. For this purpose the [hardware design guidelines](/docs/datasheets/hardware-design-with-rp2040.pdf) explicitly states that most 25-series flash devices may be used. So by using a smaller capacity storage from the same manufacturer shouldn't cause any trouble.
 
 ## Open uncertainties
 
 - The GC9A01 FPC tail spec (pin count, pitch, orientation) needs to be confirmed from physical samples.
-- Depending on availability of the displays, we might switch to dev boards instead of the bare display (prices might be similar)
 - Real per node power draw (idle, full white, inrush) hasn't been measured yet.
 - Exact RS485 transceiver part is not finalized (THVD1450 vs SN65HVD75).
 - Bus connector choice (pin count, current rating, polarization) is still open.
