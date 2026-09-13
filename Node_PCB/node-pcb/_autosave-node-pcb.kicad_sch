@@ -723,6 +723,326 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "EasyEDA:0402WGF1001TCE"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "0402WGF1001TCE"
+				(at 0 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "EasyEDA:R0402"
+				(at 0 -7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_1KR-1001-1_C11702.html"
+				(at 0 -10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "1KΩ (1001) ±1%"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Manufacturer" "UNI-ROYAL(厚声)"
+				(at 0 -12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "MPN" "0402WGF1001TCE"
+				(at 0 -15.24 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC Part" "C11702"
+				(at 0 -17.78 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "Resistors"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "0402WGF1001TCE_0_1"
+				(rectangle
+					(start -2.54 1.02)
+					(end 2.54 -1.02)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin input line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EasyEDA:0402WGF1002TCE"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "0402WGF1002TCE"
+				(at 0 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "EasyEDA:R0402"
+				(at 0 -7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_10KR-1002-1_C25744.html"
+				(at 0 -10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "10KΩ (1002) ±1%"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Manufacturer" "UNI-ROYAL(厚声)"
+				(at 0 -12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "MPN" "0402WGF1002TCE"
+				(at 0 -15.24 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC Part" "C25744"
+				(at 0 -17.78 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "Resistors"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "0402WGF1002TCE_0_1"
+				(rectangle
+					(start -2.54 1.02)
+					(end 2.54 -1.02)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin input line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "EasyEDA:0603WAF5101T5E"
 			(pin_numbers
 				(hide yes)
@@ -1047,6 +1367,467 @@
 						)
 					)
 					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EasyEDA:CL05B104KO5NNNC"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "C"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "CL05B104KO5NNNC"
+				(at 0 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "EasyEDA:C0402"
+				(at 0 -7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL05B104KO5NNNC_100nF-104-10-16V_C1525.html"
+				(at 0 -10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "100nF (104) ±10% 16V"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Manufacturer" "SAMSUNG(三星)"
+				(at 0 -12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "MPN" "CL05B104KO5NNNC"
+				(at 0 -15.24 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC Part" "C1525"
+				(at 0 -17.78 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "Multilayer Ceramic Capacitors MLCC - SMD/SMT"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "CL05B104KO5NNNC_0_1"
+				(polyline
+					(pts
+						(xy -0.51 0) (xy -2.54 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.51 -2.03) (xy -0.51 2.03)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.51 2.03) (xy 0.51 -2.03)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 0.51 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin unspecified line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EasyEDA:TS-1187A-B-A-B"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "SW"
+				(at 0 7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TS-1187A-B-A-B"
+				(at 0 -10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "EasyEDA:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+				(at 0 -12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+				(at 0 -15.24 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Manufacturer" "XKB Connection(中国星坤)"
+				(at 0 -17.78 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "MPN" "TS-1187A-B-A-B"
+				(at 0 -20.32 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC Part" "C318884"
+				(at 0 -22.86 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "Tactile Switches"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TS-1187A-B-A-B_0_1"
+				(polyline
+					(pts
+						(xy -2.54 2.54) (xy 2.54 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 -5.08) (xy 2.54 -5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.51 0.76) (xy -1.27 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0.76) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 0.51)
+					(radius 0.32)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 -2.79)
+					(radius 0.32)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -3.3) (xy 0 -5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin unspecified line
+					(at -5.08 2.54 0)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 5.08 2.54 180)
+					(length 2.54)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at -5.08 -5.08 0)
+					(length 2.54)
+					(name "C"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 5.08 -5.08 180)
+					(length 2.54)
+					(name "D"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3118,275 +3899,6 @@
 					(at 0 -2.54 90)
 					(length 2.032)
 					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "RPI_DB:Connectors | Pin_Headers/RP-01JV5X-LY21H5"
-			(pin_names
-				(offset 1.016)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J"
-				(at -2.54 5.334 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "TSW-102-07-G-S"
-				(at 0 -5.588 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "RPI_COMPILED:samtec_tsw-102-07-g-s"
-				(at 0 -16.51 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "file:///C:\\rpi-pdb\\parts\\Connectors\\Pin_Headers\\SAMTEC_TSW-102-07-G-S\\datasheets"
-				(at 0 -16.51 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Pin Header, 01x02W, 2.54mm, PTH, Male"
-				(at 0 -16.51 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "part_uid" "RP-01JV5X-LY21H5"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "status" "OK"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "manufacturer" "Samtec"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "manufacturer_pn" "TSW-102-07-G-S"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "packaging" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "packaging_qty" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "lcsc_pn" "C7402729"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "z_height_max" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "size" "5.08x2.54x10.92mm"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "package" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "z_height_nom" "8.38mm"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "RPI_COMPILED:samtec_tsw-102-07-g-s"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Connectors | Pin_Headers/RP-01JV5X-LY21H5_1_1"
-				(rectangle
-					(start -2.54 3.81)
-					(end 2.54 -3.81)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(rectangle
-					(start -0.762 2.032)
-					(end 0.762 0.508)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -0.762 -0.508)
-					(end 0.762 -2.032)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at -6.35 1.27 0)
-					(length 3.81)
-					(name "Pin_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -6.35 -1.27 0)
-					(length 3.81)
-					(name "Pin_2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -6883,358 +7395,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "RPI_DB:Resistors | Chip | M1005/RP-019A1P-53DHSX"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0.254)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "R"
-				(at 1.27 4.064 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "10k"
-				(at 1.27 2.032 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" "RPI_COMPILED:generic_resc1005x35"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "file:///C:\\rpi-pdb\\parts\\Resistors\\Chip\\M1005\\YAGEO_RC0402FR-07.autogen\\datasheets"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Resistor, Chip, 10kR, M1005, 63mW, 1%"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "power" "63mW"
-				(at 1.27 -2.032 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "tolerance" "1%"
-				(at 1.27 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "package" "M1005"
-				(at 1.27 -4.064 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "part_uid" "RP-019A1P-53DHSX"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "status" "OK"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "manufacturer" "Yageo"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "manufacturer_pn" "RC0402FR-0710KL"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "packaging" "7 inch dia. paper taping reel"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "packaging_qty" "10000"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "lcsc_pn" "C60490"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "voltage" "50V"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "z_height_max" "0.4mm"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "resistance" "10k"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "size" "1x0.5x0.35mm"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "operating_temp_max" "+155C"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "material" "Thick Film"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "temp_coefficient" "100ppm/degC"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "current" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "operating_temp_min" "-55C"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "z_height_nom" "0.35mm"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "RPI_COMPILED:generic_resc1005x35"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Resistors | Chip | M1005/RP-019A1P-53DHSX_0_1"
-				(rectangle
-					(start -0.762 1.778)
-					(end 0.762 -1.778)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "Resistors | Chip | M1005/RP-019A1P-53DHSX_1_1"
-				(pin passive line
-					(at 0 2.54 270)
-					(length 0.762)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -2.54 90)
-					(length 0.762)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "RPI_DB:Resistors | Chip | M1005/RP-01C89V-LTEYC4"
 			(pin_numbers
 				(hide yes)
@@ -7855,12 +8015,6 @@
 		(uuid "1608f6dc-da92-4256-84da-98cadf68bd71")
 	)
 	(junction
-		(at 111.76 109.22)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "16e6b60d-a2ea-4ad3-99f8-1d819aadd619")
-	)
-	(junction
 		(at 85.09 41.91)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -8005,7 +8159,7 @@
 		(uuid "742aab9f-fd9d-496e-89e5-931e797a61b6")
 	)
 	(junction
-		(at 111.76 105.41)
+		(at 100.33 109.22)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "74a023e9-4461-4294-9c9f-dc16905b3c7b")
@@ -8210,6 +8364,24 @@
 		(at 49.53 69.85)
 		(uuid "474bf061-ba34-4f56-a0b2-ccfcb2533ebe")
 	)
+	(no_connect
+		(at 21.59 133.35)
+		(uuid "57cf7d4d-10ff-4578-844a-8e7a3f214fa8")
+	)
+	(no_connect
+		(at 21.59 125.73)
+		(uuid "c0f2d67a-6547-4564-98d0-e7966082003d")
+	)
+	(wire
+		(pts
+			(xy 31.75 133.35) (xy 38.1 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "029b4978-bfbb-4218-a1c8-b729ae041564")
+	)
 	(wire
 		(pts
 			(xy 167.64 158.75) (xy 152.4 158.75)
@@ -8372,7 +8544,7 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 142.24) (xy 90.17 142.24)
+			(xy 71.12 138.43) (xy 90.17 138.43)
 		)
 		(stroke
 			(width 0)
@@ -8462,16 +8634,6 @@
 	)
 	(wire
 		(pts
-			(xy 111.76 105.41) (xy 111.76 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1a41d84a-edbc-4f7f-8e91-d69b0917f1e9")
-	)
-	(wire
-		(pts
 			(xy 214.63 111.76) (xy 212.09 111.76)
 		)
 		(stroke
@@ -8499,16 +8661,6 @@
 			(type default)
 		)
 		(uuid "1da0fa30-4390-4aa3-969a-71c3c4e608a5")
-	)
-	(wire
-		(pts
-			(xy 111.76 125.73) (xy 110.49 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1e30cf28-642b-4ba8-8ed4-ef078c0a6cc1")
 	)
 	(wire
 		(pts
@@ -8562,7 +8714,7 @@
 	)
 	(wire
 		(pts
-			(xy 111.76 104.14) (xy 111.76 105.41)
+			(xy 100.33 104.14) (xy 100.33 109.22)
 		)
 		(stroke
 			(width 0)
@@ -8659,16 +8811,6 @@
 			(type default)
 		)
 		(uuid "29f65cf9-8977-4a92-8365-57f19f38d54d")
-	)
-	(wire
-		(pts
-			(xy 110.49 142.24) (xy 111.76 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2c1a945b-8fa0-4124-a8b7-6f7d79801967")
 	)
 	(wire
 		(pts
@@ -8882,16 +9024,6 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 109.22) (xy 63.5 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "40179562-446d-4867-a936-60fd786c7b6f")
-	)
-	(wire
-		(pts
 			(xy 246.38 63.5) (xy 246.38 66.04)
 		)
 		(stroke
@@ -8922,7 +9054,7 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 119.38) (xy 63.5 125.73)
+			(xy 63.5 123.19) (xy 63.5 125.73)
 		)
 		(stroke
 			(width 0)
@@ -8949,16 +9081,6 @@
 			(type default)
 		)
 		(uuid "464cef61-1b68-4116-ab9f-52e6df089f72")
-	)
-	(wire
-		(pts
-			(xy 107.95 158.75) (xy 107.95 158.115)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4823c7c8-bc37-447a-a2d5-86580144f07e")
 	)
 	(wire
 		(pts
@@ -9032,6 +9154,16 @@
 	)
 	(wire
 		(pts
+			(xy 100.33 109.22) (xy 100.33 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "535f0050-d060-4403-9c6f-5254eec367d6")
+	)
+	(wire
+		(pts
 			(xy 146.05 128.27) (xy 167.64 128.27)
 		)
 		(stroke
@@ -9062,7 +9194,7 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 134.62) (xy 90.17 134.62)
+			(xy 71.12 133.35) (xy 90.17 133.35)
 		)
 		(stroke
 			(width 0)
@@ -9162,7 +9294,7 @@
 	)
 	(wire
 		(pts
-			(xy 118.11 105.41) (xy 111.76 105.41)
+			(xy 118.11 109.22) (xy 100.33 109.22)
 		)
 		(stroke
 			(width 0)
@@ -9452,6 +9584,16 @@
 	)
 	(wire
 		(pts
+			(xy 63.5 113.03) (xy 63.5 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "76854dfd-0844-4190-81e2-28a2ce84a89c")
+	)
+	(wire
+		(pts
 			(xy 167.64 148.59) (xy 152.4 148.59)
 		)
 		(stroke
@@ -9462,23 +9604,13 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 138.43) (xy 90.17 138.43)
+			(xy 71.12 135.89) (xy 90.17 135.89)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "7820377f-05d2-4a51-a04a-8acc6195c2e0")
-	)
-	(wire
-		(pts
-			(xy 31.75 128.27) (xy 33.02 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "789ee512-bd38-41b6-a4fd-b41c4cbcf5f6")
 	)
 	(wire
 		(pts
@@ -10052,6 +10184,26 @@
 	)
 	(wire
 		(pts
+			(xy 38.1 133.35) (xy 38.1 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a398e9fa-07cd-4444-be6f-72977ae9a7c0")
+	)
+	(wire
+		(pts
+			(xy 55.88 125.73) (xy 90.17 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a40ea141-dccb-447b-991c-6a67b4cee416")
+	)
+	(wire
+		(pts
 			(xy 303.53 149.86) (xy 309.88 149.86)
 		)
 		(stroke
@@ -10069,16 +10221,6 @@
 			(type default)
 		)
 		(uuid "a6037d44-40d1-4630-ae68-41aaa525c873")
-	)
-	(wire
-		(pts
-			(xy 111.76 109.22) (xy 111.76 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a71ae638-7647-4b64-9fea-266ea8e0e4c5")
 	)
 	(wire
 		(pts
@@ -10102,7 +10244,7 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 132.08) (xy 90.17 132.08)
+			(xy 71.12 130.81) (xy 90.17 130.81)
 		)
 		(stroke
 			(width 0)
@@ -10322,16 +10464,6 @@
 	)
 	(wire
 		(pts
-			(xy 111.76 142.24) (xy 111.76 143.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bd12827d-91f0-4d56-ae59-254204a7457c")
-	)
-	(wire
-		(pts
 			(xy 184.15 175.26) (xy 184.15 190.5)
 		)
 		(stroke
@@ -10492,16 +10624,6 @@
 	)
 	(wire
 		(pts
-			(xy 50.8 125.73) (xy 63.5 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c6e664d1-b55e-47d2-8597-5cb793ba0fe3")
-	)
-	(wire
-		(pts
 			(xy 85.09 40.64) (xy 85.09 41.91)
 		)
 		(stroke
@@ -10549,16 +10671,6 @@
 			(type default)
 		)
 		(uuid "ca2b5948-2aad-467a-90e2-228f018d0f91")
-	)
-	(wire
-		(pts
-			(xy 118.11 113.03) (xy 118.11 115.57)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cac99f30-b586-43ca-a3b6-7f42ba5a8a52")
 	)
 	(wire
 		(pts
@@ -10822,7 +10934,7 @@
 	)
 	(wire
 		(pts
-			(xy 118.11 105.41) (xy 118.11 107.95)
+			(xy 118.11 109.22) (xy 118.11 110.49)
 		)
 		(stroke
 			(width 0)
@@ -10862,16 +10974,6 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 125.73) (xy 90.17 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "de7e8f35-0c7d-48d3-a235-ba33e5d2d360")
-	)
-	(wire
-		(pts
 			(xy 212.09 111.76) (xy 212.09 114.3)
 		)
 		(stroke
@@ -10879,6 +10981,16 @@
 			(type default)
 		)
 		(uuid "df048360-17a5-4ec7-a313-fe50056d7dc3")
+	)
+	(wire
+		(pts
+			(xy 63.5 109.22) (xy 100.33 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e23cde13-61cd-4719-b17f-6b86e3cb50ec")
 	)
 	(wire
 		(pts
@@ -11102,16 +11214,6 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 109.22) (xy 111.76 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fb429b22-8c23-47a4-a17e-f6eb876bde44")
-	)
-	(wire
-		(pts
 			(xy 228.6 135.89) (xy 243.84 135.89)
 		)
 		(stroke
@@ -11129,16 +11231,6 @@
 			(type default)
 		)
 		(uuid "fbb43639-5148-47b3-86ae-a0667d91ac27")
-	)
-	(wire
-		(pts
-			(xy 33.02 128.27) (xy 33.02 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fd222048-1df6-4133-9d39-11baa972cc0e")
 	)
 	(wire
 		(pts
@@ -11201,7 +11293,7 @@
 		(uuid "10ad0549-131d-433a-9770-6b620df943b7")
 	)
 	(label "QSPI_SD3"
-		(at 71.12 142.24 0)
+		(at 71.12 138.43 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -11381,7 +11473,7 @@
 		(uuid "48364ea6-10f8-4ecc-af60-6bafe73190aa")
 	)
 	(label "QSPI_SD1"
-		(at 71.12 134.62 0)
+		(at 71.12 133.35 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -11821,7 +11913,7 @@
 		(uuid "c6125a44-5e65-43af-9cd7-c8bc4162bca7")
 	)
 	(label "QSPI_SD2"
-		(at 71.12 138.43 0)
+		(at 71.12 135.89 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -11831,7 +11923,7 @@
 		(uuid "c8f599e8-e6d2-4317-8187-7d4fd6215fe7")
 	)
 	(label "QSPI_SD0"
-		(at 71.12 132.08 0)
+		(at 71.12 130.81 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -12344,7 +12436,7 @@
 	)
 	(symbol
 		(lib_id "RPI - Power:PWR_NET")
-		(at 111.76 104.14 0)
+		(at 100.33 104.14 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12354,7 +12446,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005eda6c1c")
 		(property "Reference" "#PWR07"
-			(at 111.76 107.95 0)
+			(at 100.33 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12365,7 +12457,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 112.141 99.7458 0)
+			(at 100.711 99.7458 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12375,7 +12467,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 111.76 104.14 0)
+			(at 100.33 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12386,7 +12478,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 111.76 104.14 0)
+			(at 100.33 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12397,7 +12489,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 111.76 104.14 0)
+			(at 100.33 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12421,7 +12513,7 @@
 	)
 	(symbol
 		(lib_id "RPI - Power:GND")
-		(at 111.76 143.51 0)
+		(at 100.33 146.05 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12431,7 +12523,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005eda75f4")
 		(property "Reference" "#PWR08"
-			(at 111.76 149.86 0)
+			(at 100.33 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12442,7 +12534,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 111.76 147.447 0)
+			(at 100.33 149.987 0)
 			(show_name no)
 			(do_not_autoplace yes)
 			(effects
@@ -12452,7 +12544,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 111.76 143.51 0)
+			(at 100.33 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12463,7 +12555,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 111.76 143.51 0)
+			(at 100.33 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12474,7 +12566,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 111.76 143.51 0)
+			(at 100.33 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12497,823 +12589,8 @@
 		)
 	)
 	(symbol
-		(lib_id "RPI_DB:Resistors | Chip | M1005/RP-019A1P-53DHSX")
-		(at 63.5 116.84 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "00000000-0000-0000-0000-00005edac067")
-		(property "Reference" "R2"
-			(at 64.77 112.776 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10k"
-			(at 64.77 114.808 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "RPI_COMPILED:generic_resc1005x35"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "file:///C:\\rpi-pdb\\parts\\Resistors\\Chip\\M1005\\YAGEO_RC0402FR-07.autogen\\datasheets"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, Chip, 10kR, M1005, 63mW, 1%"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "power" "63mW"
-			(at 64.77 118.872 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "tolerance" "1%"
-			(at 64.77 116.84 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "package" "M1005"
-			(at 64.77 120.904 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "part_uid" "RP-019A1P-53DHSX"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "manufacturer" "Yageo"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "manufacturer_pn" "RC0402FR-0710KL"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "packaging" "7 inch dia. paper taping reel"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "packaging_qty" "10000"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "voltage" "50V"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "z_height_max" "0.4mm"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "resistance" "10k"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "size" "1x0.5x0.35mm"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "operating_temp_max" "+155C"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "material" "Thick Film"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "temp_coefficient" "100ppm/degC"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "current" ""
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "operating_temp_min" "-55C"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "z_height_nom" "0.35mm"
-			(at 63.5 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ff81f0bb-a638-4c96-bd52-09f3d0dbe10c")
-		)
-		(pin "2"
-			(uuid "2516d6fa-aeb0-43a9-a505-d23ff78a2c30")
-		)
-		(instances
-			(project "node-pcb"
-				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "R2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "RPI_DB:Resistors | Chip | M1005/RP-019A1P-4Z6ZWY")
-		(at 48.26 125.73 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "00000000-0000-0000-0000-00005edae9f0")
-		(property "Reference" "R1"
-			(at 52.324 127 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1k"
-			(at 50.292 127 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "RPI_COMPILED:generic_resc1005x35"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "file:///C:\\rpi-pdb\\parts\\Resistors\\Chip\\M1005\\YAGEO_RC0402FR-07.autogen\\datasheets"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, Chip, 1kR, M1005, 63mW, 1%"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "power" "63mW"
-			(at 46.228 127 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "tolerance" "1%"
-			(at 48.26 127 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "package" "M1005"
-			(at 44.196 127 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "part_uid" "RP-019A1P-4Z6ZWY"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "manufacturer" "Yageo"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "manufacturer_pn" "RC0402FR-071KL"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "packaging" "7 inch dia. paper taping reel"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "packaging_qty" "10000"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "voltage" "50V"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "z_height_max" "0.4mm"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "resistance" "1k"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "size" "1x0.5x0.35mm"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "operating_temp_max" "+155C"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "material" "Thick Film"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "temp_coefficient" "100ppm/degC"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "current" ""
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "operating_temp_min" "-55C"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "z_height_nom" "0.35mm"
-			(at 48.26 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "570b973b-a40f-434a-b099-b049ea00792b")
-		)
-		(pin "2"
-			(uuid "f78bd9f4-bda7-40a4-8410-531c54e077c9")
-		)
-		(instances
-			(project "node-pcb"
-				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "R1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "RPI_DB:Capacitors | MLCC | M1005/RP-01BJ9Y-KRGF41")
-		(at 118.11 110.49 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "00000000-0000-0000-0000-00005edb1aa1")
-		(property "Reference" "C5"
-			(at 120.142 105.41 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100n"
-			(at 120.142 107.442 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "RPI_COMPILED:generic_capc1005x50"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "file:///C:\\rpi-pdb\\parts\\Capacitors\\MLCC\\M1005\\MURATA_GRM155R71E104KE14D\\datasheets"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Capacitor, MLCC, 100nF, 10%, M1005, 25V, X7R"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "package" "M1005"
-			(at 120.142 115.57 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "voltage" "25V"
-			(at 120.142 111.506 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "dielectric" "X7R"
-			(at 120.142 113.538 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "tolerance" "10%"
-			(at 120.142 109.474 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "part_uid" "RP-01BJ9Y-KRGF41"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "manufacturer" "Murata"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "manufacturer_pn" "GRM155R71E104KE14D"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "packaging" "180mm paper taping"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "packaging_qty" "10000"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "capacitance" "100n"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "operating_temp_max" "+125C"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "material" "Ceramic"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "temp_coefficient" "X7R"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "operating_temp_min" "-55C"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "size" "1.0x0.5x0.5mm"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "z_height_nom" "0.5mm"
-			(at 118.11 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "176cc445-4234-4132-a257-eef61725e826")
-		)
-		(pin "2"
-			(uuid "caf052ef-160e-49a8-9d8a-e9b05b8c8c9e")
-		)
-		(instances
-			(project "node-pcb"
-				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "C5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "RPI - Power:GND")
-		(at 118.11 115.57 0)
+		(at 118.11 120.65 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -13323,7 +12600,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005edb5c1d")
 		(property "Reference" "#PWR011"
-			(at 118.11 121.92 0)
+			(at 118.11 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13334,7 +12611,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 118.11 119.507 0)
+			(at 118.11 124.587 0)
 			(show_name no)
 			(do_not_autoplace yes)
 			(effects
@@ -13344,7 +12621,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 118.11 115.57 0)
+			(at 118.11 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13355,7 +12632,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 118.11 115.57 0)
+			(at 118.11 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13366,7 +12643,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 118.11 115.57 0)
+			(at 118.11 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18917,187 +18194,8 @@
 		)
 	)
 	(symbol
-		(lib_id "RPI_DB:Connectors | Pin_Headers/RP-01JV5X-LY21H5")
-		(at 25.4 127 0)
-		(mirror y)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "00000000-0000-0000-0000-00005f30f0ba")
-		(property "Reference" "J2"
-			(at 23.368 121.666 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TSW-102-07-G-S"
-			(at 25.908 135.89 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "RPI_COMPILED:samtec_tsw-102-07-g-s"
-			(at 25.4 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "file:///C:\\rpi-pdb\\parts\\Connectors\\Pin_Headers\\SAMTEC_TSW-102-07-G-S\\datasheets"
-			(at 25.4 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Pin Header, 01x02W, 2.54mm, PTH, Male"
-			(at 25.4 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "part_uid" "RP-01JV5X-LY21H5"
-			(at 25.4 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "manufacturer" "Samtec"
-			(at 25.4 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "manufacturer_pn" "TSW-102-07-G-S"
-			(at 25.4 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "packaging" ""
-			(at 25.4 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "packaging_qty" ""
-			(at 25.4 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "z_height_max" ""
-			(at 25.4 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "size" "5.08x2.54x10.92mm"
-			(at 25.4 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "package" ""
-			(at 25.4 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "z_height_nom" "8.38mm"
-			(at 25.4 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a3cc3b00-4af0-4c36-9584-bfcea22d0220")
-		)
-		(pin "2"
-			(uuid "8902f4de-673d-4e2d-8dad-0b7e08d3153c")
-		)
-		(instances
-			(project "node-pcb"
-				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "J2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "RPI - Power:GND")
-		(at 33.02 129.54 0)
+		(at 38.1 137.16 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -19107,7 +18205,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005f30fde4")
 		(property "Reference" "#PWR02"
-			(at 33.02 135.89 0)
+			(at 38.1 143.51 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19118,7 +18216,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 33.02 133.477 0)
+			(at 38.1 141.097 0)
 			(show_name no)
 			(do_not_autoplace yes)
 			(effects
@@ -19128,7 +18226,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 33.02 129.54 0)
+			(at 38.1 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19139,7 +18237,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 33.02 129.54 0)
+			(at 38.1 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19150,7 +18248,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 33.02 129.54 0)
+			(at 38.1 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19806,6 +18904,121 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EasyEDA:0402WGF1002TCE")
+		(at 63.5 118.11 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp yes)
+		(fields_autoplaced yes)
+		(uuid "1439dd0f-fb5b-4403-8665-49ccf9090430")
+		(property "Reference" "R2"
+			(at 66.04 116.8399 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 66.04 119.3799 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EasyEDA:R0402"
+			(at 55.88 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_10KR-1002-1_C25744.html"
+			(at 53.34 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "10KΩ (1002) ±1%"
+			(at 63.5 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL(厚声)"
+			(at 50.8 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0402WGF1002TCE"
+			(at 48.26 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C25744"
+			(at 45.72 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "51aba87b-c096-43eb-b565-94f34b7b0f32")
+		)
+		(pin "1"
+			(uuid "726cb1d6-d7dc-488b-80a8-a612bb0aced2")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -22178,6 +21391,121 @@
 		)
 	)
 	(symbol
+		(lib_id "EasyEDA:CL05B104KO5NNNC")
+		(at 118.11 115.57 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ac8d8168-bbfb-4520-94a3-5d91d5f50a3e")
+		(property "Reference" "C5"
+			(at 121.92 114.2999 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 121.92 116.8399 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EasyEDA:C0402"
+			(at 110.49 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL05B104KO5NNNC_100nF-104-10-16V_C1525.html"
+			(at 107.95 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "100nF (104) ±10% 16V"
+			(at 118.11 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "SAMSUNG(三星)"
+			(at 105.41 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL05B104KO5NNNC"
+			(at 102.87 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C1525"
+			(at 100.33 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "2b0c8227-0f6c-42c2-9113-485463dc7dd4")
+		)
+		(pin "1"
+			(uuid "53c21b15-133d-4987-acdd-362cd4f74131")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "C5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "RPI - Power:GND")
 		(at 55.88 20.32 0)
 		(mirror x)
@@ -23122,8 +22450,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Memory_Flash:W25Q32JVSS")
-		(at 133.35 88.9 0)
+		(lib_id "EasyEDA:TS-1187A-B-A-B")
+		(at 26.67 128.27 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -23131,10 +22459,127 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
+		(uuid "e8feebb4-66c9-40b5-a99d-006df5162d38")
+		(property "Reference" "SW1"
+			(at 26.924 122.174 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TS-1187A-B-A-B"
+			(at 25.4 136.906 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EasyEDA:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL_H1.5"
+			(at 26.67 140.97 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Tactile-Switches_XKB-Enterprise-TS-1187-B-A-A_C318884.html"
+			(at 26.67 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 26.67 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "XKB Connection(中国星坤)"
+			(at 26.67 146.05 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "TS-1187A-B-A-B"
+			(at 26.67 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C318884"
+			(at 26.67 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "95a87b83-a739-4c86-8f3a-f054a7cdde1f")
+		)
+		(pin "2"
+			(uuid "1834f02a-b004-4fe0-911c-299e90d33f09")
+		)
+		(pin "4"
+			(uuid "69e58c6c-d4c9-400c-83e5-c23019fb641a")
+		)
+		(pin "3"
+			(uuid "aeb3cd2c-08a2-40c7-9eee-7d61b563a499")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "SW1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Memory_Flash:W25Q32JVSS")
+		(at 100.33 133.35 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "ee286187-4c13-4c85-82ac-5e0df887be3d")
-		(property "Reference" "U4"
-			(at 144.78 87.6299 0)
+		(property "Reference" "U2"
+			(at 104.648 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -23145,7 +22590,7 @@
 			)
 		)
 		(property "Value" "W25Q32JVSSIQ"
-			(at 144.78 90.1699 0)
+			(at 104.648 145.288 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -23156,7 +22601,7 @@
 			)
 		)
 		(property "Footprint" "EasyEDA:SOIC-8_L5.3-W5.3-P1.27-LS8.0-BL"
-			(at 133.35 88.9 0)
+			(at 100.33 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -23167,7 +22612,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.winbond.com/resource-files/w25q32jv%20revg%2003272018%20plus.pdf"
-			(at 133.35 88.9 0)
+			(at 100.33 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -23178,7 +22623,7 @@
 			)
 		)
 		(property "Description" "32Mbit / 4MiB Serial Flash Memory, Standard/Dual/Quad SPI, 2.7-3.6V, SOIC-8 (208 mil)"
-			(at 133.35 88.9 0)
+			(at 100.33 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -23189,7 +22634,7 @@
 			)
 		)
 		(property "LSCS Part" "C179173"
-			(at 133.35 88.9 0)
+			(at 100.33 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -23200,7 +22645,7 @@
 			)
 		)
 		(property "Manufacturer" "Winbond Elec"
-			(at 133.35 88.9 0)
+			(at 100.33 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -23237,7 +22682,120 @@
 		(instances
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "U4")
+					(reference "U2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EasyEDA:0402WGF1001TCE")
+		(at 50.8 125.73 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ef71fd1f-f75e-4dde-a05f-e837fbec2949")
+		(property "Reference" "R1"
+			(at 50.8 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 50.8 121.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EasyEDA:R0402"
+			(at 50.8 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_1KR-1001-1_C11702.html"
+			(at 50.8 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "1KΩ (1001) ±1%"
+			(at 50.8 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL(厚声)"
+			(at 50.8 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0402WGF1001TCE"
+			(at 50.8 140.97 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C11702"
+			(at 50.8 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "00ab4e9b-f573-47c2-ab37-25d1163d2e77")
+		)
+		(pin "1"
+			(uuid "60780413-a3f6-4742-9245-6629550e776e")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "R1")
 					(unit 1)
 				)
 			)

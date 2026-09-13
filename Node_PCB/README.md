@@ -67,6 +67,9 @@ The first step is to adjust the [schematic](/docs/datasheets/rp2040-design-examp
 
 <table>
     <tr>
+        <td><b>Before</b></td>
+        <td><b>After</b></td>
+    <tr>
         <td><img src="/docs/images/minimal-example-power.png" alt="Minimal design example power block" /></td>
         <td><img src="/docs/images/schematic-power.png" alt="schematic power block" /></td>
     </tr>
@@ -83,6 +86,22 @@ We assume the boards are arranged in 12 rows of 6, with a power injection point 
 ![Wiring diagram](/docs/images/wiring-diagram.png)
 
 A separate issue is the voltage drop across each board. The supply voltage at the last board of a row will almost certainly be below 5V, since both the JST connectors and the boards themselves add resistance. With boards spaced roughly 40 mm apart and two JST connectors per board, we estimate the resistance per board at around 150 mΩ. This puts the voltage drop from the first to the last board in a row at around 315 mV, meaning the last board would be supplied with about 4.7 V. This matters most for the display's LED backlight, which runs directly off 5V rail. The voltage drop means each display will end up with a different brightness. We address this issue when designing the display connection.
+
+### Flash storage
+
+<table>
+    <tr>
+        <td><b>Before</b></td>
+        <td><b>After</b></td>
+    </tr>
+    <tr>
+        <td><img src="/docs/images/minimal-example-flash.png" alt="Minimal design example flash block" /></td>
+        <td><img src="/docs/images/schematic-flash.png" alt="schematic flash block" /></td>
+    </tr>
+</table>
+
+The only changes here are replacing the BOOTSEL jumper J2 with a button (SW1) for easier entry into bootselect mode, and swapping in a different flash chip that shares the exact same footprint as the one in the reference design.
+
 
 ## Open uncertainties
 
