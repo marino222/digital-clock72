@@ -1074,7 +1074,7 @@
         "uuid": "8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
       }
     ],
-    "used_designators": "J5,#PWR26,#PWR29,#PWR42-44,USBC1,R6-8,USB1,U1,U4-5,D1,C1,C4,VARIANT1,SBREV1,PCB1",
+    "used_designators": "USBC1,SW1,#PWR19-22,#PWR26-29,#PWR42-56,FPC1,VARIANT1,C1,C4,C6-7,C9,C11-16,C18-19,PCB1,SBREV1,P1,D1,U1,U4-5,R1,R6-9,R11,CN1-2,USB1,J4-6",
     "variants": []
   },
   "sheets": [

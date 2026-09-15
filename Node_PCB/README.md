@@ -47,8 +47,9 @@ Common parts like resistors and capacitors are not shown in this list. They may 
 | USB-C connector | TYPE-C-31-M-12 | C165948 | ❌ |
 | BOOTSEL button | TS-1187A-B-A-B | C318884 | ❌ |
 | RS485 transceiver | THVD1450DR | C2671361 | ❌ |
-| ZIF, bottom contact | AFC07-S12FCC-00 | C11051 | ❌ |
+| ZIF, vertical | AFC11-S12ICA-00 | C262499 | ❌ |
 | Schottky diode | B5819W SL | C8598 | ❌ |
+| JST connector | SM06B-GHS-TB(LF)(SN) | C133065 | ❌ |
 
 
 > Note that the listed flash chip isn't the same as in the reference design. There a 16 Mb chip is used, which is very likely overkill for this project. To save costs this is scaled down to a 4 Mb chip. For this purpose the [hardware design guidelines](/docs/datasheets/hardware-design-with-rp2040.pdf) explicitly states that most 25-series flash devices may be used. So by using a smaller capacity storage from the same manufacturer shouldn't cause any trouble.
@@ -101,6 +102,10 @@ A separate issue is the voltage drop across each board. The supply voltage at th
 </table>
 
 The only changes here are replacing the BOOTSEL jumper J2 with a button (SW1) for easier entry into bootselect mode, and swapping in a different flash chip that shares the exact same footprint as the one in the reference design.
+
+### RS485 communication
+
+![Schematic RS485](/docs/images/schematic-rs485.png)
 
 
 ## Open uncertainties
