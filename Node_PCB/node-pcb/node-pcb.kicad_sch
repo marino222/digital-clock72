@@ -2727,6 +2727,315 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "EasyEDA:BM08B-GHS-TBT"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "CN"
+				(at 0 19.05 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "BM08B-GHS-TBT"
+				(at 0 -19.05 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "EasyEDA:CONN-SMD_BM08B-GHS-TBT-LF-SN"
+				(at 0 -21.59 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://lcsc.com/product-detail/Wire-To-Board-Wire-To-Wire-Connector_JST-Sales-America-BM08B-GHS-TBT-LF-SN_C133062.html"
+				(at 0 -24.13 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Manufacturer" "JST"
+				(at 0 -26.67 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "MPN" "BM08B-GHS-TBT(LF)(SN)"
+				(at 0 -29.21 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC Part" "C133062"
+				(at 0 -31.75 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "Wire To Board / Wire To Wire Connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "BM08B-GHS-TBT_0_1"
+				(rectangle
+					(start -1.27 11.43)
+					(end 5.08 -11.43)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(circle
+					(center 0 10.16)
+					(radius 0.38)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin unspecified line
+					(at -3.81 8.89 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at -3.81 6.35 0)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at -3.81 3.81 0)
+					(length 2.54)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at -3.81 1.27 0)
+					(length 2.54)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at -3.81 -1.27 0)
+					(length 2.54)
+					(name "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at -3.81 -3.81 0)
+					(length 2.54)
+					(name "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at -3.81 -6.35 0)
+					(length 2.54)
+					(name "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at -3.81 -8.89 0)
+					(length 2.54)
+					(name "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 2.54 -13.97 90)
+					(length 2.54)
+					(name "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 2.54 13.97 270)
+					(length 2.54)
+					(name "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "EasyEDA:CL05A105KA5NQNC"
 			(pin_numbers
 				(hide yes)
@@ -3323,279 +3632,6 @@
 						)
 					)
 					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "EasyEDA:SM06B-GHS-TB"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "CN"
-				(at 0 11.43 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "SM06B-GHS-TB"
-				(at 0 -11.43 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "EasyEDA:CONN-TH_SM06B-GHS-TB-LF-SN"
-				(at 0 -13.97 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://lcsc.com/product-detail/Connectors_JST_SM06B-GHS-TB-LF-SN_SM06B-GHS-TB-LF-SN_C133065.html"
-				(at 0 -16.51 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Manufacturer" "JST"
-				(at 0 -19.05 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "MPN" "SM06B-GHS-TB(LF)(SN)"
-				(at 0 -21.59 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "LCSC Part" "C133065"
-				(at 0 -24.13 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "Wire To Board / Wire To Wire Connector"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "SM06B-GHS-TB_0_1"
-				(rectangle
-					(start -5.08 8.89)
-					(end 5.08 -8.89)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(circle
-					(center -3.81 7.62)
-					(radius 0.38)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin unspecified line
-					(at -7.62 6.35 0)
-					(length 2.54)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at -7.62 3.81 0)
-					(length 2.54)
-					(name "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at -7.62 1.27 0)
-					(length 2.54)
-					(name "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at -7.62 -1.27 0)
-					(length 2.54)
-					(name "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at -7.62 -3.81 0)
-					(length 2.54)
-					(name "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at -7.62 -6.35 0)
-					(length 2.54)
-					(name "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at 7.62 -6.35 180)
-					(length 2.54)
-					(name "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at 7.62 6.35 180)
-					(length 2.54)
-					(name "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -7455,7 +7491,7 @@
 	)
 	(text "Daisy chain connector\n"
 		(exclude_from_sim no)
-		(at 275.844 199.39 0)
+		(at 285.496 190.246 0)
 		(effects
 			(font
 				(size 2.54 2.54)
@@ -7474,6 +7510,17 @@
 			(justify left bottom)
 		)
 		(uuid "6a55ff40-d395-4df7-82ea-8310969af123")
+	)
+	(text "Place crystal as close as possible to RP2040\n"
+		(exclude_from_sim no)
+		(at 45.974 165.354 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "87f458bc-3474-4bfa-ac0e-cc0780483b4e")
 	)
 	(text "Make sure C10 is close to pin 44 of RP2040"
 		(exclude_from_sim no)
@@ -7507,6 +7554,17 @@
 			(justify left bottom)
 		)
 		(uuid "a5eab553-69d2-421d-943e-a6591fae162a")
+	)
+	(text "Keep QSPI traces as short as possible"
+		(exclude_from_sim no)
+		(at 49.022 141.732 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cf6b89e4-8d4a-4573-8dc1-b971be3b7f20")
 	)
 	(text "Make sure R3 and R4 are close to RP2040"
 		(exclude_from_sim no)
@@ -7559,6 +7617,12 @@
 		(uuid "04a05e0e-7e4d-4846-8440-16648aea4fa3")
 	)
 	(junction
+		(at 298.45 209.55)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "067d7d1b-1d0a-40db-95ac-cd6fd54abca9")
+	)
+	(junction
 		(at 200.66 111.76)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7589,10 +7653,22 @@
 		(uuid "1c0b5a9f-fa97-480a-9059-f21c1bc4997f")
 	)
 	(junction
+		(at 298.45 204.47)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "25ca0f1d-ab48-4721-8aa9-299b19d3cad0")
+	)
+	(junction
 		(at 300.99 152.4)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "2b0c40e5-a45c-4823-827e-46ae0f540096")
+	)
+	(junction
+		(at 298.45 217.17)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2bddde20-ac3f-45ab-9e03-297ba108c298")
 	)
 	(junction
 		(at 306.07 165.1)
@@ -7607,34 +7683,10 @@
 		(uuid "39ba6310-8d40-4327-8904-8faea87a63d5")
 	)
 	(junction
-		(at 295.91 213.36)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "42ec702e-5a4f-4be2-a7db-699f80537ed7")
-	)
-	(junction
-		(at 295.91 226.06)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "4571ea4f-0609-41a8-8d35-73e83c627c4b")
-	)
-	(junction
 		(at 334.01 50.8)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4632d886-cfc0-4af2-93ea-8ddb55f09a48")
-	)
-	(junction
-		(at 257.81 226.06)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5a303eb0-6030-4753-bf34-c4c61816d560")
-	)
-	(junction
-		(at 295.91 215.9)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "626a7694-9c5c-48fe-9805-d8e57ed58205")
 	)
 	(junction
 		(at 278.13 36.83)
@@ -7671,6 +7723,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7d601b3a-e1c3-4b20-9ffa-dfec9b88ce47")
+	)
+	(junction
+		(at 316.23 212.09)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7f9d2338-4f13-4ab2-a38c-9c1f8f94e4e6")
 	)
 	(junction
 		(at 292.1 50.8)
@@ -7733,10 +7791,16 @@
 		(uuid "b34be1ba-555c-459e-9a69-f621b75b87e2")
 	)
 	(junction
-		(at 295.91 223.52)
+		(at 316.23 204.47)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "baf84428-ba95-4dcd-a5af-5aceead9bc9f")
+		(uuid "b697ab15-e6b5-4786-af87-bfff0825d7b3")
+	)
+	(junction
+		(at 316.23 214.63)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bb913735-01b1-46fe-a57d-9f7658e5058c")
 	)
 	(junction
 		(at 52.07 186.69)
@@ -7785,12 +7849,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e29a879a-accf-48f0-b16f-40d1f9d9a66c")
-	)
-	(junction
-		(at 334.01 226.06)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "e31f5087-9fea-413e-90fc-405cbe917612")
 	)
 	(junction
 		(at 134.62 41.91)
@@ -7862,6 +7920,16 @@
 	)
 	(wire
 		(pts
+			(xy 316.23 227.33) (xy 327.66 227.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0449d6a8-1ec6-4a0b-9252-46b33c0acfd9")
+	)
+	(wire
+		(pts
 			(xy 49.53 49.53) (xy 57.15 49.53)
 		)
 		(stroke
@@ -7869,16 +7937,6 @@
 			(type default)
 		)
 		(uuid "04553813-250a-428a-b137-eece84115035")
-	)
-	(wire
-		(pts
-			(xy 295.91 223.52) (xy 295.91 226.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "04644e45-f645-48e5-ac58-69abe46dee80")
 	)
 	(wire
 		(pts
@@ -8092,16 +8150,6 @@
 	)
 	(wire
 		(pts
-			(xy 295.91 226.06) (xy 295.91 229.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1c4932b9-c4da-463b-a2c4-94b5ed9ee51d")
-	)
-	(wire
-		(pts
 			(xy 228.6 146.05) (xy 243.84 146.05)
 		)
 		(stroke
@@ -8109,16 +8157,6 @@
 			(type default)
 		)
 		(uuid "1da0fa30-4390-4aa3-969a-71c3c4e608a5")
-	)
-	(wire
-		(pts
-			(xy 327.66 226.06) (xy 334.01 226.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1de3f171-678d-4244-9d39-f64f20aaa1bc")
 	)
 	(wire
 		(pts
@@ -8242,16 +8280,6 @@
 	)
 	(wire
 		(pts
-			(xy 334.01 226.06) (xy 334.01 229.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2b9376e1-e608-4e45-b865-c47d952c31c0")
-	)
-	(wire
-		(pts
 			(xy 167.64 135.89) (xy 152.4 135.89)
 		)
 		(stroke
@@ -8262,23 +8290,13 @@
 	)
 	(wire
 		(pts
-			(xy 280.67 213.36) (xy 295.91 213.36)
+			(xy 289.56 227.33) (xy 302.26 227.33)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "31acba24-79d2-4c5d-9693-5bb68f71bb88")
-	)
-	(wire
-		(pts
-			(xy 280.67 220.98) (xy 312.42 220.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "323be2db-3396-44b7-9542-3a063f5e454a")
+		(uuid "2f7d8fc6-8a66-43d9-9711-c845b1e7cc1a")
 	)
 	(wire
 		(pts
@@ -8422,6 +8440,16 @@
 	)
 	(wire
 		(pts
+			(xy 289.56 219.71) (xy 327.66 219.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "43374c36-c9e4-44e5-b9b1-e794c0be1d91")
+	)
+	(wire
+		(pts
 			(xy 105.41 246.38) (xy 105.41 247.65)
 		)
 		(stroke
@@ -8429,16 +8457,6 @@
 			(type default)
 		)
 		(uuid "433ef377-1c05-409a-98fd-518ab246ae69")
-	)
-	(wire
-		(pts
-			(xy 265.43 226.06) (xy 257.81 226.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "43e21035-0088-4f3f-86d1-97293e5c4c45")
 	)
 	(wire
 		(pts
@@ -8502,6 +8520,26 @@
 	)
 	(wire
 		(pts
+			(xy 298.45 209.55) (xy 298.45 217.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4ba8a29b-d642-4087-908a-8fcc519e353c")
+	)
+	(wire
+		(pts
+			(xy 316.23 199.39) (xy 316.23 212.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d348db6-9329-4d33-a922-39803ae20d1d")
+	)
+	(wire
+		(pts
 			(xy 49.53 59.69) (xy 57.15 59.69)
 		)
 		(stroke
@@ -8532,16 +8570,6 @@
 	)
 	(wire
 		(pts
-			(xy 334.01 213.36) (xy 334.01 226.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5151aeda-1392-4db8-a338-74a8e7a00d56")
-	)
-	(wire
-		(pts
 			(xy 49.53 57.15) (xy 57.15 57.15)
 		)
 		(stroke
@@ -8549,16 +8577,6 @@
 			(type default)
 		)
 		(uuid "520d269e-1d1e-424a-9399-27d4371bc960")
-	)
-	(wire
-		(pts
-			(xy 295.91 223.52) (xy 312.42 223.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "52cd528d-f9b8-43f6-9289-7c86e903de5a")
 	)
 	(wire
 		(pts
@@ -8682,6 +8700,16 @@
 	)
 	(wire
 		(pts
+			(xy 289.56 224.79) (xy 302.26 224.79)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5e229efc-5407-43d9-88a4-16875f226834")
+	)
+	(wire
+		(pts
 			(xy 201.93 114.3) (xy 201.93 111.76)
 		)
 		(stroke
@@ -8689,26 +8717,6 @@
 			(type default)
 		)
 		(uuid "5f7a2f07-a498-416e-990d-3e9bdccbc682")
-	)
-	(wire
-		(pts
-			(xy 295.91 207.01) (xy 295.91 213.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5fc43d58-9a25-4406-a79e-d94a967d62ec")
-	)
-	(wire
-		(pts
-			(xy 295.91 215.9) (xy 312.42 215.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6389b059-117c-4175-9047-e65bbee84ac6")
 	)
 	(wire
 		(pts
@@ -8862,13 +8870,13 @@
 	)
 	(wire
 		(pts
-			(xy 280.67 215.9) (xy 295.91 215.9)
+			(xy 316.23 224.79) (xy 327.66 224.79)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "70f699ba-3217-4401-b910-0a2fdc8a7400")
+		(uuid "6ffa7530-595a-4660-a5ce-1cde123e9a35")
 	)
 	(wire
 		(pts
@@ -8932,6 +8940,16 @@
 	)
 	(wire
 		(pts
+			(xy 298.45 209.55) (xy 327.66 209.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "775c7a49-e3e2-4452-8b50-5f25b1528212")
+	)
+	(wire
+		(pts
 			(xy 167.64 148.59) (xy 152.4 148.59)
 		)
 		(stroke
@@ -8992,16 +9010,6 @@
 	)
 	(wire
 		(pts
-			(xy 257.81 226.06) (xy 257.81 229.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7edb8036-40de-46de-8e3f-63fc9a33c509")
-	)
-	(wire
-		(pts
 			(xy 228.6 130.81) (xy 243.84 130.81)
 		)
 		(stroke
@@ -9042,13 +9050,13 @@
 	)
 	(wire
 		(pts
-			(xy 295.91 213.36) (xy 295.91 215.9)
+			(xy 312.42 204.47) (xy 316.23 204.47)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "83aeb7eb-fab2-4263-9067-8da531f8ad29")
+		(uuid "84727f87-4913-482d-8d0d-b787dc01ef84")
 	)
 	(wire
 		(pts
@@ -9079,6 +9087,16 @@
 			(type default)
 		)
 		(uuid "85124578-4c7e-4f89-94b1-58df6415e6b1")
+	)
+	(wire
+		(pts
+			(xy 316.23 214.63) (xy 327.66 214.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "87109475-52f5-43f2-9141-b1d0d2a0e41f")
 	)
 	(wire
 		(pts
@@ -9149,6 +9167,16 @@
 			(type default)
 		)
 		(uuid "8d2bfe32-2b19-4539-ac20-c56ab6191d73")
+	)
+	(wire
+		(pts
+			(xy 289.56 212.09) (xy 316.23 212.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8d55bbe9-29b1-49d0-ac1e-1c85fa1be813")
 	)
 	(wire
 		(pts
@@ -9342,16 +9370,6 @@
 	)
 	(wire
 		(pts
-			(xy 280.67 226.06) (xy 295.91 226.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9eb4878e-0aa1-4ead-9658-767e2162dac1")
-	)
-	(wire
-		(pts
 			(xy 349.25 50.8) (xy 349.25 54.61)
 		)
 		(stroke
@@ -9359,16 +9377,6 @@
 			(type default)
 		)
 		(uuid "9ee1cc16-38f7-40a1-9d92-0284daec91a2")
-	)
-	(wire
-		(pts
-			(xy 327.66 213.36) (xy 334.01 213.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9f3afde4-e44c-47e3-a765-29bbec11b322")
 	)
 	(wire
 		(pts
@@ -9462,6 +9470,16 @@
 	)
 	(wire
 		(pts
+			(xy 298.45 204.47) (xy 302.26 204.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ae54a705-6801-4ed2-8142-3789a9cc0ace")
+	)
+	(wire
+		(pts
 			(xy 292.1 36.83) (xy 306.07 36.83)
 		)
 		(stroke
@@ -9552,6 +9570,16 @@
 	)
 	(wire
 		(pts
+			(xy 289.56 217.17) (xy 298.45 217.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b63b6d4e-e596-4eea-a317-ac082061209e")
+	)
+	(wire
+		(pts
 			(xy 204.47 91.44) (xy 204.47 114.3)
 		)
 		(stroke
@@ -9592,16 +9620,6 @@
 	)
 	(wire
 		(pts
-			(xy 265.43 213.36) (xy 257.81 213.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bec65645-cd0c-4d95-b901-037f4972c3e9")
-	)
-	(wire
-		(pts
 			(xy 189.23 100.33) (xy 189.23 114.3)
 		)
 		(stroke
@@ -9639,6 +9657,16 @@
 			(type default)
 		)
 		(uuid "c3477e55-6132-4449-9acc-c097c06003b5")
+	)
+	(wire
+		(pts
+			(xy 298.45 217.17) (xy 327.66 217.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c39f6224-6732-4f61-aea1-a29ff635f2bb")
 	)
 	(wire
 		(pts
@@ -9712,16 +9740,6 @@
 	)
 	(wire
 		(pts
-			(xy 257.81 213.36) (xy 257.81 226.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c7f8177e-7947-462f-8ff0-668a7dcc604d")
-	)
-	(wire
-		(pts
 			(xy 317.5 157.48) (xy 330.2 157.48)
 		)
 		(stroke
@@ -9769,16 +9787,6 @@
 			(type default)
 		)
 		(uuid "ce3150ca-fa6f-42ff-92d3-03a9d0b9f481")
-	)
-	(wire
-		(pts
-			(xy 280.67 218.44) (xy 312.42 218.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cf016698-f4b5-44db-8780-2043f940313b")
 	)
 	(wire
 		(pts
@@ -9842,6 +9850,26 @@
 	)
 	(wire
 		(pts
+			(xy 298.45 198.12) (xy 298.45 209.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d4f9d02d-34a0-443d-b33d-1d5a0b8c8147")
+	)
+	(wire
+		(pts
+			(xy 289.56 214.63) (xy 316.23 214.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d5b98e16-0d05-417f-95ea-b73aa825befb")
+	)
+	(wire
+		(pts
 			(xy 167.64 143.51) (xy 152.4 143.51)
 		)
 		(stroke
@@ -9879,6 +9907,16 @@
 			(type default)
 		)
 		(uuid "d84a9545-49a5-4ac7-9e54-0a929cf04913")
+	)
+	(wire
+		(pts
+			(xy 289.56 222.25) (xy 327.66 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d973295b-139b-4286-ba9b-b56d7109a22c")
 	)
 	(wire
 		(pts
@@ -9922,13 +9960,13 @@
 	)
 	(wire
 		(pts
-			(xy 295.91 226.06) (xy 312.42 226.06)
+			(xy 289.56 209.55) (xy 298.45 209.55)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "db64311d-6194-4aea-b8d8-98ad3df2ecec")
+		(uuid "daeec352-5fdb-462d-8520-45735bd0775f")
 	)
 	(wire
 		(pts
@@ -9959,16 +9997,6 @@
 			(type default)
 		)
 		(uuid "df048360-17a5-4ec7-a313-fe50056d7dc3")
-	)
-	(wire
-		(pts
-			(xy 280.67 223.52) (xy 295.91 223.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e0b5ed36-3bbc-4003-928b-b1ca35cc0a80")
 	)
 	(wire
 		(pts
@@ -10022,6 +10050,16 @@
 	)
 	(wire
 		(pts
+			(xy 316.23 212.09) (xy 327.66 212.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e5e4379e-857b-4c1a-b6d7-59a6a005e721")
+	)
+	(wire
+		(pts
 			(xy 317.5 147.32) (xy 330.2 147.32)
 		)
 		(stroke
@@ -10032,6 +10070,16 @@
 	)
 	(wire
 		(pts
+			(xy 316.23 212.09) (xy 316.23 214.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e90a8fa0-dc9b-4cf1-b0e9-c0f265c10ffb")
+	)
+	(wire
+		(pts
 			(xy 309.88 149.86) (xy 330.2 149.86)
 		)
 		(stroke
@@ -10039,16 +10087,6 @@
 			(type default)
 		)
 		(uuid "ed44f6ef-3441-4a38-bbe2-7986f420802e")
-	)
-	(wire
-		(pts
-			(xy 295.91 213.36) (xy 312.42 213.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "edac0af3-8152-40f3-8669-d51c61a65044")
 	)
 	(wire
 		(pts
@@ -10190,6 +10228,16 @@
 		)
 		(uuid "0ecc4071-cf65-4dfe-9589-42d7373b1331")
 	)
+	(label "SPARE_IN"
+		(at 316.23 227.33 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0faa2f60-ac23-48ad-bbcb-b383cc65c7b1")
+	)
 	(label "QSPI_SS"
 		(at 71.12 125.73 0)
 		(effects
@@ -10250,6 +10298,16 @@
 		)
 		(uuid "1b8f1646-57a0-4258-a45d-8888e02c72f6")
 	)
+	(label "RS485_A"
+		(at 320.04 219.71 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "1e70c81e-1b10-4128-ba9c-6803f0b51e35")
+	)
 	(label "RUN"
 		(at 209.55 190.5 90)
 		(effects
@@ -10259,6 +10317,16 @@
 			(justify left bottom)
 		)
 		(uuid "23a53848-15d1-48cf-890e-c52036da0400")
+	)
+	(label "RS485_B"
+		(at 320.04 222.25 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "27522f30-b94c-4a78-b594-fcfca2157f57")
 	)
 	(label "XOUT"
 		(at 196.85 190.5 90)
@@ -10460,7 +10528,7 @@
 		)
 		(uuid "6f2602da-bd2c-448f-8465-393fcb5a859f")
 	)
-	(label "GPIO11"
+	(label "ADDR_IN"
 		(at 152.4 161.29 0)
 		(effects
 			(font
@@ -10479,6 +10547,16 @@
 			(justify right bottom)
 		)
 		(uuid "76b48c4c-94c1-4118-ad3f-333310abffdf")
+	)
+	(label "SPARE_OUT"
+		(at 302.26 227.33 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "79e6bf39-e7b9-4925-abd2-d521f7de9752")
 	)
 	(label "GPIO1"
 		(at 152.4 133.35 0)
@@ -10530,17 +10608,7 @@
 		)
 		(uuid "86ac283d-a915-4137-bf09-0c1b299c3471")
 	)
-	(label "RS485_B"
-		(at 298.45 220.98 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "86d39836-4157-47cf-9af5-2d8211eadf06")
-	)
-	(label "GPIO10"
+	(label "ADDR_OUT"
 		(at 152.4 158.75 0)
 		(effects
 			(font
@@ -10559,6 +10627,16 @@
 			(justify right bottom)
 		)
 		(uuid "8ec10931-b571-443a-a84b-19552a9e36bf")
+	)
+	(label "ADDR_OUT"
+		(at 302.26 224.79 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "969b4afe-398d-426f-b34a-4c93be6dba6b")
 	)
 	(label "SWCLK"
 		(at 204.47 190.5 90)
@@ -10610,7 +10688,7 @@
 		)
 		(uuid "b44f8089-1105-490d-8634-35af406c13ff")
 	)
-	(label "GPIO9"
+	(label "SPARE_IN"
 		(at 152.4 156.21 0)
 		(effects
 			(font
@@ -10710,6 +10788,16 @@
 		)
 		(uuid "bda8e14f-b278-4e47-9e21-a237075e0326")
 	)
+	(label "ADDR_IN"
+		(at 316.23 224.79 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "be4ed1ae-3360-423d-a094-27cf8bc25b60")
+	)
 	(label "CS"
 		(at 189.23 242.57 180)
 		(effects
@@ -10780,16 +10868,6 @@
 		)
 		(uuid "ce9c58bd-6983-4c5b-957a-c89c680e6de5")
 	)
-	(label "RS485_A"
-		(at 298.45 218.44 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "d0222543-ea9a-4ae7-bd72-c4a6a4c96970")
-	)
 	(label "SPI0_TX (MOSI)"
 		(at 189.23 247.65 180)
 		(effects
@@ -10850,7 +10928,7 @@
 		)
 		(uuid "eaddef34-0707-4b64-9664-47adb109bea7")
 	)
-	(label "GPIO8"
+	(label "SPARE_OUT"
 		(at 152.4 153.67 0)
 		(effects
 			(font
@@ -13344,83 +13422,6 @@
 		)
 	)
 	(symbol
-		(lib_id "RPI - Power:GND")
-		(at 257.81 229.87 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "02a8a00d-0381-434e-b821-97f10515fe09")
-		(property "Reference" "#PWR048"
-			(at 257.81 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 257.81 233.807 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 257.81 229.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 257.81 229.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 257.81 229.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3722ebb9-445a-4f52-9509-e43295046567")
-		)
-		(instances
-			(project "node-pcb"
-				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "#PWR048")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "EasyEDA:CL05B104KO5NNNC")
 		(at 356.87 128.27 270)
 		(unit 1)
@@ -13651,83 +13652,6 @@
 		)
 	)
 	(symbol
-		(lib_id "RPI - Power:GND")
-		(at 334.01 229.87 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "14ace4b1-e49e-4db4-83db-51abcd181dd9")
-		(property "Reference" "#PWR049"
-			(at 334.01 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 334.01 233.807 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 334.01 229.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 334.01 229.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 334.01 229.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "be5ae267-db4b-4a04-a8c3-572ee7c7b97e")
-		)
-		(instances
-			(project "node-pcb"
-				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "#PWR049")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_name "GRM21BR61C106KE15L_1")
 		(lib_id "EasyEDA:GRM21BR61C106KE15L")
 		(at 95.25 52.07 270)
@@ -13838,6 +13762,145 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "C1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EasyEDA:BM08B-GHS-TBT")
+		(at 285.75 218.44 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "19366674-bcf0-4b4a-ae1c-f11dc87644df")
+		(property "Reference" "J2"
+			(at 279.4 217.1699 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "BM08B-GHS-TBT"
+			(at 301.752 231.648 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EasyEDA:CONN-SMD_BM08B-GHS-TBT-LF-SN"
+			(at 285.75 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Wire-To-Board-Wire-To-Wire-Connector_JST-Sales-America-BM08B-GHS-TBT-LF-SN_C133062.html"
+			(at 285.75 242.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 285.75 218.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "JST"
+			(at 285.75 245.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "BM08B-GHS-TBT(LF)(SN)"
+			(at 285.75 247.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C133062"
+			(at 285.75 250.19 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "7"
+			(uuid "706ceefc-70db-4ee5-9455-021bca6e3659")
+		)
+		(pin "6"
+			(uuid "563f9e53-1b8b-49d3-a59d-51f6f0a80b58")
+		)
+		(pin "5"
+			(uuid "a68a4b16-55a5-4cf7-ba20-8fad9427a3e4")
+		)
+		(pin "4"
+			(uuid "102a7f2e-ea8d-4332-8bc1-9685311b9a84")
+		)
+		(pin "3"
+			(uuid "24d3c314-4b4d-4469-b0f8-80ab8267e247")
+		)
+		(pin "10"
+			(uuid "10cbfbd4-2cc6-4ac7-b143-c71e3b1132b2")
+		)
+		(pin "9"
+			(uuid "0f133564-acf1-434e-950c-e3d9e75e2190")
+		)
+		(pin "1"
+			(uuid "c3764b97-8ca6-41cf-bf61-9e625a522d2a")
+		)
+		(pin "2"
+			(uuid "5ab6ef90-b0ad-441c-8aa3-67d0f57a9dac")
+		)
+		(pin "8"
+			(uuid "0b9327a3-9236-4cdf-9f66-f7c243d3efb4")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "J2")
 					(unit 1)
 				)
 			)
@@ -13993,6 +14056,83 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "#PWR038")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "RPI - Power:GND")
+		(at 334.01 204.47 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "220b9938-f75b-4546-b72f-c64e5f5bdf00")
+		(property "Reference" "#PWR060"
+			(at 334.01 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 334.01 200.533 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 334.01 204.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 334.01 204.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 334.01 204.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4d402a8b-4041-49bc-a865-2af21b388c07")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "#PWR060")
 					(unit 1)
 				)
 			)
@@ -15455,6 +15595,83 @@
 		)
 	)
 	(symbol
+		(lib_id "RPI - Power:GND")
+		(at 334.01 232.41 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "53adbe82-f353-4a59-844a-ffae35db51b0")
+		(property "Reference" "#PWR061"
+			(at 334.01 238.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 334.01 236.347 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 334.01 232.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 334.01 232.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 334.01 232.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9068b18e-1b27-43d2-8f89-ed3593323066")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "#PWR061")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "EasyEDA:0402CG150J500NT")
 		(at 36.83 167.64 0)
 		(unit 1)
@@ -15562,6 +15779,144 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EasyEDA:BM08B-GHS-TBT")
+		(at 331.47 218.44 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "58280d4f-8a54-47a9-8088-0a8f97bdfb31")
+		(property "Reference" "J3"
+			(at 337.82 217.1699 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "BM08B-GHS-TBT"
+			(at 336.042 231.902 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EasyEDA:CONN-SMD_BM08B-GHS-TBT-LF-SN"
+			(at 331.47 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Wire-To-Board-Wire-To-Wire-Connector_JST-Sales-America-BM08B-GHS-TBT-LF-SN_C133062.html"
+			(at 331.47 242.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 331.47 218.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "JST"
+			(at 331.47 245.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "BM08B-GHS-TBT(LF)(SN)"
+			(at 331.47 247.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C133062"
+			(at 331.47 250.19 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "7"
+			(uuid "3878d33f-705b-4b0f-a869-8887338951e4")
+		)
+		(pin "6"
+			(uuid "b3ea2285-2780-4bbe-bab6-a578a97369f8")
+		)
+		(pin "5"
+			(uuid "17f1aecb-2758-4bec-8e81-a63a65d21360")
+		)
+		(pin "4"
+			(uuid "a6aaad7b-6178-4471-a554-0fe06f47a599")
+		)
+		(pin "3"
+			(uuid "5e8424c1-2410-41dc-8eb1-35fc036738f3")
+		)
+		(pin "10"
+			(uuid "62688895-4266-4350-8c76-f076bacf8db3")
+		)
+		(pin "9"
+			(uuid "082ba426-b545-49f8-8d6d-b427cd4229ee")
+		)
+		(pin "1"
+			(uuid "8940a58d-887d-4f2d-af3a-c1abfda25a48")
+		)
+		(pin "2"
+			(uuid "b4b65699-7a78-47ce-9555-47b10a4587a7")
+		)
+		(pin "8"
+			(uuid "5effd14b-c13e-486e-9e9b-e6f9d4b0410a")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -16106,83 +16461,6 @@
 		)
 	)
 	(symbol
-		(lib_id "RPI - Power:GND")
-		(at 295.91 229.87 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "68cd3415-ef2d-4a21-8830-351c7e1da12b")
-		(property "Reference" "#PWR046"
-			(at 295.91 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 295.91 233.807 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 295.91 229.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 295.91 229.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 295.91 229.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f8e3b49f-ecac-4e53-93f8-b729d4bd188c")
-		)
-		(instances
-			(project "node-pcb"
-				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "#PWR046")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "EasyEDA:S8050_C2146")
 		(at 120.65 234.95 0)
 		(unit 1)
@@ -16378,83 +16656,6 @@
 		)
 	)
 	(symbol
-		(lib_id "RPI - Power:PWR_NET")
-		(at 295.91 207.01 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "723f6121-dec4-41a3-9119-ef3e56b9e905")
-		(property "Reference" "#PWR047"
-			(at 295.91 210.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "VBUS +5V"
-			(at 296.291 202.6158 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 295.91 207.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 295.91 207.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 295.91 207.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "876c2ec8-92ec-428a-8cf4-c850deb95f3a")
-		)
-		(instances
-			(project "node-pcb"
-				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "#PWR047")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "RPI - Power:GND")
 		(at 356.87 123.19 0)
 		(mirror x)
@@ -16527,136 +16728,6 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "#PWR027")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "EasyEDA:SM06B-GHS-TB")
-		(at 320.04 219.71 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "76fb1934-80db-4df8-aa7d-d9d19fab301e")
-		(property "Reference" "J3"
-			(at 320.04 208.788 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SM06B-GHS-TB"
-			(at 320.548 230.632 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "EasyEDA:CONN-TH_SM06B-GHS-TB-LF-SN"
-			(at 320.04 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://lcsc.com/product-detail/Connectors_JST_SM06B-GHS-TB-LF-SN_SM06B-GHS-TB-LF-SN_C133065.html"
-			(at 320.04 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 320.04 219.71 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "JST"
-			(at 320.04 238.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "SM06B-GHS-TB(LF)(SN)"
-			(at 320.04 241.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC Part" "C133065"
-			(at 320.04 243.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5238fb21-d721-49d7-b34a-b76f1043a196")
-		)
-		(pin "4"
-			(uuid "ce236816-b2a8-4099-8fa5-5e9f577def72")
-		)
-		(pin "3"
-			(uuid "7ebe11bf-9b26-4cc1-b5e6-7e30f8f359c2")
-		)
-		(pin "5"
-			(uuid "38edb16d-c995-4fa1-bb6f-066ec6b9ffd7")
-		)
-		(pin "6"
-			(uuid "bf0dc9bb-987e-4486-9023-67d7623540c3")
-		)
-		(pin "8"
-			(uuid "2239d16e-923b-42f8-ba4b-772cb35a8e98")
-		)
-		(pin "2"
-			(uuid "2d845742-f0df-4036-ac9a-b9dc5ab23ecb")
-		)
-		(pin "7"
-			(uuid "626ebc27-5acc-41d3-9ffb-637fd54d3563")
-		)
-		(instances
-			(project "node-pcb"
-				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -16818,9 +16889,8 @@
 		)
 	)
 	(symbol
-		(lib_id "EasyEDA:SM06B-GHS-TB")
-		(at 273.05 219.71 0)
-		(mirror y)
+		(lib_id "RPI - Power:PWR_NET")
+		(at 316.23 199.39 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -16828,29 +16898,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "7b790c81-7c8f-4cb3-a031-fac7655d8c3f")
-		(property "Reference" "J2"
-			(at 272.796 208.534 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SM06B-GHS-TB"
-			(at 273.304 230.632 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "EasyEDA:CONN-TH_SM06B-GHS-TB-LF-SN"
-			(at 273.05 233.68 0)
+		(uuid "7c0998d8-1e3e-4701-ab05-15c0321df1eb")
+		(property "Reference" "#PWR063"
+			(at 316.23 203.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16860,8 +16910,29 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://lcsc.com/product-detail/Connectors_JST_SM06B-GHS-TB-LF-SN_SM06B-GHS-TB-LF-SN_C133065.html"
-			(at 273.05 236.22 0)
+		(property "Value" "VBUS +5V"
+			(at 316.611 194.9958 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 316.23 199.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 316.23 199.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16872,40 +16943,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 273.05 219.71 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "JST"
-			(at 273.05 238.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "SM06B-GHS-TB(LF)(SN)"
-			(at 273.05 241.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC Part" "C133065"
-			(at 273.05 243.84 0)
+			(at 316.23 199.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16916,33 +16954,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "e2afeebd-2b10-49ad-b006-d2c11796d92b")
-		)
-		(pin "4"
-			(uuid "77f12a8f-b153-4f5a-840f-0e91dac31a65")
-		)
-		(pin "3"
-			(uuid "7059800c-2d99-411f-a4e7-48d9a603928f")
-		)
-		(pin "5"
-			(uuid "addc600d-0d4b-4b55-a48c-51ae77fa686a")
-		)
-		(pin "6"
-			(uuid "3294a164-c027-4079-91aa-d97fdac06ff9")
-		)
-		(pin "8"
-			(uuid "f5642401-c9a0-48d4-b21f-ba7a7da504c1")
-		)
-		(pin "2"
-			(uuid "91efbe51-c9db-498c-a506-14562a061d1b")
-		)
-		(pin "7"
-			(uuid "d84a4024-6a82-46d4-a4bf-1e706c93b0aa")
+			(uuid "ab0f9580-eaf7-46b7-b026-5db57fb9b7c5")
 		)
 		(instances
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
-					(reference "J2")
+					(reference "#PWR063")
 					(unit 1)
 				)
 			)
@@ -18351,6 +18368,83 @@
 		)
 	)
 	(symbol
+		(lib_id "RPI - Power:GND")
+		(at 283.21 204.47 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a0807291-17ed-4a4d-9dbf-57161cd105a3")
+		(property "Reference" "#PWR059"
+			(at 283.21 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 283.21 200.533 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 283.21 204.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 283.21 204.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 283.21 204.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8551a234-b943-420e-b93d-499c9a32dbe5")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "#PWR059")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "EasyEDA:CL05B104KO5NNNC")
 		(at 246.38 44.45 270)
 		(unit 1)
@@ -18460,6 +18554,120 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "C7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_name "GRM21BR61C106KE15L_1")
+		(lib_id "EasyEDA:GRM21BR61C106KE15L")
+		(at 307.34 204.47 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "abe29431-c60d-4b29-8285-13f25301a1ec")
+		(property "Reference" "C20"
+			(at 307.34 198.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10uF"
+			(at 307.34 200.66 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EasyEDA:C0805"
+			(at 307.34 212.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_muRata_GRM21BR61C106KE15L_10uF-106-10-16V_C77075.html"
+			(at 307.34 214.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "10uF (106) ±10% 16V"
+			(at 307.34 204.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "muRata(村田)"
+			(at 307.34 217.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "GRM21BR61C106KE15L"
+			(at 307.34 219.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C77075"
+			(at 307.34 222.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "788ae8d7-1a6e-404c-9dd7-2fe0be6d43b2")
+		)
+		(pin "2"
+			(uuid "c7b4616f-4270-4d0c-97dd-77445bd74a22")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "C20")
 					(unit 1)
 				)
 			)
@@ -20099,6 +20307,83 @@
 		)
 	)
 	(symbol
+		(lib_id "RPI - Power:GND")
+		(at 283.21 232.41 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "de259ca7-d222-4e10-898c-5ab66bc52662")
+		(property "Reference" "#PWR058"
+			(at 283.21 238.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 283.21 236.347 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 283.21 232.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 283.21 232.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 283.21 232.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ef731a28-4fbd-45b1-bc38-ebf11cdd3d2e")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "#PWR058")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "EasyEDA:CL05B104KO5NNNC")
 		(at 278.13 44.45 270)
 		(unit 1)
@@ -20285,6 +20570,83 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "#PWR032")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "RPI - Power:GND")
+		(at 298.45 198.12 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e4983390-c83b-43e1-a7b4-1181acf05fca")
+		(property "Reference" "#PWR062"
+			(at 298.45 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 298.45 194.183 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 298.45 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 298.45 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 298.45 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f6b50740-ee03-45f5-890b-eb0ab9833506")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "#PWR062")
 					(unit 1)
 				)
 			)
