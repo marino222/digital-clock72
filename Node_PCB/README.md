@@ -107,6 +107,25 @@ The only changes here are replacing the BOOTSEL jumper J2 with a button (SW1) fo
 
 ![Schematic RS485](/docs/images/schematic-rs485.png)
 
+The THVD1450DR was chosen for the RS485 bus because it's a 1/8 unit-load transceiver, which supports up to 256 nodes on one bus segment. It's also a common, widely available part. The wiring follows the reference circuit in the chip's [datasheet](/docs/datasheets/thvd1450.pdf). A 120 Ω termination resistor is also populated, which can be enabled by bridging the solder jumper. Looking at the wiring diagram above, it becomes clear that this isn't a continuous serial bus, but rather a tree network with 12 individual branches. Whether each branch needs its own termination resistor still has to be tested. Terminating all 12 branches is likely overkill.
+
+### Daisy chain connector
+
+![Schematic daisy chain connector](/docs/images/schematic-connector.png)
+
+To connect the boards, an 8-pin JST connector was chosen. It's a vertical connector that can be fully assembled with SMT. A vertical connector was chosen over a horizontal one because the gap between boards might be very tight (not confirmed yet). With a vertical connector, the gap size doesn't matter. The power and ground lines are each deliberately split across two pins to reduce the load per pin. Two lines carry RS485 data, and one line is used for the nodes' auto-addressing feature. This leaves one spare line, which is proactively wired to unused GPIO pins on the RP2040 so it can be used for anything in the future. A decoupling capacitor also sits between +5V and GND, as is good practice.
+
+### SWD Debug interface
+
+![Schematic SWD debug](/docs/images/schematic-debug.png)
+
+It was decided to add an SWD debug interface in addition to the USB-C connector, to make flashing and debugging easier. The PCB features a standard TC2030 footprint, and the idea is to buy a cheap connector from AliExpress that matches it. The individual pins can then be wired to an external Raspberry Pi Pico running dedicated debug probe firmware, which handles both debugging and flashing.
+
+### SPI
+
+![Schematic SPI](/docs/images/schematic-spi.png)
+
+To connect the FPC tail of the display, a matching ZIF (zero insertion force) connector is used. The wiring follows the reference circuit in the display's [datasheet](/docs/datasheets/display-datasheets/). The interesting part is the wiring of the backlight's LEDA and LEDK pins. The anode (LEDA) is powered directly from +5V, while the cathode (LEDK) is wired through a transistor circuit that allows for dimming. A PWM signal on BL_PWM switches the transistor on and off, which dims the backlight.
 
 ## Open uncertainties
 
