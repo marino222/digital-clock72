@@ -1051,8 +1051,8 @@
       "group_symbols": true,
       "include_excluded_from_bom": false,
       "name": "",
-      "sort_asc": true,
-      "sort_field": "LCSC Part"
+      "sort_asc": false,
+      "sort_field": "Description"
     },
     "bus_aliases": {},
     "connection_grid_size": 50.0,
@@ -1084,6 +1084,14 @@
       "version": 1
     },
     "net_format_name": "",
+    "ngspice": {
+      "fix_include_paths": true,
+      "meta": {
+        "version": 0
+      },
+      "model_mode": 4,
+      "workbook_filename": ""
+    },
     "page_layout_descr_file": "kicad-embed://marino_template.kicad_wks",
     "plot_directory": "",
     "reuse_designators": true,
@@ -1104,7 +1112,7 @@
         "uuid": "8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
       }
     ],
-    "used_designators": "#PWR19-22,#PWR26-29,#PWR42-56,#PWR58-64,SW1,USBC1,PCB1,TP1-5,R1,R6-9,R11-13,C1,C4,C6-7,C9,C11-16,C18-21,VARIANT1,JP1,FPC1,D1-2,U1,U4-5,SBREV1,P1,J4-6,USB1,CN1-2",
+    "used_designators": "Q2,CN1-2,J4-6,USB1,R1,R6-9,R11-14,PCB1,TP1-5,P1,SBREV1,VARIANT1,C1,C4,C6-7,C9,C11-16,C18-21,JP1,FPC1,USBC1,SW1,#PWR19-22,#PWR26-29,#PWR42-56,#PWR58-65,D1-2,U1,U4-5",
     "variants": []
   },
   "sheets": [

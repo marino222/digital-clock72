@@ -181,32 +181,95 @@ The only changes here are replacing the BOOTSEL jumper J2 with a button (SW1) fo
 
 ![Schematic RS485](/docs/images/schematic-rs485.png)
 
-The THVD1450DR was chosen for the RS485 bus because it's a 1/8 unit-load transceiver, which supports up to 256 nodes on one bus segment. It's also a common, widely available part. The wiring follows the reference circuit in the chip's [datasheet](/docs/datasheets/thvd1450.pdf). A 120 Ω termination resistor is also populated, which can be enabled by bridging the solder jumper. Looking at the wiring diagram above, it becomes clear that this isn't a continuous serial bus, but rather a tree network with 12 individual branches. Whether each branch needs its own termination resistor still has to be tested. Terminating all 12 branches is likely overkill.
+**Why this transceiver.** The THVD1450DR is a 1/8 unit-load part, so up to 256 nodes can share one bus segment. Since the array targets 72 nodes, that leaves plenty of headroom. It is also a common, widely available part and is stocked by JLCPCB.
+
+**What the circuit does.** U4 runs off +3V3 and connects the RP2040's UART to the differential pair:
+
+- `GPIO12_TX` → `DI` and `RO` → `GPIO13_RX` carry the data.
+- `GPIO15_DE` and `GPIO14_RE` control the direction. Both are pulled to GND through 10 kΩ (R6, R9), so on power-up the driver is disabled and the receiver is enabled.
+- C18 (100 nF) sits directly at pin 8, with C19 (1 µF) immediately upstream on the same 3V3 feed.
+
+This follows the layout guidelines in the chip's [datasheet](/docs/datasheets/thvd1450.pdf), which ask for a 100–220 nF cap as close as possible to VCC, at least two vias per decoupling connection, and 1–10 kΩ resistors on the enable lines to limit noise currents during transients. 
+
+**Termination.** R12 (120 Ω) is populated on every board but sits in series with solder jumper JP1, so it is only in circuit once that jumper is bridged. That matters because of how the array is wired. Looking back at the [wiring diagram](/docs/images/wiring-diagram.png), this is not one continuous bus. The 72 nodes are split into 12 rows of 6, each fed from its own injection point, so electrically there are 12 separate branches. Each branch is a short run, and terminating all 24 ends is likely overkill. How many jumpers actually need bridging still has to be measured on real hardware.
+
+> **Note on the part number.** The THVD1450 is the 50 Mbps variant of the family, the pin-compatible THVD1410 is the 500 kbps.
 
 ### Daisy chain connector
 
 ![Schematic daisy chain connector](/docs/images/schematic-connector.png)
 
-To connect the boards, an 8-pin JST connector was chosen. It's a vertical connector that can be fully assembled with SMT. A vertical connector was chosen over a horizontal one because the gap between boards might be very tight (not confirmed yet). With a vertical connector, the gap size doesn't matter. The power and ground lines are each deliberately split across two pins to reduce the load per pin. Two lines carry RS485 data, and one line is used for the nodes' auto-addressing feature. This leaves one spare line, which is proactively wired to unused GPIO pins on the RP2040 so it can be used for anything in the future. A decoupling capacitor also sits between +5V and GND, as is good practice.
+Boards are linked with 8-pin JST GH connectors (BM08B-GHS-TBT), one in (J3) and one out (J2). Two things made this the pick:
 
-### SWD Debug interface
+- **Top entry.** The gap between adjacent boards is not confirmed yet. A vertical connector routes the cable away from the board edge, so the gap size does not constrain the choice. A side-entry part (SM08B-GHS-TB) would.
+- **SMT.** The whole board is machine assembled, and this header is surface mount, so no hand soldering step is needed.
+
+The eight lines are allocated as follows:
+
+| Pins | Net | Notes |
+| --- | --- | --- |
+| 1, 4 | GND | Split across two pins |
+| 2, 3 | +5V (VBUS) | Split across two pins |
+| 5, 6 | RS485_A / RS485_B | Passed straight through |
+| 7 | ADDR | Point to point, for auto-addressing |
+| 8 | SPARE | Point to point, reserved |
+
+Power and ground each get two pins on purpose. The GH series is rated for 1.0 A per contact with AWG #26 wire, so doubling up gives a comfortable 2 A budget.
+
+The last two lines are wired differently from the rest. Power, ground and the RS485 pair passed straight through the board, `ADDR` and `SPARE` are not. `ADDR_IN`/`SPARE_IN` on J3 and `ADDR_OUT`/`SPARE_OUT` on J2 are four separate nets going to four separate GPIOs. `ADDR` is used for the auto adressing feature. `SPARE` is the same arrangement with nothing assigned to it yet, wired up proactively so a future feature can use it without a board change.
+
+C20 (10 µF) provides local bulk decoupling between +5V and GND at the connector.
+
+### SWD debug interface
 
 ![Schematic SWD debug](/docs/images/schematic-debug.png)
 
-It was decided to add an SWD debug interface in addition to the USB-C connector, to make flashing and debugging easier. The PCB features a standard TC2030 footprint, and the idea is to buy a cheap connector from AliExpress that matches it. The individual pins can then be wired to an external Raspberry Pi Pico running dedicated debug probe firmware, which handles both debugging and flashing.
+An SWD header (J4) was added alongside USB-C to make flashing and debugging easier. The footprint is a standard TC2030, which needs no connector on the board at all. A pogo pin cable is simply pressed against the pads.
 
-### SPI
+On the other end, the plan is to drive it from a second Raspberry Pi Pico running the official debugprobe firmware, which handles both flashing and interactive debugging over the same three wires.
+
+### SPI display
 
 ![Schematic SPI](/docs/images/schematic-spi.png)
 
-To connect the FPC tail of the display, a matching ZIF (zero insertion force) connector is used. The wiring follows the reference circuit in the display's [datasheet](/docs/datasheets/display-datasheets/). The interesting part is the wiring of the backlight's LEDA and LEDK pins. The anode (LEDA) is powered directly from +5V, while the cathode (LEDK) is wired through a transistor circuit that allows for dimming. A PWM signal on BL_PWM switches the transistor on and off, which dims the backlight.
+The display's FPC tail plugs into J5, a 12-pin ZIF (zero insertion force) connector, so the panel can be swapped without soldering. The assignment follows the tail pinout given in the panel [datasheet](/docs/datasheets/HZ0128QVPHGWS01N-AA.pdf), which the two [GoldenMorning T128HC](/docs/datasheets/display-datasheets/) drawings of the same 12-pin tail agree with:
+
+| Pin | Net | Purpose |
+| --- | --- | --- |
+| 1 | GND | |
+| 2 | LEDK | Backlight cathode, switched by Q1 |
+| 3 | LEDA | Backlight anode, +5V through R11 |
+| 4 | +3V3 | VDD, analog supply |
+| 5, 6 | GND | |
+| 7 | D/C | Data / command select |
+| 8 | CS | Chip select, active low |
+| 9 | SPI0_SCK | Serial clock |
+| 10 | SPI0_TX | Serial data in |
+| 11 | RESET | Active low |
+| 12 | GND | |
+| 13, 14 | GND | Mounting tabs |
+
+Ten of the twelve pins are unremarkable: the 4-wire SPI signals, `RESET`, the 3V3 analog supply and four grounds. Note that VDD is specified as 2.8 V typical with an absolute maximum of 4.6 V, so it belongs on the logic rail, the +5V rail is only for the backlight.
+
+**The backlight.** This is the one block that needs more than a wire. The panel carries two white LEDs in parallel, specified at VF ≈ 3.0 V and IF = 40 mA, and it has no driver of its own.
+
+`LEDA` (pin 3) is fed from +5V rather than the 3V3 rail, because 3.3 V leaves almost no headroom above the 3.0 V forward voltage. `LEDK` (pin 2) is then switched low-side by Q1, an S8050 NPN: `BL_PWM` drives the base through R13 (2.2 kΩ), and R14 (10 kΩ) pulls the base down so the backlight stays dark until the firmware deliberately drives the pin. Varying the PWM duty cycle dims the display.
+
+R11 (47 Ω) sits in series with the anode and sets the current:
+
+```
+I = (5 V − 3.0 V − 0.2 V) / 47 Ω ≈ 38 mA
+```
+
+with the 0.2 V accounting for Q1's collector-emitter saturation voltage. That lands just under the 40 mA rating, which is where we want to be.
+
 
 ## Open uncertainties
 
-- The GC9A01 FPC tail spec (pin count, pitch, orientation) needs to be confirmed from physical samples.
+- The GC9A01 FPC tail spec (pin count, pitch, orientation) needs to be confirmed from physical samples, and the ZIF pin assignment corrected to match (see the SPI section).
 - Real per node power draw (idle, full white, inrush) hasn't been measured yet.
-- Exact RS485 transceiver part is not finalized (THVD1450 vs SN65HVD75).
-- Bus connector choice (pin count, current rating, polarization) is still open.
+- The THVD1450 is in the schematic, but the slower, lower-EMI THVD1410 may be the better fit for this bus.
+- How many of the 12 branches actually need their 120 Ω termination jumper bridged has to be measured.
 - Baud rate vs. max bus length for the largest planned install needs to be decided.
 
 See the root [README.md](../README.md) for full system context.
