@@ -456,3 +456,14 @@ TX 60.0 frames/s | 17.6 kB/s of ~100 kB/s | CLOCK @ 60 Hz | seq 149
 The steady-state clock run matches the master's 60 Hz TX rate, with render times consistent with the phase 1.1 baseline (~11.6 ms) and no bad frames, confirming the bus and node both handle the full 72-node broadcast at the design rate.
 
 </details>
+
+
+<details id="pcb-prototype-design">
+<summary><strong>5.1 PCB Prototype design: Examine prototype board</strong></summary>
+
+### Objective
+
+Test if everything works, measure resistance, current and voltage.
+
+
+</details>
