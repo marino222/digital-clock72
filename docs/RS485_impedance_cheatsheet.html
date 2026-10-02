@@ -1,0 +1,367 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>RS485 Impedance Cheatsheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column. Each step = heading, short lede, one figure, formula strip, optional correction. */
+:root{
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-head:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --bg:#F3F6F9; --surface:#FFFFFF; --surface-2:#E9EFF5;
+  --ink:#13202E; --muted:#55677B; --line:#D3DDE8; --line-strong:#97A9BE;
+  --v:#1F5FBF; --i:#C2510A; --l:#7340C2; --c:#0B7F74;
+  --ok:#17794A; --bad:#C0352D;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1621; --surface:#152131; --surface-2:#1B2A3D;
+    --ink:#E8EEF5; --muted:#9AABBF; --line:#263850; --line-strong:#4B6283;
+    --v:#6BA5FF; --i:#FF9F5A; --l:#B592FF; --c:#4CD0C0;
+    --ok:#5BD39A; --bad:#FF8078; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1621; --surface:#152131; --surface-2:#1B2A3D;
+  --ink:#E8EEF5; --muted:#9AABBF; --line:#263850; --line-strong:#4B6283;
+  --v:#6BA5FF; --i:#FF9F5A; --l:#B592FF; --c:#4CD0C0;
+  --ok:#5BD39A; --bad:#FF8078; color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;
+  padding-inline:clamp(16px,4vw,32px);padding-block:36px 72px}
+.wrap{max-width:760px;margin-inline:auto;display:flex;flex-direction:column;gap:52px}
+.wrap>*{min-width:0}
+header{display:flex;flex-direction:column;gap:18px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--font-head);font-weight:600;font-size:clamp(32px,7vw,46px);line-height:1.04;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h2{font-family:var(--font-head);font-weight:600;font-size:26px;line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0;max-width:65ch}
+.sub{font-size:18px;color:var(--muted);max-width:60ch}
+.short{background:var(--ink);color:var(--bg);border-radius:8px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.short h2{font-size:15px;font-family:var(--font-mono);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.short ul{margin:0;padding-left:1.1em;display:grid;gap:8px;max-width:65ch}
+.path{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.path a{display:inline-flex;gap:7px;align-items:baseline;padding:5px 11px;border:1px solid var(--line-strong);border-radius:999px;color:var(--ink);text-decoration:none;font-size:13.5px}
+.path a b{font-family:var(--font-mono);font-weight:500;font-size:12px;color:var(--muted)}
+.path a:hover{background:var(--surface-2)}
+a:focus-visible,input:focus-visible{outline:2px solid var(--v);outline-offset:2px}
+section.step{display:flex;flex-direction:column;gap:16px;scroll-margin-top:16px}
+.step-head{display:flex;align-items:baseline;gap:12px}
+.num{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--muted);border:1px solid var(--line-strong);border-radius:4px;padding:1px 7px}
+.lede{font-size:17px}
+figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+figcaption{font-size:13.5px;color:var(--muted);line-height:1.45;max-width:65ch}
+svg.dia{display:block;width:100%;height:auto;max-width:520px;margin-inline:auto}
+svg text{font-family:var(--font-mono);font-size:13px;fill:var(--ink)}
+svg .t-muted{fill:var(--muted)}
+svg .fv{fill:var(--v)} svg .fi{fill:var(--i)} svg .fl{fill:var(--l)} svg .fc{fill:var(--c)}
+svg .fok{fill:var(--ok)} svg .fbad{fill:var(--bad)}
+svg .axis{stroke:var(--line-strong);stroke-width:1.2;fill:none}
+svg .gridline{stroke:var(--line);stroke-width:1;fill:none}
+svg .dash{stroke-dasharray:4 4}
+svg .ink{stroke:var(--ink);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg .inkf{fill:var(--ink);stroke:none}
+svg .mut{stroke:var(--muted);stroke-width:1.5;fill:none}
+svg .mutf{fill:var(--muted);stroke:none}
+svg .bus{stroke:var(--ink);stroke-width:5;fill:none;stroke-linecap:round}
+svg .v{stroke:var(--v);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg .i{stroke:var(--i);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg .cap{stroke:var(--c);stroke-width:2.75;fill:none;stroke-linecap:round}
+svg .ind{stroke:var(--l);stroke-width:2.75;fill:none;stroke-linecap:round}
+svg .sq{stroke:var(--line-strong);stroke-width:1.5;fill:none;stroke-dasharray:4 3}
+svg .dot{fill:var(--ink);stroke:none}
+svg .dotink{fill:var(--ink);stroke:none}
+svg .dotopen{fill:var(--surface);stroke:var(--ink);stroke-width:2}
+svg .boxline{fill:var(--surface-2);stroke:var(--ink);stroke-width:1.6}
+svg .boxok{fill:var(--surface-2);stroke:var(--ok);stroke-width:2}
+svg .barl{fill:var(--l);fill-opacity:.85;stroke:none}
+svg .barc{fill:var(--c);fill-opacity:.85;stroke:none}
+svg .barv{fill:var(--v);fill-opacity:.85;stroke:none}
+svg .pv{fill:var(--v);fill-opacity:.2;stroke:var(--v);stroke-width:2}
+svg .pb{fill:var(--bad);fill-opacity:.2;stroke:var(--bad);stroke-width:2}
+svg .stub{stroke:var(--ink);stroke-width:1.6;stroke-dasharray:5 4;fill:none}
+.formula{font-family:var(--font-mono);font-size:15px;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:8px}
+.formula .row{display:flex;flex-wrap:wrap;gap:2px 18px;align-items:baseline}
+.formula .note{font-family:var(--font-body);font-size:13.5px;color:var(--muted)}
+.slip{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.slip .lab{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--bad)}
+.slip p{font-size:15px}
+ul.plain{margin:0;padding-left:1.1em;display:grid;gap:7px;max-width:65ch}
+.cases{list-style:none;margin:0;padding:0;display:grid;gap:8px;max-width:65ch}
+.cases li{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:baseline}
+.cases b{font-family:var(--font-mono);font-weight:500;font-size:13.5px}
+.tag{font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;border:1px solid currentColor;display:inline-block;white-space:nowrap;line-height:1.5}
+.tag.repo{color:var(--ok)} .tag.rec{color:var(--v)} .tag.open{color:var(--i)}
+.rules{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.rules li{display:grid;grid-template-columns:132px 1fr;gap:12px;align-items:start}
+.rules li>div{max-width:62ch}
+h3{font-family:var(--font-mono);font-weight:500;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px}
+.calc label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.calc input{font-family:var(--font-mono);font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;padding:7px 9px;width:100%;min-width:0}
+.calc .out{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.calc .out b{font-family:var(--font-mono);font-weight:500;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums}
+footer{font-size:13.5px;color:var(--muted);max-width:65ch;border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:520px){
+  .rules li{grid-template-columns:1fr;gap:6px}
+  .cases li{grid-template-columns:1fr;gap:2px}
+  h2{font-size:23px}
+}
+</style>
+<main class="wrap">
+
+<header>
+  <div class="eyebrow">DigitalClock72 · RS485 bus · 72 nodes · 1 Mbaud</div>
+  <h1>Impedance for RS485, step by step</h1>
+  <p class="sub">From capacitors and inductors to termination resistors. Each step builds on the one before.</p>
+</header>
+
+<div class="short">
+  <h2>Short version</h2>
+  <ul>
+    <li>Impedance is how a part opposes AC. A transmission line has a single number for it, Z<sub>0</sub>.</li>
+    <li>Z<sub>0</sub> only matters when a trace or cable is long compared with the signal edge. Then a mismatch sends a reflection back.</li>
+    <li>On your board that means 120 Ω at the two bus ends, short stubs, a tight A/B pair. No controlled-impedance trace and no impedance calculator for RS485.</li>
+  </ul>
+</div>
+
+<nav aria-label="Steps"><ol class="path">
+  <li style="display:contents"><a href="#s1"><b>1</b> DC behavior</a></li>
+  <li style="display:contents"><a href="#s2"><b>2</b> Reactance</a></li>
+  <li style="display:contents"><a href="#s3"><b>3</b> Phase</a></li>
+  <li style="display:contents"><a href="#s4"><b>4</b> Impedance Z</a></li>
+  <li style="display:contents"><a href="#s5"><b>5</b> Square waves</a></li>
+  <li style="display:contents"><a href="#s6"><b>6</b> Transmission lines</a></li>
+  <li style="display:contents"><a href="#s7"><b>7</b> Reflections</a></li>
+  <li style="display:contents"><a href="#s8"><b>8</b> Long or short</a></li>
+  <li style="display:contents"><a href="#s9"><b>9</b> Your board</a></li>
+</ol></nav>
+
+<section class="step" id="s1">
+  <div class="step-head"><span class="num">01</span><h2>Capacitor and inductor at DC</h2></div>
+  <p class="lede">A capacitor resists a change in voltage. An inductor resists a change in current. They only fight changes, so once a DC source has been on for a while, both settle.</p>
+  <figure>
+    <svg class="dia" viewBox="0 0 480 224" role="img" aria-label="Current over time after a DC source is switched on. With a capacitor the current falls to zero. With an inductor it rises to V over R.">
+<line class="gridline" x1="50" y1="30" x2="450" y2="30"/>
+<line class="axis" x1="50" y1="190" x2="456" y2="190"/>
+<line class="axis" x1="50" y1="190" x2="50" y2="22"/>
+<text class="t-muted" x="44" y="34" text-anchor="end">V/R</text>
+<text class="t-muted" x="44" y="194" text-anchor="end">0</text>
+<text class="t-muted" x="50" y="14" text-anchor="start">current I</text>
+<text class="t-muted" x="456" y="208" text-anchor="end">time after switch-on</text>
+<path class="cap" d="M50.0,30.0 L60.0,45.2 L70.0,59.0 L80.0,71.5 L90.0,82.7 L100.0,93.0 L110.0,102.2 L120.0,110.5 L130.0,118.1 L140.0,124.9 L150.0,131.1 L160.0,136.7 L170.0,141.8 L180.0,146.4 L190.0,150.5 L200.0,154.3 L210.0,157.7 L220.0,160.8 L230.0,163.6 L240.0,166.1 L250.0,168.3 L260.0,170.4 L270.0,172.3 L280.0,174.0 L290.0,175.5 L300.0,176.9 L310.0,178.1 L320.0,179.2 L330.0,180.3 L340.0,181.2 L350.0,182.0 L360.0,182.8 L370.0,183.5 L380.0,184.1 L390.0,184.7 L400.0,185.2 L410.0,185.6 L420.0,186.0 L430.0,186.4 L440.0,186.8 L450.0,187.1"/>
+<path class="ind" d="M50.0,190.0 L60.0,174.8 L70.0,161.0 L80.0,148.5 L90.0,137.3 L100.0,127.0 L110.0,117.8 L120.0,109.5 L130.0,101.9 L140.0,95.1 L150.0,88.9 L160.0,83.3 L170.0,78.2 L180.0,73.6 L190.0,69.5 L200.0,65.7 L210.0,62.3 L220.0,59.2 L230.0,56.4 L240.0,53.9 L250.0,51.7 L260.0,49.6 L270.0,47.7 L280.0,46.0 L290.0,44.5 L300.0,43.1 L310.0,41.9 L320.0,40.8 L330.0,39.7 L340.0,38.8 L350.0,38.0 L360.0,37.2 L370.0,36.5 L380.0,35.9 L390.0,35.3 L400.0,34.8 L410.0,34.4 L420.0,34.0 L430.0,33.6 L440.0,33.2 L450.0,32.9"/>
+<text class="fc" x="450" y="158" text-anchor="end">capacitor: current → 0 (open)</text>
+<text class="fl" x="450" y="66" text-anchor="end">inductor: current → V/R (wire)</text>
+</svg>
+    <figcaption>DC source with a series resistor, switched on at t = 0. Capacitor: current falls to zero. Inductor: current rises to V/R and stays there.</figcaption>
+  </figure>
+  <ul class="plain">
+    <li><b>Steady state:</b> a capacitor is an open circuit (a gap). An inductor is a short circuit (a wire).</li>
+    <li><b>Right at switch-on it is reversed:</b> a capacitor acts like a wire, an inductor like a gap.</li>
+  </ul>
+  <div class="slip"><span class="lab">Common slip</span><p>A settled inductor does not give "unrestricted" current. It drops no voltage, and the rest of the circuit (R) still sets the current. A settled capacitor is not like a normal resistor either. It blocks DC completely.</p></div>
+</section>
+
+<section class="step" id="s2">
+  <div class="step-head"><span class="num">02</span><h2>Reactance: opposition that depends on frequency</h2></div>
+  <p class="lede">With AC the source keeps reversing, so neither part ever settles. How strongly each one opposes current now depends on frequency. That opposition is reactance, X, measured in ohms.</p>
+  <div class="formula">
+    <div class="row"><span>X<sub>L</sub> = 2πfL</span><span class="note">inductor: grows with frequency</span></div>
+    <div class="row"><span>X<sub>C</sub> = 1 / (2πfC)</span><span class="note">capacitor: shrinks with frequency</span></div>
+  </div>
+  <figure>
+    <svg class="dia" viewBox="0 0 480 240" role="img" aria-label="Reactance against frequency. Inductive reactance rises linearly. Capacitive reactance falls and is infinite at DC.">
+<line class="axis" x1="50" y1="210" x2="456" y2="210"/>
+<line class="axis" x1="50" y1="210" x2="50" y2="14"/>
+<text class="t-muted" x="44" y="14" text-anchor="end">X (Ω)</text>
+<text class="t-muted" x="50" y="228" text-anchor="start">0 (DC)</text>
+<text class="t-muted" x="456" y="228" text-anchor="end">frequency f</text>
+<path class="ind" d="M50.0,210.0 L450.0,20.0"/>
+<path class="cap" d="M94.4,20.0 L100.4,42.4 L106.3,60.0 L112.2,74.3 L118.1,86.1 L124.1,96.0 L130.0,104.4 L135.9,111.7 L141.9,118.1 L147.8,123.6 L153.7,128.6 L159.6,133.0 L165.6,136.9 L171.5,140.5 L177.4,143.7 L183.3,146.7 L189.3,149.4 L195.2,151.8 L201.1,154.1 L207.0,156.2 L213.0,158.2 L218.9,160.0 L224.8,161.7 L230.7,163.3 L236.7,164.8 L242.6,166.2 L248.5,167.5 L254.4,168.7 L260.4,169.9 L266.3,171.0 L272.2,172.0 L278.1,173.0 L284.1,173.9 L290.0,174.8 L295.9,175.7 L301.9,176.5 L307.8,177.2 L313.7,178.0 L319.6,178.7 L325.6,179.4 L331.5,180.0 L337.4,180.6 L343.3,181.2 L349.3,181.8 L355.2,182.3 L361.1,182.9 L367.0,183.4 L373.0,183.9 L378.9,184.3 L384.8,184.8 L390.7,185.2 L396.7,185.6 L402.6,186.1 L408.5,186.4 L414.4,186.8 L420.4,187.2 L426.3,187.6 L432.2,187.9 L438.1,188.2 L444.1,188.6 L450.0,188.9"/>
+<circle class="dot" cx="183.33333333333334" cy="146.66666666666666" r="4"/>
+<text class="t-muted" x="200" y="188" text-anchor="start">X<tspan dy="3" font-size="10">L</tspan><tspan dy="-3"> = X</tspan><tspan dy="3" font-size="10">C</tspan></text>
+<text class="fl" x="262" y="40" text-anchor="start">X<tspan dy="3" font-size="10">L</tspan><tspan dy="-3"> = 2πfL</tspan></text>
+<text class="t-muted" x="262" y="56" text-anchor="start">grows with f</text>
+<text class="fc" x="452" y="160" text-anchor="end">X<tspan dy="3" font-size="10">C</tspan><tspan dy="-3"> = 1/(2πfC)</tspan></text>
+<text class="t-muted" x="452" y="146" text-anchor="end">falls with f</text>
+<text class="fc" x="104" y="14" text-anchor="start">→ ∞ at DC</text>
+</svg>
+    <figcaption>At DC (f = 0): X<sub>L</sub> = 0, so the inductor is a wire. X<sub>C</sub> is infinite, so the capacitor is a gap. Same result as step 1.</figcaption>
+  </figure>
+  <div class="slip"><span class="lab">Common slip</span><p>Frequency zero does not make both reactances zero. Only X<sub>L</sub> goes to zero. X<sub>C</sub> goes to infinity, which is exactly why DC cannot pass a capacitor.</p></div>
+</section>
+
+<section class="step" id="s3">
+  <div class="step-head"><span class="num">03</span><h2>Phase: voltage and current fall out of step</h2></div>
+  <p class="lede">In a capacitor, current has to flow before the voltage can change, so current peaks first. In an inductor, voltage has to be applied before current can build, so voltage peaks first. Both gaps are 90°.</p>
+  <figure>
+    <svg class="dia" viewBox="0 0 480 300" role="img" aria-label="Capacitor: current peaks 90 degrees before voltage. Inductor: voltage peaks 90 degrees before current."><line class="v" x1="372" y1="14" x2="392" y2="14"/><text x="398" y="18">V</text><line class="i" x1="424" y1="14" x2="444" y2="14"/><text x="450" y="18">I</text><text x="40" y="34">Capacitor: I leads V</text><line class="gridline" x1="40" y1="100" x2="460" y2="100"/><path class="v" d="M40.0,100.0 L42.6,97.0 L45.2,94.1 L47.9,91.1 L50.5,88.3 L53.1,85.5 L55.8,82.7 L58.4,80.1 L61.0,77.7 L63.6,75.3 L66.2,73.1 L68.9,71.1 L71.5,69.3 L74.1,67.6 L76.8,66.1 L79.4,64.9 L82.0,63.9 L84.6,63.0 L87.2,62.5 L89.9,62.1 L92.5,62.0 L95.1,62.1 L97.8,62.5 L100.4,63.0 L103.0,63.9 L105.6,64.9 L108.2,66.1 L110.9,67.6 L113.5,69.3 L116.1,71.1 L118.8,73.1 L121.4,75.3 L124.0,77.7 L126.6,80.1 L129.2,82.7 L131.9,85.5 L134.5,88.3 L137.1,91.1 L139.8,94.1 L142.4,97.0 L145.0,100.0 L147.6,103.0 L150.2,105.9 L152.9,108.9 L155.5,111.7 L158.1,114.5 L160.8,117.3 L163.4,119.9 L166.0,122.3 L168.6,124.7 L171.2,126.9 L173.9,128.9 L176.5,130.7 L179.1,132.4 L181.8,133.9 L184.4,135.1 L187.0,136.1 L189.6,137.0 L192.2,137.5 L194.9,137.9 L197.5,138.0 L200.1,137.9 L202.8,137.5 L205.4,137.0 L208.0,136.1 L210.6,135.1 L213.2,133.9 L215.9,132.4 L218.5,130.7 L221.1,128.9 L223.8,126.9 L226.4,124.7 L229.0,122.3 L231.6,119.9 L234.2,117.3 L236.9,114.5 L239.5,111.7 L242.1,108.9 L244.8,105.9 L247.4,103.0 L250.0,100.0 L252.6,97.0 L255.2,94.1 L257.9,91.1 L260.5,88.3 L263.1,85.5 L265.8,82.7 L268.4,80.1 L271.0,77.7 L273.6,75.3 L276.2,73.1 L278.9,71.1 L281.5,69.3 L284.1,67.6 L286.8,66.1 L289.4,64.9 L292.0,63.9 L294.6,63.0 L297.2,62.5 L299.9,62.1 L302.5,62.0 L305.1,62.1 L307.7,62.5 L310.4,63.0 L313.0,63.9 L315.6,64.9 L318.2,66.1 L320.9,67.6 L323.5,69.3 L326.1,71.1 L328.8,73.1 L331.4,75.3 L334.0,77.7 L336.6,80.1 L339.2,82.7 L341.9,85.5 L344.5,88.3 L347.1,91.1 L349.7,94.1 L352.4,97.0 L355.0,100.0 L357.6,103.0 L360.2,105.9 L362.9,108.9 L365.5,111.7 L368.1,114.5 L370.8,117.3 L373.4,119.9 L376.0,122.3 L378.6,124.7 L381.2,126.9 L383.9,128.9 L386.5,130.7 L389.1,132.4 L391.7,133.9 L394.4,135.1 L397.0,136.1 L399.6,137.0 L402.3,137.5 L404.9,137.9 L407.5,138.0 L410.1,137.9 L412.8,137.5 L415.4,137.0 L418.0,136.1 L420.6,135.1 L423.2,133.9 L425.9,132.4 L428.5,130.7 L431.1,128.9 L433.7,126.9 L436.4,124.7 L439.0,122.3 L441.6,119.9 L444.3,117.3 L446.9,114.5 L449.5,111.7 L452.1,108.9 L454.8,105.9 L457.4,103.0 L460.0,100.0"/><path class="i" d="M40.0,62.0 L42.6,62.1 L45.2,62.5 L47.9,63.0 L50.5,63.9 L53.1,64.9 L55.8,66.1 L58.4,67.6 L61.0,69.3 L63.6,71.1 L66.2,73.1 L68.9,75.3 L71.5,77.7 L74.1,80.1 L76.8,82.7 L79.4,85.5 L82.0,88.3 L84.6,91.1 L87.2,94.1 L89.9,97.0 L92.5,100.0 L95.1,103.0 L97.8,105.9 L100.4,108.9 L103.0,111.7 L105.6,114.5 L108.2,117.3 L110.9,119.9 L113.5,122.3 L116.1,124.7 L118.8,126.9 L121.4,128.9 L124.0,130.7 L126.6,132.4 L129.2,133.9 L131.9,135.1 L134.5,136.1 L137.1,137.0 L139.8,137.5 L142.4,137.9 L145.0,138.0 L147.6,137.9 L150.2,137.5 L152.9,137.0 L155.5,136.1 L158.1,135.1 L160.8,133.9 L163.4,132.4 L166.0,130.7 L168.6,128.9 L171.2,126.9 L173.9,124.7 L176.5,122.3 L179.1,119.9 L181.8,117.3 L184.4,114.5 L187.0,111.7 L189.6,108.9 L192.2,105.9 L194.9,103.0 L197.5,100.0 L200.1,97.0 L202.8,94.1 L205.4,91.1 L208.0,88.3 L210.6,85.5 L213.2,82.7 L215.9,80.1 L218.5,77.7 L221.1,75.3 L223.8,73.1 L226.4,71.1 L229.0,69.3 L231.6,67.6 L234.2,66.1 L236.9,64.9 L239.5,63.9 L242.1,63.0 L244.8,62.5 L247.4,62.1 L250.0,62.0 L252.6,62.1 L255.2,62.5 L257.9,63.0 L260.5,63.9 L263.1,64.9 L265.8,66.1 L268.4,67.6 L271.0,69.3 L273.6,71.1 L276.2,73.1 L278.9,75.3 L281.5,77.7 L284.1,80.1 L286.8,82.7 L289.4,85.5 L292.0,88.3 L294.6,91.1 L297.2,94.1 L299.9,97.0 L302.5,100.0 L305.1,103.0 L307.7,105.9 L310.4,108.9 L313.0,111.7 L315.6,114.5 L318.2,117.3 L320.9,119.9 L323.5,122.3 L326.1,124.7 L328.8,126.9 L331.4,128.9 L334.0,130.7 L336.6,132.4 L339.2,133.9 L341.9,135.1 L344.5,136.1 L347.1,137.0 L349.7,137.5 L352.4,137.9 L355.0,138.0 L357.6,137.9 L360.2,137.5 L362.9,137.0 L365.5,136.1 L368.1,135.1 L370.8,133.9 L373.4,132.4 L376.0,130.7 L378.6,128.9 L381.2,126.9 L383.9,124.7 L386.5,122.3 L389.1,119.9 L391.7,117.3 L394.4,114.5 L397.0,111.7 L399.6,108.9 L402.3,105.9 L404.9,103.0 L407.5,100.0 L410.1,97.0 L412.8,94.1 L415.4,91.1 L418.0,88.3 L420.6,85.5 L423.2,82.7 L425.9,80.1 L428.5,77.7 L431.1,75.3 L433.7,73.1 L436.4,71.1 L439.0,69.3 L441.6,67.6 L444.3,66.1 L446.9,64.9 L449.5,63.9 L452.1,63.0 L454.8,62.5 L457.4,62.1 L460.0,62.0"/><line class="gridline dash" x1="250.0" y1="50" x2="250.0" y2="138"/><line class="gridline dash" x1="302.5" y1="50" x2="302.5" y2="138"/><line class="ink" x1="250.0" y1="50" x2="295.5" y2="50.0"/><polygon class="inkf" points="302.5,50 295.5,53.5 295.5,46.5"/><text class="fi" x="244.0" y="54" text-anchor="end">I peaks first</text><text class="t-muted" x="276.2" y="44" text-anchor="middle">90°</text><text x="40" y="174">Inductor: V leads I</text><line class="gridline" x1="40" y1="240" x2="460" y2="240"/><path class="v" d="M40.0,202.0 L42.6,202.1 L45.2,202.5 L47.9,203.0 L50.5,203.9 L53.1,204.9 L55.8,206.1 L58.4,207.6 L61.0,209.3 L63.6,211.1 L66.2,213.1 L68.9,215.3 L71.5,217.7 L74.1,220.1 L76.8,222.7 L79.4,225.5 L82.0,228.3 L84.6,231.1 L87.2,234.1 L89.9,237.0 L92.5,240.0 L95.1,243.0 L97.8,245.9 L100.4,248.9 L103.0,251.7 L105.6,254.5 L108.2,257.3 L110.9,259.9 L113.5,262.3 L116.1,264.7 L118.8,266.9 L121.4,268.9 L124.0,270.7 L126.6,272.4 L129.2,273.9 L131.9,275.1 L134.5,276.1 L137.1,277.0 L139.8,277.5 L142.4,277.9 L145.0,278.0 L147.6,277.9 L150.2,277.5 L152.9,277.0 L155.5,276.1 L158.1,275.1 L160.8,273.9 L163.4,272.4 L166.0,270.7 L168.6,268.9 L171.2,266.9 L173.9,264.7 L176.5,262.3 L179.1,259.9 L181.8,257.3 L184.4,254.5 L187.0,251.7 L189.6,248.9 L192.2,245.9 L194.9,243.0 L197.5,240.0 L200.1,237.0 L202.8,234.1 L205.4,231.1 L208.0,228.3 L210.6,225.5 L213.2,222.7 L215.9,220.1 L218.5,217.7 L221.1,215.3 L223.8,213.1 L226.4,211.1 L229.0,209.3 L231.6,207.6 L234.2,206.1 L236.9,204.9 L239.5,203.9 L242.1,203.0 L244.8,202.5 L247.4,202.1 L250.0,202.0 L252.6,202.1 L255.2,202.5 L257.9,203.0 L260.5,203.9 L263.1,204.9 L265.8,206.1 L268.4,207.6 L271.0,209.3 L273.6,211.1 L276.2,213.1 L278.9,215.3 L281.5,217.7 L284.1,220.1 L286.8,222.7 L289.4,225.5 L292.0,228.3 L294.6,231.1 L297.2,234.1 L299.9,237.0 L302.5,240.0 L305.1,243.0 L307.7,245.9 L310.4,248.9 L313.0,251.7 L315.6,254.5 L318.2,257.3 L320.9,259.9 L323.5,262.3 L326.1,264.7 L328.8,266.9 L331.4,268.9 L334.0,270.7 L336.6,272.4 L339.2,273.9 L341.9,275.1 L344.5,276.1 L347.1,277.0 L349.7,277.5 L352.4,277.9 L355.0,278.0 L357.6,277.9 L360.2,277.5 L362.9,277.0 L365.5,276.1 L368.1,275.1 L370.8,273.9 L373.4,272.4 L376.0,270.7 L378.6,268.9 L381.2,266.9 L383.9,264.7 L386.5,262.3 L389.1,259.9 L391.7,257.3 L394.4,254.5 L397.0,251.7 L399.6,248.9 L402.3,245.9 L404.9,243.0 L407.5,240.0 L410.1,237.0 L412.8,234.1 L415.4,231.1 L418.0,228.3 L420.6,225.5 L423.2,222.7 L425.9,220.1 L428.5,217.7 L431.1,215.3 L433.7,213.1 L436.4,211.1 L439.0,209.3 L441.6,207.6 L444.3,206.1 L446.9,204.9 L449.5,203.9 L452.1,203.0 L454.8,202.5 L457.4,202.1 L460.0,202.0"/><path class="i" d="M40.0,240.0 L42.6,237.0 L45.2,234.1 L47.9,231.1 L50.5,228.3 L53.1,225.5 L55.8,222.7 L58.4,220.1 L61.0,217.7 L63.6,215.3 L66.2,213.1 L68.9,211.1 L71.5,209.3 L74.1,207.6 L76.8,206.1 L79.4,204.9 L82.0,203.9 L84.6,203.0 L87.2,202.5 L89.9,202.1 L92.5,202.0 L95.1,202.1 L97.8,202.5 L100.4,203.0 L103.0,203.9 L105.6,204.9 L108.2,206.1 L110.9,207.6 L113.5,209.3 L116.1,211.1 L118.8,213.1 L121.4,215.3 L124.0,217.7 L126.6,220.1 L129.2,222.7 L131.9,225.5 L134.5,228.3 L137.1,231.1 L139.8,234.1 L142.4,237.0 L145.0,240.0 L147.6,243.0 L150.2,245.9 L152.9,248.9 L155.5,251.7 L158.1,254.5 L160.8,257.3 L163.4,259.9 L166.0,262.3 L168.6,264.7 L171.2,266.9 L173.9,268.9 L176.5,270.7 L179.1,272.4 L181.8,273.9 L184.4,275.1 L187.0,276.1 L189.6,277.0 L192.2,277.5 L194.9,277.9 L197.5,278.0 L200.1,277.9 L202.8,277.5 L205.4,277.0 L208.0,276.1 L210.6,275.1 L213.2,273.9 L215.9,272.4 L218.5,270.7 L221.1,268.9 L223.8,266.9 L226.4,264.7 L229.0,262.3 L231.6,259.9 L234.2,257.3 L236.9,254.5 L239.5,251.7 L242.1,248.9 L244.8,245.9 L247.4,243.0 L250.0,240.0 L252.6,237.0 L255.2,234.1 L257.9,231.1 L260.5,228.3 L263.1,225.5 L265.8,222.7 L268.4,220.1 L271.0,217.7 L273.6,215.3 L276.2,213.1 L278.9,211.1 L281.5,209.3 L284.1,207.6 L286.8,206.1 L289.4,204.9 L292.0,203.9 L294.6,203.0 L297.2,202.5 L299.9,202.1 L302.5,202.0 L305.1,202.1 L307.7,202.5 L310.4,203.0 L313.0,203.9 L315.6,204.9 L318.2,206.1 L320.9,207.6 L323.5,209.3 L326.1,211.1 L328.8,213.1 L331.4,215.3 L334.0,217.7 L336.6,220.1 L339.2,222.7 L341.9,225.5 L344.5,228.3 L347.1,231.1 L349.7,234.1 L352.4,237.0 L355.0,240.0 L357.6,243.0 L360.2,245.9 L362.9,248.9 L365.5,251.7 L368.1,254.5 L370.8,257.3 L373.4,259.9 L376.0,262.3 L378.6,264.7 L381.2,266.9 L383.9,268.9 L386.5,270.7 L389.1,272.4 L391.7,273.9 L394.4,275.1 L397.0,276.1 L399.6,277.0 L402.3,277.5 L404.9,277.9 L407.5,278.0 L410.1,277.9 L412.8,277.5 L415.4,277.0 L418.0,276.1 L420.6,275.1 L423.2,273.9 L425.9,272.4 L428.5,270.7 L431.1,268.9 L433.7,266.9 L436.4,264.7 L439.0,262.3 L441.6,259.9 L444.3,257.3 L446.9,254.5 L449.5,251.7 L452.1,248.9 L454.8,245.9 L457.4,243.0 L460.0,240.0"/><line class="gridline dash" x1="250.0" y1="190" x2="250.0" y2="278"/><line class="gridline dash" x1="302.5" y1="190" x2="302.5" y2="278"/><line class="ink" x1="250.0" y1="190" x2="295.5" y2="190.0"/><polygon class="inkf" points="302.5,190 295.5,193.5 295.5,186.5"/><text class="fv" x="244.0" y="194" text-anchor="end">V peaks first</text><text class="t-muted" x="276.2" y="184" text-anchor="middle">90°</text></svg>
+    <figcaption>Memory aid: ELI the ICE man. In an inductor (L) voltage (E) leads current (I). In a capacitor (C) current (I) leads voltage (E).</figcaption>
+  </figure>
+</section>
+
+<section class="step" id="s4">
+  <div class="step-head"><span class="num">04</span><h2>Impedance: resistance and reactance together</h2></div>
+  <p class="lede">Impedance, Z, is the total opposition to AC current. Resistance R turns energy into heat. Reactance X stores it and hands it back. They sit 90° apart, so they combine like the two sides of a right triangle.</p>
+  <div class="formula">
+    <div class="row"><span>Z = R + jX</span><span class="note">a complex number, j is the imaginary unit</span></div>
+    <div class="row"><span>X = X<sub>L</sub> − X<sub>C</sub></span><span class="note">they point opposite ways and partly cancel</span></div>
+    <div class="row"><span>|Z| = √(R² + X²)</span><span>φ = atan(X / R)</span></div>
+  </div>
+  <figure>
+    <svg class="dia" viewBox="0 0 480 262" role="img" aria-label="Impedance triangle with R = 4, net X = 3, giving impedance 5 ohms, next to bars showing inductive and capacitive reactance that partly cancel.">
+<line class="gridline" x1="40" y1="190" x2="222" y2="190"/>
+<line class="gridline" x1="70" y1="20" x2="70" y2="248"/>
+<line class="ink" x1="70" y1="190" x2="182" y2="190"/>
+<line class="ind" x1="182" y1="190" x2="182" y2="106"/>
+<line class="ink" style="stroke-width:3.5" x1="70" y1="190" x2="182" y2="106"/>
+<path class="ink" d="M98,190 A28,28 0 0 0 92.4,173.2"/>
+<text x="106" y="182">φ</text>
+<text x="126.0" y="208" text-anchor="middle">R = 4</text>
+<text class="fl" x="190" y="152.0">X = 3</text>
+<text x="92" y="136.0" text-anchor="end">|Z| = 5</text>
+<text class="t-muted" x="74" y="32">+jX</text>
+<text class="t-muted" x="74" y="246">−jX</text>
+<line class="gridline dash" x1="182" y1="106" x2="300" y2="106"/>
+<text class="fl" x="194" y="98">net +3</text>
+<rect class="barl" x="300" y="50" width="30" height="140"/>
+<rect class="barc" x="300" y="190" width="30" height="56"/>
+<text class="fl" x="340" y="124.0">X<tspan dy="3" font-size="10">L</tspan><tspan dy="-3"> = 5 Ω</tspan></text>
+<text class="t-muted" x="340" y="140.0">inductive</text>
+<text class="fc" x="340" y="222.0">X<tspan dy="3" font-size="10">C</tspan><tspan dy="-3"> = 2 Ω</tspan></text>
+<text class="t-muted" x="340" y="238.0">capacitive</text>
+</svg>
+    <figcaption>Example: R = 4 Ω, X<sub>L</sub> = 5 Ω, X<sub>C</sub> = 2 Ω. Net X = +3 Ω, so |Z| = 5 Ω at φ ≈ 37°.</figcaption>
+  </figure>
+  <div class="slip"><span class="lab">Common slip</span><p>Z = R + jX, not R + X. Z is a complex number, and X is a signed sum of X<sub>L</sub> and X<sub>C</sub>.</p></div>
+</section>
+
+<section class="step" id="s5">
+  <div class="step-head"><span class="num">05</span><h2>Why a DC board still has an AC problem</h2></div>
+  <p class="lede">The supply is DC, but a logic signal is a square wave. A square wave is a sum of sine waves: a fundamental plus odd harmonics. The sharper the edge, the more high-frequency content it carries, and the more reactance and delay matter.</p>
+  <figure>
+    <svg class="dia" viewBox="0 0 480 250" role="img" aria-label="A square wave built from sine waves. One sine looks like a round wave. Adding the 3rd and 5th harmonics gives steeper edges. Adding up to the 15th gives nearly square edges."><text class="t-muted" x="40" y="14">1st harmonic only</text><path class="sq" d="M40.0,46.0 L40.0,24.0 L140.0,24.0 L140.0,68.0 L240.0,68.0 L240.0,24.0 L340.0,24.0 L340.0,68.0 L440.0,68.0"/><path class="v" d="M40.0,46.0 L41.0,45.1 L42.0,44.2 L43.0,43.4 L44.0,42.5 L45.0,41.6 L46.0,40.8 L47.0,39.9 L48.0,39.0 L49.0,38.2 L50.0,37.3 L51.0,36.5 L52.0,35.7 L53.0,34.9 L54.0,34.1 L55.0,33.3 L56.0,32.5 L57.0,31.7 L58.0,31.0 L59.0,30.3 L60.0,29.5 L61.0,28.8 L62.0,28.1 L63.0,27.5 L64.0,26.8 L65.0,26.2 L66.0,25.6 L67.0,25.0 L68.0,24.4 L69.0,23.9 L70.0,23.3 L71.0,22.8 L72.0,22.3 L73.0,21.9 L74.0,21.5 L75.0,21.0 L76.0,20.7 L77.0,20.3 L78.0,20.0 L79.0,19.6 L80.0,19.4 L81.0,19.1 L82.0,18.9 L83.0,18.7 L84.0,18.5 L85.0,18.3 L86.0,18.2 L87.0,18.1 L88.0,18.0 L89.0,18.0 L90.0,18.0 L91.0,18.0 L92.0,18.0 L93.0,18.1 L94.0,18.2 L95.0,18.3 L96.0,18.5 L97.0,18.7 L98.0,18.9 L99.0,19.1 L100.0,19.4 L101.0,19.6 L102.0,20.0 L103.0,20.3 L104.0,20.7 L105.0,21.0 L106.0,21.5 L107.0,21.9 L108.0,22.3 L109.0,22.8 L110.0,23.3 L111.0,23.9 L112.0,24.4 L113.0,25.0 L114.0,25.6 L115.0,26.2 L116.0,26.8 L117.0,27.5 L118.0,28.1 L119.0,28.8 L120.0,29.5 L121.0,30.3 L122.0,31.0 L123.0,31.7 L124.0,32.5 L125.0,33.3 L126.0,34.1 L127.0,34.9 L128.0,35.7 L129.0,36.5 L130.0,37.3 L131.0,38.2 L132.0,39.0 L133.0,39.9 L134.0,40.8 L135.0,41.6 L136.0,42.5 L137.0,43.4 L138.0,44.2 L139.0,45.1 L140.0,46.0 L141.0,46.9 L142.0,47.8 L143.0,48.6 L144.0,49.5 L145.0,50.4 L146.0,51.2 L147.0,52.1 L148.0,53.0 L149.0,53.8 L150.0,54.7 L151.0,55.5 L152.0,56.3 L153.0,57.1 L154.0,57.9 L155.0,58.7 L156.0,59.5 L157.0,60.3 L158.0,61.0 L159.0,61.7 L160.0,62.5 L161.0,63.2 L162.0,63.9 L163.0,64.5 L164.0,65.2 L165.0,65.8 L166.0,66.4 L167.0,67.0 L168.0,67.6 L169.0,68.1 L170.0,68.7 L171.0,69.2 L172.0,69.7 L173.0,70.1 L174.0,70.5 L175.0,71.0 L176.0,71.3 L177.0,71.7 L178.0,72.0 L179.0,72.4 L180.0,72.6 L181.0,72.9 L182.0,73.1 L183.0,73.3 L184.0,73.5 L185.0,73.7 L186.0,73.8 L187.0,73.9 L188.0,74.0 L189.0,74.0 L190.0,74.0 L191.0,74.0 L192.0,74.0 L193.0,73.9 L194.0,73.8 L195.0,73.7 L196.0,73.5 L197.0,73.3 L198.0,73.1 L199.0,72.9 L200.0,72.6 L201.0,72.4 L202.0,72.0 L203.0,71.7 L204.0,71.3 L205.0,71.0 L206.0,70.5 L207.0,70.1 L208.0,69.7 L209.0,69.2 L210.0,68.7 L211.0,68.1 L212.0,67.6 L213.0,67.0 L214.0,66.4 L215.0,65.8 L216.0,65.2 L217.0,64.5 L218.0,63.9 L219.0,63.2 L220.0,62.5 L221.0,61.7 L222.0,61.0 L223.0,60.3 L224.0,59.5 L225.0,58.7 L226.0,57.9 L227.0,57.1 L228.0,56.3 L229.0,55.5 L230.0,54.7 L231.0,53.8 L232.0,53.0 L233.0,52.1 L234.0,51.2 L235.0,50.4 L236.0,49.5 L237.0,48.6 L238.0,47.8 L239.0,46.9 L240.0,46.0 L241.0,45.1 L242.0,44.2 L243.0,43.4 L244.0,42.5 L245.0,41.6 L246.0,40.8 L247.0,39.9 L248.0,39.0 L249.0,38.2 L250.0,37.3 L251.0,36.5 L252.0,35.7 L253.0,34.9 L254.0,34.1 L255.0,33.3 L256.0,32.5 L257.0,31.7 L258.0,31.0 L259.0,30.3 L260.0,29.5 L261.0,28.8 L262.0,28.1 L263.0,27.5 L264.0,26.8 L265.0,26.2 L266.0,25.6 L267.0,25.0 L268.0,24.4 L269.0,23.9 L270.0,23.3 L271.0,22.8 L272.0,22.3 L273.0,21.9 L274.0,21.5 L275.0,21.0 L276.0,20.7 L277.0,20.3 L278.0,20.0 L279.0,19.6 L280.0,19.4 L281.0,19.1 L282.0,18.9 L283.0,18.7 L284.0,18.5 L285.0,18.3 L286.0,18.2 L287.0,18.1 L288.0,18.0 L289.0,18.0 L290.0,18.0 L291.0,18.0 L292.0,18.0 L293.0,18.1 L294.0,18.2 L295.0,18.3 L296.0,18.5 L297.0,18.7 L298.0,18.9 L299.0,19.1 L300.0,19.4 L301.0,19.6 L302.0,20.0 L303.0,20.3 L304.0,20.7 L305.0,21.0 L306.0,21.5 L307.0,21.9 L308.0,22.3 L309.0,22.8 L310.0,23.3 L311.0,23.9 L312.0,24.4 L313.0,25.0 L314.0,25.6 L315.0,26.2 L316.0,26.8 L317.0,27.5 L318.0,28.1 L319.0,28.8 L320.0,29.5 L321.0,30.3 L322.0,31.0 L323.0,31.7 L324.0,32.5 L325.0,33.3 L326.0,34.1 L327.0,34.9 L328.0,35.7 L329.0,36.5 L330.0,37.3 L331.0,38.2 L332.0,39.0 L333.0,39.9 L334.0,40.8 L335.0,41.6 L336.0,42.5 L337.0,43.4 L338.0,44.2 L339.0,45.1 L340.0,46.0 L341.0,46.9 L342.0,47.8 L343.0,48.6 L344.0,49.5 L345.0,50.4 L346.0,51.2 L347.0,52.1 L348.0,53.0 L349.0,53.8 L350.0,54.7 L351.0,55.5 L352.0,56.3 L353.0,57.1 L354.0,57.9 L355.0,58.7 L356.0,59.5 L357.0,60.3 L358.0,61.0 L359.0,61.7 L360.0,62.5 L361.0,63.2 L362.0,63.9 L363.0,64.5 L364.0,65.2 L365.0,65.8 L366.0,66.4 L367.0,67.0 L368.0,67.6 L369.0,68.1 L370.0,68.7 L371.0,69.2 L372.0,69.7 L373.0,70.1 L374.0,70.5 L375.0,71.0 L376.0,71.3 L377.0,71.7 L378.0,72.0 L379.0,72.4 L380.0,72.6 L381.0,72.9 L382.0,73.1 L383.0,73.3 L384.0,73.5 L385.0,73.7 L386.0,73.8 L387.0,73.9 L388.0,74.0 L389.0,74.0 L390.0,74.0 L391.0,74.0 L392.0,74.0 L393.0,73.9 L394.0,73.8 L395.0,73.7 L396.0,73.5 L397.0,73.3 L398.0,73.1 L399.0,72.9 L400.0,72.6 L401.0,72.4 L402.0,72.0 L403.0,71.7 L404.0,71.3 L405.0,71.0 L406.0,70.5 L407.0,70.1 L408.0,69.7 L409.0,69.2 L410.0,68.7 L411.0,68.1 L412.0,67.6 L413.0,67.0 L414.0,66.4 L415.0,65.8 L416.0,65.2 L417.0,64.5 L418.0,63.9 L419.0,63.2 L420.0,62.5 L421.0,61.7 L422.0,61.0 L423.0,60.3 L424.0,59.5 L425.0,58.7 L426.0,57.9 L427.0,57.1 L428.0,56.3 L429.0,55.5 L430.0,54.7 L431.0,53.8 L432.0,53.0 L433.0,52.1 L434.0,51.2 L435.0,50.4 L436.0,49.5 L437.0,48.6 L438.0,47.8 L439.0,46.9 L440.0,46.0"/><text class="t-muted" x="40" y="96">+ 3rd and 5th</text><path class="sq" d="M40.0,128.0 L40.0,106.0 L140.0,106.0 L140.0,150.0 L240.0,150.0 L240.0,106.0 L340.0,106.0 L340.0,150.0 L440.0,150.0"/><path class="v" d="M40.0,128.0 L41.0,125.4 L42.0,122.8 L43.0,120.2 L44.0,117.8 L45.0,115.4 L46.0,113.2 L47.0,111.2 L48.0,109.3 L49.0,107.6 L50.0,106.2 L51.0,104.9 L52.0,103.9 L53.0,103.1 L54.0,102.5 L55.0,102.1 L56.0,101.9 L57.0,101.9 L58.0,102.0 L59.0,102.3 L60.0,102.7 L61.0,103.1 L62.0,103.7 L63.0,104.3 L64.0,104.9 L65.0,105.6 L66.0,106.2 L67.0,106.7 L68.0,107.2 L69.0,107.7 L70.0,108.1 L71.0,108.3 L72.0,108.5 L73.0,108.6 L74.0,108.6 L75.0,108.5 L76.0,108.3 L77.0,108.0 L78.0,107.7 L79.0,107.3 L80.0,106.8 L81.0,106.4 L82.0,105.9 L83.0,105.5 L84.0,105.1 L85.0,104.7 L86.0,104.4 L87.0,104.1 L88.0,103.9 L89.0,103.8 L90.0,103.7 L91.0,103.8 L92.0,103.9 L93.0,104.1 L94.0,104.4 L95.0,104.7 L96.0,105.1 L97.0,105.5 L98.0,105.9 L99.0,106.4 L100.0,106.8 L101.0,107.3 L102.0,107.7 L103.0,108.0 L104.0,108.3 L105.0,108.5 L106.0,108.6 L107.0,108.6 L108.0,108.5 L109.0,108.3 L110.0,108.1 L111.0,107.7 L112.0,107.2 L113.0,106.7 L114.0,106.2 L115.0,105.6 L116.0,104.9 L117.0,104.3 L118.0,103.7 L119.0,103.1 L120.0,102.7 L121.0,102.3 L122.0,102.0 L123.0,101.9 L124.0,101.9 L125.0,102.1 L126.0,102.5 L127.0,103.1 L128.0,103.9 L129.0,104.9 L130.0,106.2 L131.0,107.6 L132.0,109.3 L133.0,111.2 L134.0,113.2 L135.0,115.4 L136.0,117.8 L137.0,120.2 L138.0,122.8 L139.0,125.4 L140.0,128.0 L141.0,130.6 L142.0,133.2 L143.0,135.8 L144.0,138.2 L145.0,140.6 L146.0,142.8 L147.0,144.8 L148.0,146.7 L149.0,148.4 L150.0,149.8 L151.0,151.1 L152.0,152.1 L153.0,152.9 L154.0,153.5 L155.0,153.9 L156.0,154.1 L157.0,154.1 L158.0,154.0 L159.0,153.7 L160.0,153.3 L161.0,152.9 L162.0,152.3 L163.0,151.7 L164.0,151.1 L165.0,150.4 L166.0,149.8 L167.0,149.3 L168.0,148.8 L169.0,148.3 L170.0,147.9 L171.0,147.7 L172.0,147.5 L173.0,147.4 L174.0,147.4 L175.0,147.5 L176.0,147.7 L177.0,148.0 L178.0,148.3 L179.0,148.7 L180.0,149.2 L181.0,149.6 L182.0,150.1 L183.0,150.5 L184.0,150.9 L185.0,151.3 L186.0,151.6 L187.0,151.9 L188.0,152.1 L189.0,152.2 L190.0,152.3 L191.0,152.2 L192.0,152.1 L193.0,151.9 L194.0,151.6 L195.0,151.3 L196.0,150.9 L197.0,150.5 L198.0,150.1 L199.0,149.6 L200.0,149.2 L201.0,148.7 L202.0,148.3 L203.0,148.0 L204.0,147.7 L205.0,147.5 L206.0,147.4 L207.0,147.4 L208.0,147.5 L209.0,147.7 L210.0,147.9 L211.0,148.3 L212.0,148.8 L213.0,149.3 L214.0,149.8 L215.0,150.4 L216.0,151.1 L217.0,151.7 L218.0,152.3 L219.0,152.9 L220.0,153.3 L221.0,153.7 L222.0,154.0 L223.0,154.1 L224.0,154.1 L225.0,153.9 L226.0,153.5 L227.0,152.9 L228.0,152.1 L229.0,151.1 L230.0,149.8 L231.0,148.4 L232.0,146.7 L233.0,144.8 L234.0,142.8 L235.0,140.6 L236.0,138.2 L237.0,135.8 L238.0,133.2 L239.0,130.6 L240.0,128.0 L241.0,125.4 L242.0,122.8 L243.0,120.2 L244.0,117.8 L245.0,115.4 L246.0,113.2 L247.0,111.2 L248.0,109.3 L249.0,107.6 L250.0,106.2 L251.0,104.9 L252.0,103.9 L253.0,103.1 L254.0,102.5 L255.0,102.1 L256.0,101.9 L257.0,101.9 L258.0,102.0 L259.0,102.3 L260.0,102.7 L261.0,103.1 L262.0,103.7 L263.0,104.3 L264.0,104.9 L265.0,105.6 L266.0,106.2 L267.0,106.7 L268.0,107.2 L269.0,107.7 L270.0,108.1 L271.0,108.3 L272.0,108.5 L273.0,108.6 L274.0,108.6 L275.0,108.5 L276.0,108.3 L277.0,108.0 L278.0,107.7 L279.0,107.3 L280.0,106.8 L281.0,106.4 L282.0,105.9 L283.0,105.5 L284.0,105.1 L285.0,104.7 L286.0,104.4 L287.0,104.1 L288.0,103.9 L289.0,103.8 L290.0,103.7 L291.0,103.8 L292.0,103.9 L293.0,104.1 L294.0,104.4 L295.0,104.7 L296.0,105.1 L297.0,105.5 L298.0,105.9 L299.0,106.4 L300.0,106.8 L301.0,107.3 L302.0,107.7 L303.0,108.0 L304.0,108.3 L305.0,108.5 L306.0,108.6 L307.0,108.6 L308.0,108.5 L309.0,108.3 L310.0,108.1 L311.0,107.7 L312.0,107.2 L313.0,106.7 L314.0,106.2 L315.0,105.6 L316.0,104.9 L317.0,104.3 L318.0,103.7 L319.0,103.1 L320.0,102.7 L321.0,102.3 L322.0,102.0 L323.0,101.9 L324.0,101.9 L325.0,102.1 L326.0,102.5 L327.0,103.1 L328.0,103.9 L329.0,104.9 L330.0,106.2 L331.0,107.6 L332.0,109.3 L333.0,111.2 L334.0,113.2 L335.0,115.4 L336.0,117.8 L337.0,120.2 L338.0,122.8 L339.0,125.4 L340.0,128.0 L341.0,130.6 L342.0,133.2 L343.0,135.8 L344.0,138.2 L345.0,140.6 L346.0,142.8 L347.0,144.8 L348.0,146.7 L349.0,148.4 L350.0,149.8 L351.0,151.1 L352.0,152.1 L353.0,152.9 L354.0,153.5 L355.0,153.9 L356.0,154.1 L357.0,154.1 L358.0,154.0 L359.0,153.7 L360.0,153.3 L361.0,152.9 L362.0,152.3 L363.0,151.7 L364.0,151.1 L365.0,150.4 L366.0,149.8 L367.0,149.3 L368.0,148.8 L369.0,148.3 L370.0,147.9 L371.0,147.7 L372.0,147.5 L373.0,147.4 L374.0,147.4 L375.0,147.5 L376.0,147.7 L377.0,148.0 L378.0,148.3 L379.0,148.7 L380.0,149.2 L381.0,149.6 L382.0,150.1 L383.0,150.5 L384.0,150.9 L385.0,151.3 L386.0,151.6 L387.0,151.9 L388.0,152.1 L389.0,152.2 L390.0,152.3 L391.0,152.2 L392.0,152.1 L393.0,151.9 L394.0,151.6 L395.0,151.3 L396.0,150.9 L397.0,150.5 L398.0,150.1 L399.0,149.6 L400.0,149.2 L401.0,148.7 L402.0,148.3 L403.0,148.0 L404.0,147.7 L405.0,147.5 L406.0,147.4 L407.0,147.4 L408.0,147.5 L409.0,147.7 L410.0,147.9 L411.0,148.3 L412.0,148.8 L413.0,149.3 L414.0,149.8 L415.0,150.4 L416.0,151.1 L417.0,151.7 L418.0,152.3 L419.0,152.9 L420.0,153.3 L421.0,153.7 L422.0,154.0 L423.0,154.1 L424.0,154.1 L425.0,153.9 L426.0,153.5 L427.0,152.9 L428.0,152.1 L429.0,151.1 L430.0,149.8 L431.0,148.4 L432.0,146.7 L433.0,144.8 L434.0,142.8 L435.0,140.6 L436.0,138.2 L437.0,135.8 L438.0,133.2 L439.0,130.6 L440.0,128.0"/><text class="t-muted" x="40" y="178">odd harmonics up to the 15th</text><path class="sq" d="M40.0,210.0 L40.0,188.0 L140.0,188.0 L140.0,232.0 L240.0,232.0 L240.0,188.0 L340.0,188.0 L340.0,232.0 L440.0,232.0"/><path class="v" d="M40.0,210.0 L41.0,203.1 L42.0,196.7 L43.0,191.4 L44.0,187.4 L45.0,185.0 L46.0,184.1 L47.0,184.3 L48.0,185.4 L49.0,186.9 L50.0,188.4 L51.0,189.5 L52.0,190.1 L53.0,190.1 L54.0,189.6 L55.0,188.8 L56.0,187.9 L57.0,187.1 L58.0,186.6 L59.0,186.5 L60.0,186.7 L61.0,187.3 L62.0,188.0 L63.0,188.6 L64.0,189.1 L65.0,189.2 L66.0,189.1 L67.0,188.7 L68.0,188.1 L69.0,187.6 L70.0,187.2 L71.0,187.0 L72.0,187.0 L73.0,187.3 L74.0,187.8 L75.0,188.3 L76.0,188.7 L77.0,188.9 L78.0,188.9 L79.0,188.7 L80.0,188.3 L81.0,187.8 L82.0,187.4 L83.0,187.2 L84.0,187.1 L85.0,187.3 L86.0,187.6 L87.0,188.0 L88.0,188.5 L89.0,188.8 L90.0,188.9 L91.0,188.8 L92.0,188.5 L93.0,188.0 L94.0,187.6 L95.0,187.3 L96.0,187.1 L97.0,187.2 L98.0,187.4 L99.0,187.8 L100.0,188.3 L101.0,188.7 L102.0,188.9 L103.0,188.9 L104.0,188.7 L105.0,188.3 L106.0,187.8 L107.0,187.3 L108.0,187.0 L109.0,187.0 L110.0,187.2 L111.0,187.6 L112.0,188.1 L113.0,188.7 L114.0,189.1 L115.0,189.2 L116.0,189.1 L117.0,188.6 L118.0,188.0 L119.0,187.3 L120.0,186.7 L121.0,186.5 L122.0,186.6 L123.0,187.1 L124.0,187.9 L125.0,188.8 L126.0,189.6 L127.0,190.1 L128.0,190.1 L129.0,189.5 L130.0,188.4 L131.0,186.9 L132.0,185.4 L133.0,184.3 L134.0,184.1 L135.0,185.0 L136.0,187.4 L137.0,191.4 L138.0,196.7 L139.0,203.1 L140.0,210.0 L141.0,216.9 L142.0,223.3 L143.0,228.6 L144.0,232.6 L145.0,235.0 L146.0,235.9 L147.0,235.7 L148.0,234.6 L149.0,233.1 L150.0,231.6 L151.0,230.5 L152.0,229.9 L153.0,229.9 L154.0,230.4 L155.0,231.2 L156.0,232.1 L157.0,232.9 L158.0,233.4 L159.0,233.5 L160.0,233.3 L161.0,232.7 L162.0,232.0 L163.0,231.4 L164.0,230.9 L165.0,230.8 L166.0,230.9 L167.0,231.3 L168.0,231.9 L169.0,232.4 L170.0,232.8 L171.0,233.0 L172.0,233.0 L173.0,232.7 L174.0,232.2 L175.0,231.7 L176.0,231.3 L177.0,231.1 L178.0,231.1 L179.0,231.3 L180.0,231.7 L181.0,232.2 L182.0,232.6 L183.0,232.8 L184.0,232.9 L185.0,232.7 L186.0,232.4 L187.0,232.0 L188.0,231.5 L189.0,231.2 L190.0,231.1 L191.0,231.2 L192.0,231.5 L193.0,232.0 L194.0,232.4 L195.0,232.7 L196.0,232.9 L197.0,232.8 L198.0,232.6 L199.0,232.2 L200.0,231.7 L201.0,231.3 L202.0,231.1 L203.0,231.1 L204.0,231.3 L205.0,231.7 L206.0,232.2 L207.0,232.7 L208.0,233.0 L209.0,233.0 L210.0,232.8 L211.0,232.4 L212.0,231.9 L213.0,231.3 L214.0,230.9 L215.0,230.8 L216.0,230.9 L217.0,231.4 L218.0,232.0 L219.0,232.7 L220.0,233.3 L221.0,233.5 L222.0,233.4 L223.0,232.9 L224.0,232.1 L225.0,231.2 L226.0,230.4 L227.0,229.9 L228.0,229.9 L229.0,230.5 L230.0,231.6 L231.0,233.1 L232.0,234.6 L233.0,235.7 L234.0,235.9 L235.0,235.0 L236.0,232.6 L237.0,228.6 L238.0,223.3 L239.0,216.9 L240.0,210.0 L241.0,203.1 L242.0,196.7 L243.0,191.4 L244.0,187.4 L245.0,185.0 L246.0,184.1 L247.0,184.3 L248.0,185.4 L249.0,186.9 L250.0,188.4 L251.0,189.5 L252.0,190.1 L253.0,190.1 L254.0,189.6 L255.0,188.8 L256.0,187.9 L257.0,187.1 L258.0,186.6 L259.0,186.5 L260.0,186.7 L261.0,187.3 L262.0,188.0 L263.0,188.6 L264.0,189.1 L265.0,189.2 L266.0,189.1 L267.0,188.7 L268.0,188.1 L269.0,187.6 L270.0,187.2 L271.0,187.0 L272.0,187.0 L273.0,187.3 L274.0,187.8 L275.0,188.3 L276.0,188.7 L277.0,188.9 L278.0,188.9 L279.0,188.7 L280.0,188.3 L281.0,187.8 L282.0,187.4 L283.0,187.2 L284.0,187.1 L285.0,187.3 L286.0,187.6 L287.0,188.0 L288.0,188.5 L289.0,188.8 L290.0,188.9 L291.0,188.8 L292.0,188.5 L293.0,188.0 L294.0,187.6 L295.0,187.3 L296.0,187.1 L297.0,187.2 L298.0,187.4 L299.0,187.8 L300.0,188.3 L301.0,188.7 L302.0,188.9 L303.0,188.9 L304.0,188.7 L305.0,188.3 L306.0,187.8 L307.0,187.3 L308.0,187.0 L309.0,187.0 L310.0,187.2 L311.0,187.6 L312.0,188.1 L313.0,188.7 L314.0,189.1 L315.0,189.2 L316.0,189.1 L317.0,188.6 L318.0,188.0 L319.0,187.3 L320.0,186.7 L321.0,186.5 L322.0,186.6 L323.0,187.1 L324.0,187.9 L325.0,188.8 L326.0,189.6 L327.0,190.1 L328.0,190.1 L329.0,189.5 L330.0,188.4 L331.0,186.9 L332.0,185.4 L333.0,184.3 L334.0,184.1 L335.0,185.0 L336.0,187.4 L337.0,191.4 L338.0,196.7 L339.0,203.1 L340.0,210.0 L341.0,216.9 L342.0,223.3 L343.0,228.6 L344.0,232.6 L345.0,235.0 L346.0,235.9 L347.0,235.7 L348.0,234.6 L349.0,233.1 L350.0,231.6 L351.0,230.5 L352.0,229.9 L353.0,229.9 L354.0,230.4 L355.0,231.2 L356.0,232.1 L357.0,232.9 L358.0,233.4 L359.0,233.5 L360.0,233.3 L361.0,232.7 L362.0,232.0 L363.0,231.4 L364.0,230.9 L365.0,230.8 L366.0,230.9 L367.0,231.3 L368.0,231.9 L369.0,232.4 L370.0,232.8 L371.0,233.0 L372.0,233.0 L373.0,232.7 L374.0,232.2 L375.0,231.7 L376.0,231.3 L377.0,231.1 L378.0,231.1 L379.0,231.3 L380.0,231.7 L381.0,232.2 L382.0,232.6 L383.0,232.8 L384.0,232.9 L385.0,232.7 L386.0,232.4 L387.0,232.0 L388.0,231.5 L389.0,231.2 L390.0,231.1 L391.0,231.2 L392.0,231.5 L393.0,232.0 L394.0,232.4 L395.0,232.7 L396.0,232.9 L397.0,232.8 L398.0,232.6 L399.0,232.2 L400.0,231.7 L401.0,231.3 L402.0,231.1 L403.0,231.1 L404.0,231.3 L405.0,231.7 L406.0,232.2 L407.0,232.7 L408.0,233.0 L409.0,233.0 L410.0,232.8 L411.0,232.4 L412.0,231.9 L413.0,231.3 L414.0,230.9 L415.0,230.8 L416.0,230.9 L417.0,231.4 L418.0,232.0 L419.0,232.7 L420.0,233.3 L421.0,233.5 L422.0,233.4 L423.0,232.9 L424.0,232.1 L425.0,231.2 L426.0,230.4 L427.0,229.9 L428.0,229.9 L429.0,230.5 L430.0,231.6 L431.0,233.1 L432.0,234.6 L433.0,235.7 L434.0,235.9 L435.0,235.0 L436.0,232.6 L437.0,228.6 L438.0,223.3 L439.0,216.9 L440.0,210.0"/></svg>
+    <figcaption>Blue: the sum of the sines listed above each plot. Dashed: the ideal square wave. More harmonics give steeper edges.</figcaption>
+  </figure>
+  <div class="formula">
+    <div class="row"><span>bandwidth ≈ 0.35 / t<sub>rise</sub></span><span class="note">example: 5 ns edge → about 70 MHz</span></div>
+  </div>
+  <p>Edge rate sets the frequency content, not baud rate. Your bit time at 1 Mbaud is 1 µs, but the transceiver output can switch in a few nanoseconds.</p>
+</section>
+
+<section class="step" id="s6">
+  <div class="step-head"><span class="num">06</span><h2>Transmission lines and Z<sub>0</sub></h2></div>
+  <p class="lede">Every cable and PCB trace has inductance and capacitance along its whole length. Picture it as many tiny slices, each with a series inductor and a shunt capacitor. An edge has to charge each slice in turn, which is why signals travel at a finite speed.</p>
+  <figure>
+    <svg class="dia" viewBox="0 0 500 196" role="img" aria-label="A transmission line modelled as repeated slices, each with a series inductor and a shunt capacitor to the return conductor."><text class="t-muted" x="30" y="22">signal conductor</text><text class="t-muted" x="30" y="184">return conductor (ground)</text><line class="ink" x1="14" y1="66" x2="30" y2="66"/><line class="ink" x1="14" y1="154" x2="440" y2="154"/><line class="ink" x1="30" y1="66" x2="42" y2="66"/><path class="ind" d="M42,66 a8,8 0 0 1 16,0 a8,8 0 0 1 16,0 a8,8 0 0 1 16,0"/><line class="ink" x1="90" y1="66" x2="140" y2="66"/><circle class="dotink" cx="116" cy="66" r="3"/><line class="ink" x1="116" y1="66" x2="116" y2="100"/><line class="cap" x1="104" y1="100" x2="128" y2="100"/><line class="cap" x1="104" y1="108" x2="128" y2="108"/><line class="ink" x1="116" y1="108" x2="116" y2="154"/><circle class="dotink" cx="116" cy="154" r="3"/><text class="fl" x="66" y="50" text-anchor="middle">L′·dx</text><text class="fc" x="132" y="108">C′·dx</text><line class="ink" x1="140" y1="66" x2="152" y2="66"/><path class="ind" d="M152,66 a8,8 0 0 1 16,0 a8,8 0 0 1 16,0 a8,8 0 0 1 16,0"/><line class="ink" x1="200" y1="66" x2="250" y2="66"/><circle class="dotink" cx="226" cy="66" r="3"/><line class="ink" x1="226" y1="66" x2="226" y2="100"/><line class="cap" x1="214" y1="100" x2="238" y2="100"/><line class="cap" x1="214" y1="108" x2="238" y2="108"/><line class="ink" x1="226" y1="108" x2="226" y2="154"/><circle class="dotink" cx="226" cy="154" r="3"/><text class="fl" x="176" y="50" text-anchor="middle">L′·dx</text><text class="fc" x="242" y="108">C′·dx</text><line class="ink" x1="250" y1="66" x2="262" y2="66"/><path class="ind" d="M262,66 a8,8 0 0 1 16,0 a8,8 0 0 1 16,0 a8,8 0 0 1 16,0"/><line class="ink" x1="310" y1="66" x2="360" y2="66"/><circle class="dotink" cx="336" cy="66" r="3"/><line class="ink" x1="336" y1="66" x2="336" y2="100"/><line class="cap" x1="324" y1="100" x2="348" y2="100"/><line class="cap" x1="324" y1="108" x2="348" y2="108"/><line class="ink" x1="336" y1="108" x2="336" y2="154"/><circle class="dotink" cx="336" cy="154" r="3"/><text class="fl" x="286" y="50" text-anchor="middle">L′·dx</text><text class="fc" x="352" y="108">C′·dx</text><line class="ink" x1="360" y1="66" x2="396" y2="66"/><text x="420" y="71" text-anchor="middle">…</text><text x="420" y="148" text-anchor="middle" class="t-muted">…</text></svg>
+    <figcaption>L′ and C′ are inductance and capacitance per unit length. dx is the length of one slice.</figcaption>
+  </figure>
+  <div class="formula">
+    <div class="row"><span>Z<sub>0</sub> = √(L′ / C′)</span><span class="note">characteristic impedance, in ohms</span></div>
+    <div class="row"><span>v = 1 / √(L′ · C′)</span><span class="note">propagation speed</span></div>
+  </div>
+  <figure>
+    <svg class="dia" viewBox="0 0 500 96" role="img" aria-label="From the source, an infinitely long line looks like a single resistor of value Z0.">
+<text class="t-muted" x="20" y="16">infinitely long line</text>
+<circle class="ink" fill="none" cx="34" cy="58" r="14"/>
+<text x="34" y="63" text-anchor="middle">V</text>
+<line class="ink" x1="48" y1="58" x2="220" y2="58"/>
+<line class="ink" x1="220" y1="58" x2="232" y2="58" stroke-dasharray="3 3"/>
+<text x="236" y="63">∞</text>
+<text x="272" y="64" text-anchor="middle" style="font-size:22px">≡</text>
+<text class="t-muted" x="310" y="16">just a resistor</text>
+<circle class="ink" fill="none" cx="324" cy="58" r="14"/>
+<text x="324" y="63" text-anchor="middle">V</text>
+<line class="ink" x1="338" y1="58" x2="372" y2="58"/>
+<rect class="boxline" x="372" y="48" width="56" height="20"/>
+<text x="400" y="63" text-anchor="middle">Z<tspan dy="3" font-size="10">0</tspan><tspan dy="-3"></tspan></text>
+</svg>
+    <figcaption>From the source's point of view, an infinitely long line draws current like a resistor of value Z<sub>0</sub>. A real line behaves the same until the edge reaches its end.</figcaption>
+  </figure>
+  <p><b>Why one number is enough:</b> for a low-loss line, Z<sub>0</sub> is the same real value at every frequency. Every harmonic of your square wave sees the same Z<sub>0</sub>, so you do not need to calculate them one by one.</p>
+  <div class="slip"><span class="lab">Common slip</span><p>Z<sub>0</sub> is not a heater. The energy is not burned in the line, it goes into the line's fields and travels on. Z<sub>0</sub> also does not depend on length. And 120 Ω belongs to the twisted-pair cable RS485 assumes, not to RS485 itself. Coax is typically 50 Ω.</p></div>
+</section>
+
+<section class="step" id="s7">
+  <div class="step-head"><span class="num">07</span><h2>Reflections: why termination exists</h2></div>
+  <p class="lede">A wave on the line carries voltage and current in a fixed ratio: V / I = Z<sub>0</sub>. The line sets that ratio. Whatever sits at the end sets its own: V / I = R<sub>load</sub>. If the two differ, the leftover has to go somewhere, and it goes into a wave travelling back.</p>
+  <ul class="cases">
+    <li><b>Open end</b><span>Current must be zero there. The reflected wave carries opposite current, which adds voltage. Voltage at the end doubles.</span></li>
+    <li><b>Short</b><span>Voltage must be zero there. The reflected wave carries opposite voltage.</span></li>
+    <li><b>R = Z<sub>0</sub></b><span>The wave already has the ratio the load wants. Nothing is left over, nothing reflects. This is termination.</span></li>
+    <li><b>Step in Z</b><span>A connector or a change in trace geometry asks the wave for a different V / I. Part of it reflects, the rest continues with amplitude 1 + Γ.</span></li>
+  </ul>
+  <div class="formula">
+    <div class="row"><span>Γ = (R<sub>load</sub> − Z<sub>0</sub>) / (R<sub>load</sub> + Z<sub>0</sub>)</span></div>
+    <div class="row"><span>Γ = (Z<sub>2</sub> − Z<sub>1</sub>) / (Z<sub>2</sub> + Z<sub>1</sub>)</span><span class="note">at a step</span></div>
+    <div class="row"><span>V<sub>reflected</sub> = Γ · V<sub>incident</sub></span></div>
+  </div>
+  <figure>
+    <svg class="dia" viewBox="0 0 480 450" role="img" aria-label="Pulse before and after reaching a line end. Open end reflects the same pulse. Matched end reflects nothing. Short reflects an inverted pulse. An impedance step from 120 to 60 ohms reflects one third, inverted."><text x="14" y="16"><tspan font-weight="500">Open end</tspan><tspan class="t-muted">  ·  R = ∞</tspan></text><text class="fbad" x="466" y="16" text-anchor="end">Γ = +1</text><line class="ink" x1="24" y1="72" x2="402" y2="72"/><circle class="dotopen" cx="406" cy="72" r="4"/><path class="pv" d="M60,72 L64,48.0 L92,48.0 L96,72 Z"/><text class="fv" x="78" y="42" text-anchor="middle">in →</text><path class="pb" d="M290,72 L294,48.0 L322,48.0 L326,72 Z"/><text class="fbad" x="308" y="42.0" text-anchor="middle">← back</text><text x="14" y="128"><tspan font-weight="500">Matched end</tspan><tspan class="t-muted">  ·  R = Z₀ (terminator)</tspan></text><text class="fok" x="466" y="128" text-anchor="end">Γ = 0</text><line class="ink" x1="24" y1="184" x2="402" y2="184"/><line class="ink" x1="404" y1="184" x2="404" y2="192"/><rect class="boxline" x="396" y="192" width="16" height="26"/><line class="ink" x1="404" y1="218" x2="404" y2="224"/><line class="ink" x1="396" y1="224" x2="412" y2="224"/><text x="422" y="210">Z<tspan dy="3" font-size="10">0</tspan><tspan dy="-3"></tspan></text><path class="pv" d="M60,184 L64,160.0 L92,160.0 L96,184 Z"/><text class="fv" x="78" y="154" text-anchor="middle">in →</text><text class="fok" x="308" y="176" text-anchor="middle">no reflection</text><text x="14" y="240"><tspan font-weight="500">Shorted end</tspan><tspan class="t-muted">  ·  R = 0</tspan></text><text class="fbad" x="466" y="240" text-anchor="end">Γ = −1</text><line class="ink" x1="24" y1="296" x2="402" y2="296"/><line class="ink" x1="404" y1="296" x2="404" y2="326"/><line class="ink" x1="396.0" y1="326" x2="412.0" y2="326"/><line class="ink" x1="399.0" y1="331" x2="409.0" y2="331"/><line class="ink" x1="402.0" y1="336" x2="406.0" y2="336"/><path class="pv" d="M60,296 L64,272.0 L92,272.0 L96,296 Z"/><text class="fv" x="78" y="266" text-anchor="middle">in →</text><path class="pb" d="M290,296 L294,320.0 L322,320.0 L326,296 Z"/><text class="fbad" x="308" y="336.0" text-anchor="middle">← back</text><text x="14" y="352"><tspan font-weight="500">Impedance step</tspan><tspan class="t-muted">  ·  120 Ω → 60 Ω</tspan></text><text class="fbad" x="466" y="352" text-anchor="end">Γ = −1/3</text><line class="ink" style="stroke-width:1.5" x1="24" y1="408" x2="230" y2="408"/><line class="ink" style="stroke-width:4.5" x1="230" y1="408" x2="466" y2="408"/><line class="gridline dash" x1="230" y1="376" x2="230" y2="440"/><text class="t-muted" x="24" y="440">Z<tspan dy="3" font-size="10">1</tspan><tspan dy="-3"> 120 Ω</tspan></text><text class="t-muted" x="300" y="440">Z<tspan dy="3" font-size="10">2</tspan><tspan dy="-3"> 60 Ω</tspan></text><path class="pv" d="M60,408 L64,384.0 L92,384.0 L96,408 Z"/><text class="fv" x="78" y="378" text-anchor="middle">in →</text><path class="pb" d="M140,408 L144,416.0 L172,416.0 L176,408 Z"/><text class="fbad" x="158" y="432.0" text-anchor="middle">← back</text><path class="pv" d="M300,408 L304,392.0 L332,392.0 L336,408 Z"/><text class="fv" x="318" y="386.0" text-anchor="middle">on → 2/3</text></svg>
+    <figcaption>Blue: pulse going in. Red: its reflection. Heights are drawn to scale with Γ. The step example, 120 Ω to 60 Ω, gives Γ = (60 − 120) / (60 + 120) = −1/3.</figcaption>
+  </figure>
+</section>
+
+<section class="step" id="s8">
+  <div class="step-head"><span class="num">08</span><h2>Long or short: when it matters</h2></div>
+  <p class="lede">A reflection only hurts if it arrives as a separate echo. If the round trip is much shorter than the edge, the echo merges into the edge and the receiver never sees it. Rule of thumb: treat a section as a transmission line when its one-way delay is longer than about one sixth of the rise time.</p>
+  <figure>
+    <svg class="dia" viewBox="0 0 480 232" role="img" aria-label="Longest trace you can ignore for different edge rise times: 6 centimetres at 2 nanoseconds, 14 at 5, 55 at 20, 2.8 metres at 100."><text class="t-muted" x="8" y="16">rise time</text><text x="120" y="50" text-anchor="end">2 ns</text><rect class="barv" x="130" y="34" width="79.8" height="22"/><text x="215.8" y="50">≈ 6 cm</text><text x="120" y="88" text-anchor="end">5 ns</text><rect class="barv" x="130" y="72" width="121.9" height="22"/><text x="257.9" y="88">≈ 14 cm</text><text x="120" y="126" text-anchor="end">20 ns</text><rect class="barv" x="130" y="110" width="186.1" height="22"/><text x="322.1" y="126">≈ 55 cm</text><text x="120" y="164" text-anchor="end">100 ns</text><rect class="barv" x="130" y="148" width="260.7" height="22"/><text x="396.7" y="164">≈ 2.8 m</text><line class="stub" x1="180.9" y1="26" x2="180.9" y2="186"/><text x="184.9" y="16" class="t-muted">example stub, 3 cm</text><line class="axis" x1="130" y1="190" x2="450" y2="190"/><line class="axis" x1="130.0" y1="190" x2="130.0" y2="195"/><text class="t-muted" x="130.0" y="212" text-anchor="middle">1 cm</text><line class="axis" x1="236.7" y1="190" x2="236.7" y2="195"/><text class="t-muted" x="236.7" y="212" text-anchor="middle">10 cm</text><line class="axis" x1="343.3" y1="190" x2="343.3" y2="195"/><text class="t-muted" x="343.3" y="212" text-anchor="middle">1 m</text><line class="axis" x1="450.0" y1="190" x2="450.0" y2="195"/><text class="t-muted" x="450.0" y="212" text-anchor="middle">10 m</text></svg>
+    <figcaption>Each bar is the longest FR4 trace you can ignore for that rise time, using about 6 ns/m and the one-sixth rule. A stub shorter than the bar is invisible to the signal.</figcaption>
+  </figure>
+  <h3>Try your transceiver's edge</h3>
+  <div class="calc">
+    <label for="tr">Rise time (ns)<input id="tr" type="number" min="0.1" step="0.5" value="5" inputmode="decimal"></label>
+    <label for="dl">Trace delay (ns/m)<input id="dl" type="number" min="1" step="0.5" value="6" inputmode="decimal"></label>
+    <div class="out">Signal bandwidth<b id="bw">70 MHz</b></div>
+    <div class="out">Ignore traces up to<b id="cl">≈ 14 cm</b></div>
+  </div>
+  <ul class="plain">
+    <li>These are rules of thumb, not a cliff. Cable is slower than FR4, about 5 ns/m, but the same logic applies.</li>
+    <li>The bus as a whole is the long part. 72 boards chained together is meters of line, so its two ends need terminators even when every stub is short.</li>
+    <li><span class="tag open">Open</span> Your kickoff doc names THVD1450 and SN65HVD75 and records no edge rate for either. Read it from the datasheet and enter it above.</li>
+  </ul>
+</section>
+
+<section class="step" id="s9">
+  <div class="step-head"><span class="num">09</span><h2>Your board: the RS485 rules</h2></div>
+  <figure>
+    <svg class="dia" style="max-width:560px" viewBox="0 0 520 214" role="img" aria-label="Daisy-chained bus: master at the left, nodes along a single A/B line with short stubs, 120 ohm terminators only at the two ends, bias at the master end."><rect class="boxline" x="6" y="80" width="82" height="48"/><text x="47" y="101" text-anchor="middle">master</text><text class="t-muted" x="47" y="117" text-anchor="middle" style="font-size:11px">bias here</text><line class="bus" x1="88" y1="104" x2="514" y2="104"/><text class="t-muted" x="300" y="92" text-anchor="middle">A/B twisted pair, one line through every node</text><line class="ink" x1="112" y1="104" x2="112" y2="124"/><rect class="boxok" x="88" y="124" width="48" height="24"/><text class="fok" x="112" y="141" text-anchor="middle">120 Ω</text><line class="ink" x1="200" y1="104" x2="200" y2="124"/><rect class="boxline" x="170" y="124" width="60" height="44"/><text x="200" y="143" text-anchor="middle">node 1</text><text class="t-muted" x="200" y="159" text-anchor="middle" style="font-size:11px">term: open</text><line class="ink" x1="286" y1="104" x2="286" y2="124"/><rect class="boxline" x="256" y="124" width="60" height="44"/><text x="286" y="143" text-anchor="middle">node 2</text><text class="t-muted" x="286" y="159" text-anchor="middle" style="font-size:11px">term: open</text><text x="352" y="108" text-anchor="middle" style="font-size:18px">…</text><line class="ink" x1="418" y1="104" x2="418" y2="124"/><rect class="boxline" x="388" y="124" width="60" height="44"/><text x="418" y="143" text-anchor="middle">node 72</text><text class="t-muted" x="418" y="159" text-anchor="middle" style="font-size:11px">term: open</text><line class="ink" x1="492" y1="104" x2="492" y2="124"/><rect class="boxok" x="468" y="124" width="48" height="24"/><text class="fok" x="492" y="141" text-anchor="middle">120 Ω</text><text class="t-muted" x="200" y="190" text-anchor="middle">short stub</text><line class="mut" x1="200" y1="184" x2="200.0" y2="175.0"/><polygon class="mutf" points="200,170 202.5,175.0 197.5,175.0"/><text class="t-muted" x="300" y="206" text-anchor="start" style="font-size:11px">A and B drawn as one line. Green = jumper closed.</text></svg>
+    <figcaption>Termination on the two end nodes only. Every other board leaves its 120 Ω jumper open and keeps a short stub to the bus.</figcaption>
+  </figure>
+  <ul class="rules">
+    <li><span class="tag repo">From your repo</span><div>Daisy chain, A to A and B to B, 120 Ω at both ends, common ground between all nodes. (Bring-up notes, kickoff doc §1.6.)</div></li>
+    <li><span class="tag repo">From your repo</span><div>1 Mbaud 8N1, 72 transceivers on one segment, DE and RE tied to one GPIO. (Kickoff doc §1.4, §1.5, §3.1.)</div></li>
+    <li><span class="tag rec">Recommendation</span><div>One 120 Ω resistor per board behind a solder jumper, open by default. Close it only on the two end nodes.</div></li>
+    <li><span class="tag rec">Recommendation</span><div>Failsafe bias, pull-up on A and pull-down on B, once at the master end. Take the values from the transceiver datasheet.</div></li>
+    <li><span class="tag rec">Recommendation</span><div>Keep the connector-to-transceiver stub short, ideally under 3 to 5 cm. Route A and B together at equal length, with no extra vias, over an unbroken ground area.</div></li>
+    <li><span class="tag rec">Recommendation</span><div>No controlled-impedance trace for RS485. Skip the JLCPCB impedance calculator for this net.</div></li>
+    <li><span class="tag open">Open</span><div>Termination and bias strategy: jumper, fixed, or switchable (kickoff Q3).</div></li>
+    <li><span class="tag open">Open</span><div>Unit load: can 72 transceivers share one segment? Parts rated 1/8 unit load allow up to 256, so check the datasheet (Q4).</div></li>
+    <li><span class="tag open">Open</span><div>Total bus length against baud rate. About 80% of bandwidth is spare, so lowering the baud rate is available if needed (Q5).</div></li>
+    <li><span class="tag open">Open</span><div>Auto-addressing scheme. If it needs a segmentable bus, termination and stub rules change (Q7).</div></li>
+    <li><span class="tag open">Open</span><div>Layer count. A ground area under A and B is easy on 4 layers. On 2 layers it needs a solid ground pour on the other side (Q13).</div></li>
+  </ul>
+</section>
+
+<footer>Numbers in steps 8 and 9 are rules of thumb. Project facts come from CONTEXT_PCB_KICKOFF.md in this project. Transceiver edge rate and unit load are not verified here.</footer>
+
+</main>
+<script>
+(function(){
+  var tr=document.getElementById('tr'),dl=document.getElementById('dl'),bw=document.getElementById('bw'),cl=document.getElementById('cl');
+  if(!tr||!dl||!bw||!cl)return;
+  function fmt(cm){return cm>=100?(cm/100).toFixed(1)+' m':(cm>=10?Math.round(cm):cm.toFixed(1))+' cm';}
+  function upd(){
+    var t=parseFloat(tr.value),d=parseFloat(dl.value);
+    if(!(t>0)||!(d>0)){bw.textContent='-';cl.textContent='-';return;}
+    bw.textContent=Math.round(350/t)+' MHz';
+    cl.textContent='≈ '+fmt(t/6/d*100);
+  }
+  tr.addEventListener('input',upd);dl.addEventListener('input',upd);
+})();
+</script>
+
+</body></html>

@@ -50,6 +50,7 @@ Common parts like resistors and capacitors are not shown in this list. They may 
 | ZIF, vertical | AFC11-S12ICA-00 | C262499 | ❌ |
 | Schottky diode | B5819W SL | C8598 | ❌ |
 | JST connector, 8-pin | BM08B-GHS-TBT(LF)(SN) | C133062 | ❌ |
+| LDO voltage regulator | AP2112K-3.3TRG1 | C51118 | ❌ |
 
 
 > Note that the listed flash chip isn't the same as in the reference design. There a 16 Mb chip is used, which is very likely overkill for this project. To save costs this is scaled down to a 4 Mb chip. For this purpose the [hardware design guidelines](/docs/datasheets/hardware-design-with-rp2040.pdf) explicitly states that most 25-series flash devices may be used. So by using a smaller capacity storage from the same manufacturer shouldn't cause any trouble.
@@ -80,11 +81,11 @@ The image on the left shows the power block of the minimal example, the image on
 
 - The Micro USB connector is replaced by a USB-C connector (J1). Its shield pins are tied directly to ground. The two D+ pins (A6/B6) are tied together, and so are the two D- pins (A7/B7), so the port works in either plug orientation. Both pairs then run to the MCU through 33 Ω series resistors.
 - CC1 and CC2 are each pulled down with a 5.1 kΩ resistor. This is what tells the host that our board is a sink, so it enables +5 V on VBUS.
-- The regulator stays as it is in the reference design: U1 (NCP1117) turns the +5 V input into the +3.3 V logic rail.
+- To supply a steady 3.3V, the AP2112K-3.3TRG1 voltage regulater was chosen. This differs from the reference design, mainly because it has a lower dropout voltage (see below)
 
 **Two power sources, two diodes**
 
-During normal operation the board is not powered over USB — that port is only for development and testing. Power comes in over a JST connector, which also carries the RS485 signal lines. Each node has two of these connectors, so a board can be passed through to the next one in a daisy chain.
+During normal operation the board is not powered over USB, that port is only for development and testing. Power comes in over a JST connector, which also carries the RS485 signal lines. Each node has two of these connectors, so a board can be passed through to the next one in a daisy chain.
 
 That means both sources can be present at the same time, so two Schottky diodes keep them apart:
 
@@ -108,6 +109,7 @@ Figure 1 shows a simplified version of our power supply circuit. The standard ca
     </tr>
 </table>
 
+
 In our [tests](/tests/README.md), a single Raspberry Pi Pico plus a display and RS485 module drew around 60 mA. We round this up generously to **100 mA per board**.
 
 Two parts in that path define the minimum input voltage, both taken at 100 mA:
@@ -115,16 +117,16 @@ Two parts in that path define the minimum input voltage, both taken at 100 mA:
 | Part | Value at 100 mA | Source |
 | --- | --- | --- |
 | Schottky diode (B5819W) | V_F ≈ 0.3 V | [datasheet](/docs/datasheets/schottky-diode-B5817W-589W.pdf), see Figure 2 |
-| NCP1117 LDO | V_in - V_out = 1.10 V (max) | [datasheet](/docs/datasheets/NCP1117-LDO.PDF), 0.95 V typical / 1.10 V max |
+| AP2112K LDO | V_in - V_out ≈ 45 mV | [datasheet](/docs/datasheets/AP2112-LDO.pdf), see Performance Characteristics |
 
-The 1.10 V is the LDO's *dropout voltage*: the **minimum** difference the regulator needs between its input and its output. If V_in - V_out falls below it, the LDO drops out of regulation and the 3.3 V rail starts to sag. With V_out = 3.3 V that gives:
+The 45 mV is the LDO's *dropout voltage*: the **minimum** difference the regulator needs between its input and its output. If V_in - V_out falls below it, the LDO drops out of regulation and the 3.3 V rail starts to sag. With V_out = 3.3 V that gives:
 
 ```
-V_in(LDO) >= V_out + V_dropout = 3.3 V + 1.10 V = 4.40 V
-V_bus     >= V_in(LDO) + V_F   = 4.40 V + 0.3 V = 4.70 V
+V_in(LDO) >= V_out + V_dropout = 3.3 V + 0.045 V = 3.345 V
+V_bus     >= V_in(LDO) + V_F   = 3.345 V + 0.3 V = 3.645 V
 ```
 
-So the +5 V on the bus connector must never drop below **4.7 V**, anywhere in the installation.
+So the +5 V on the bus connector must never drop below **≈3.7 V**, anywhere in the installation.
 
 #### How much is left at the last board?
 
@@ -155,11 +157,7 @@ Together with the PCB traces and the wire to the next board, we estimate roughly
 4.75 V (PSU worst case) - 0.20 V (wiring) = 4.55 V at node a6
 ```
 
-That is 0.15 V short of the 4.7 V we calculated as the minimum input voltage.
-
-In reality this will probably still be fine, because every assumption above is a worst case. The PSU at the bottom of its tolerance, 100 mA per board when we measured 60 mA, and the full current charged to every hop. On the other hand, the 0.3 V diode drop is read off a typical curve and not a guaranteed maximum, so it could also turn out slightly worse.
-
-Either way, the 100 mΩ per hop is an estimate. Once the first batch of PCBs arrives we have to measure the actual resistance and the voltage that really arrives at the last node (see [tests](../tests/README.md#pcb-prototype-design) for the measured results).
+That is well above the minimum of **3.7 V** we calculated earlier.
 
 
 ### Flash storage
@@ -193,16 +191,12 @@ This follows the layout guidelines in the chip's [datasheet](/docs/datasheets/th
 
 **Termination.** R12 (120 Ω) is populated on every board but sits in series with solder jumper JP1, so it is only in circuit once that jumper is bridged. That matters because of how the array is wired. Looking back at the [wiring diagram](/docs/images/wiring-diagram.png), this is not one continuous bus. The 72 nodes are split into 12 rows of 6, each fed from its own injection point, so electrically there are 12 separate branches. Each branch is a short run, and terminating all 24 ends is likely overkill. How many jumpers actually need bridging still has to be measured on real hardware.
 
-> **Note on the part number.** The THVD1450 is the 50 Mbps variant of the family, the pin-compatible THVD1410 is the 500 kbps.
 
 ### Daisy chain connector
 
 ![Schematic daisy chain connector](/docs/images/schematic-connector.png)
 
-Boards are linked with 8-pin JST GH connectors (BM08B-GHS-TBT), one in (J3) and one out (J2). Two things made this the pick:
-
-- **Top entry.** The gap between adjacent boards is not confirmed yet. A vertical connector routes the cable away from the board edge, so the gap size does not constrain the choice. A side-entry part (SM08B-GHS-TB) would.
-- **SMT.** The whole board is machine assembled, and this header is surface mount, so no hand soldering step is needed.
+Boards are linked with 8-pin JST GH connectors (BM08B-GHS-TBT), one in (J3) and one out (J2). 
 
 The eight lines are allocated as follows:
 
@@ -219,8 +213,7 @@ Power and ground each get two pins on purpose. The GH series is rated for 1.0 A 
 The last two lines are wired differently from the rest. Power, ground and the RS485 pair passed straight through the board, `ADDR` and `SPARE` are not. `ADDR_IN`/`SPARE_IN` on J3 and `ADDR_OUT`/`SPARE_OUT` on J2 are four separate nets going to four separate GPIOs. `ADDR` is used for the auto adressing feature. `SPARE` is the same arrangement with nothing assigned to it yet, wired up proactively so a future feature can use it without a board change.
 
 C20 (10 µF) provides local bulk decoupling between +5V and GND at the connector.
-
-### SWD debug interface
+AP2112K-3.3TRG1
 
 ![Schematic SWD debug](/docs/images/schematic-debug.png)
 
@@ -232,7 +225,7 @@ On the other end, the plan is to drive it from a second Raspberry Pi Pico runnin
 
 ![Schematic SPI](/docs/images/schematic-spi.png)
 
-The display's FPC tail plugs into J5, a 12-pin ZIF (zero insertion force) connector, so the panel can be swapped without soldering. The assignment follows the tail pinout given in the panel [datasheet](/docs/datasheets/HZ0128QVPHGWS01N-AA.pdf), which the two [GoldenMorning T128HC](/docs/datasheets/display-datasheets/) drawings of the same 12-pin tail agree with:
+The display's FPC tail plugs into J5, a 12-pin ZIF (zero insertion force) connector, so the panel can be swapped without soldering. The assignment follows the tail pinout given in the panel [datasheet](/docs/datasheets/HZ0128QVPHGWS01N-AA).
 
 | Pin | Net | Purpose |
 | --- | --- | --- |
@@ -253,7 +246,7 @@ Ten of the twelve pins are unremarkable: the 4-wire SPI signals, `RESET`, the 3V
 
 **The backlight.** This is the one block that needs more than a wire. The panel carries two white LEDs in parallel, specified at VF ≈ 3.0 V and IF = 40 mA, and it has no driver of its own.
 
-`LEDA` (pin 3) is fed from +5V rather than the 3V3 rail, because 3.3 V leaves almost no headroom above the 3.0 V forward voltage. `LEDK` (pin 2) is then switched low-side by Q1, an S8050 NPN: `BL_PWM` drives the base through R13 (2.2 kΩ), and R14 (10 kΩ) pulls the base down so the backlight stays dark until the firmware deliberately drives the pin. Varying the PWM duty cycle dims the display.
+`LEDA` (pin 3) is fed from +5V rather than the 3V3 rail, because 3.3 V leaves almost no headroom above the 3.0 V forward voltage. `LEDK` (pin 2) is then switched low-side by Q1, an S8050 NPN. `BL_PWM` drives the base through R13 (2.2 kΩ), and R14 (10 kΩ) pulls the base down so the backlight stays dark until the firmware deliberately drives the pin. Varying the PWM duty cycle dims the display.
 
 R11 (47 Ω) sits in series with the anode and sets the current:
 

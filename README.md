@@ -70,7 +70,7 @@ To make the vision above work, the project splits the thinking and the drawing o
 One computer, the master controller, runs the whole logic. It keeps track of time, decides what the array should be displaying, and runs a simple web page so it can be controlled. Every screen has its own slave controller, together they make up a node. Each node holds the picture for its own screen and draws it fast enough to keep up with all the others. It also knows its own position in the grid, so it only draws its own little piece of the bigger picture. The work is split this way because one controller can think for the whole array, but it cannot draw fast enough on dozens of screens by itself. And a tiny slave controller is fast enough to draw one screen, but it is too small to run all the planning logic. Splitting the work lets both sides do what they are good at. There is also a hard numeric reason the nodes have to render locally. One screen is 240×240 pixels at 16-bit color (RGB565), so one full frame is 240 × 240 × 2 bytes ≈ **112.5 KiB**. The RP2040 on each node has 264 KiB of SRAM, so it comfortably fits a double buffer for its *own* screen (≈225 KiB) with room to spare.
 
 Read more about the master controller in [`master/README.md`](master/README.md), about the nodes in [`slave/README.md`](slave/README.md), and about the
-hardware behind them in [`node_pcb/README.md`](node_pcb/README.md).
+hardware behind them in [`pcb/README.md`](pcb/README.md).
 
 ### How the data is sent to the nodes
 
@@ -104,8 +104,8 @@ Digital Clock 72/
 │   └── README.md
 ├── slave/
 │   └── README.md
-├── node_pcb/
-│   ├── manufacturing/
+├── pcb/
+│   ├── node-pcb/
 │   └── README.md
 ├── tests/
 │   ├── phase-1.1-display-performance/
