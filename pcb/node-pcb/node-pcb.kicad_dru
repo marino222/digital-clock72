@@ -1,12 +1,12 @@
 (version 1)
-# Custom Design Rules (DRC) for KiCad — JLCPCB: 4 layer, 1oz outer / 0.5oz inner
+# Custom Design Rules (DRC) for KiCad - JLCPCB: 4 layer, 1oz outer / 0.5oz inner
 #
 # Matching JLCPCB capabilities: https://jlcpcb.com/capabilities/pcb-capabilities
 #
 # This is the '4L-1oz' variant. If your order differs, use one of
-# the other variants (2L-1oz, 4L-2oz, 6L-1oz) — see the README table.
+# the other variants (2L-1oz, 4L-2oz, 6L-1oz) - see the README table.
 #
-# GENERATED FILE — do not edit by hand.
+# GENERATED FILE - do not edit by hand.
 # Edit capabilities/JLCPCB.toml and run tools/generate_dru.py instead.
 #
 # KiCad documentation: https://docs.kicad.org/8.0/en/pcbnew/pcbnew.html#custom-design-rules
@@ -208,7 +208,7 @@
 #
 # WARNING: trace width/gap for a target impedance depend on YOUR stackup
 # (dielectric height, Dk, copper weight). The values below are typical
-# starting points for JLCPCB's default stackup — verify against
+# starting points for JLCPCB's default stackup - verify against
 # JLCPCB's impedance calculator for your actual order. Constraints use
 # (opt ...) so they guide the router without raising nuisance DRC errors;
 # tighten to (min/max) once tuned. Assign nets to these classes in
@@ -270,3 +270,9 @@
 	(condition "A.Type == 'Track'")
 	(constraint edge_clearance (min 0.2mm))
 )
+
+# --- No vias ---
+
+(rule "No vias on tier A nets"
+  (constraint disallow via)
+  (condition "A.hasNetclass('XTAL') || A.hasNetclass('QSPI') || A.hasNetclass('SPI_DISPLAY')"))

@@ -63,7 +63,7 @@
           "min_clearance": 0.15,
           "min_island_area": 10.0,
           "min_thickness": 0.25,
-          "pad_connection": 1,
+          "pad_connection": 2,
           "remove_islands": 0,
           "thermal_relief_gap": 0.5,
           "thermal_relief_spoke_width": 0.5
@@ -536,20 +536,17 @@
         "wire_width": 6
       },
       {
-        "bus_width": 12,
-        "clearance": 0.3,
-        "line_style": 0,
+        "clearance": 0.2,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
-        "name": "Fast Data",
-        "pcb_color": "rgb(0, 194, 0)",
-        "priority": 0,
+        "name": "DISPLAY_CTRL",
+        "pcb_color": "rgb(194, 194, 194)",
+        "priority": 2,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.2,
         "tuning_profile": "",
         "via_diameter": 0.6,
-        "via_drill": 0.35,
-        "wire_width": 6
+        "via_drill": 0.35
       },
       {
         "bus_width": 12,
@@ -559,13 +556,26 @@
         "microvia_drill": 0.1,
         "name": "Power",
         "pcb_color": "rgb(255, 0, 0)",
-        "priority": 1,
+        "priority": 5,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.4,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.35,
         "wire_width": 6
+      },
+      {
+        "clearance": 0.3,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "QSPI",
+        "pcb_color": "rgb(132, 132, 0)",
+        "priority": 4,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.2,
+        "tuning_profile": "",
+        "via_diameter": 0.6,
+        "via_drill": 0.35
       },
       {
         "bus_width": 12,
@@ -577,13 +587,39 @@
         "microvia_drill": 0.1,
         "name": "RS485",
         "pcb_color": "rgb(204, 102, 0)",
-        "priority": 2,
+        "priority": 6,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.2,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.35,
         "wire_width": 6
+      },
+      {
+        "clearance": 0.2,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "SERIAL_CTRL",
+        "pcb_color": "rgb(255, 153, 0)",
+        "priority": 0,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.2,
+        "tuning_profile": "",
+        "via_diameter": 0.6,
+        "via_drill": 0.35
+      },
+      {
+        "clearance": 0.2,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "SPI_DISPLAY",
+        "pcb_color": "rgb(0, 0, 194)",
+        "priority": 3,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.2,
+        "tuning_profile": "",
+        "via_diameter": 0.6,
+        "via_drill": 0.35
       },
       {
         "bus_width": 12,
@@ -595,13 +631,26 @@
         "microvia_drill": 0.1,
         "name": "USB",
         "pcb_color": "rgb(194, 0, 194)",
-        "priority": 3,
+        "priority": 7,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.35,
         "wire_width": 6
+      },
+      {
+        "clearance": 0.2,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "XTAL",
+        "pcb_color": "rgb(0, 194, 194)",
+        "priority": 1,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.2,
+        "tuning_profile": "",
+        "via_diameter": 0.6,
+        "via_drill": 0.35
       }
     ],
     "meta": {
@@ -739,27 +788,27 @@
         "pattern": "/GPIO9"
       },
       {
-        "netclass": "Fast Data",
+        "netclass": "QSPI",
         "pattern": "/QSPI_SCLK"
       },
       {
-        "netclass": "Fast Data",
+        "netclass": "QSPI",
         "pattern": "/QSPI_SD0"
       },
       {
-        "netclass": "Fast Data",
+        "netclass": "QSPI",
         "pattern": "/QSPI_SD1"
       },
       {
-        "netclass": "Fast Data",
+        "netclass": "QSPI",
         "pattern": "/QSPI_SD2"
       },
       {
-        "netclass": "Fast Data",
+        "netclass": "QSPI",
         "pattern": "/QSPI_SD3"
       },
       {
-        "netclass": "Fast Data",
+        "netclass": "Default",
         "pattern": "/QSPI_SS"
       },
       {
@@ -775,11 +824,11 @@
         "pattern": "/SWD"
       },
       {
-        "netclass": "Fast Data",
+        "netclass": "XTAL",
         "pattern": "/XIN"
       },
       {
-        "netclass": "Fast Data",
+        "netclass": "XTAL",
         "pattern": "/XOUT"
       },
       {
@@ -820,27 +869,43 @@
       },
       {
         "netclass": "RS485",
-        "pattern": "/RS485_A"
+        "pattern": "/RS485_A+"
       },
       {
         "netclass": "RS485",
-        "pattern": "/RS485_B"
+        "pattern": "/RS485_B-"
       },
       {
-        "netclass": "Fast Data",
+        "netclass": "SPI_DISPLAY",
         "pattern": "/SPI0_TX (MOSI)"
       },
       {
-        "netclass": "Fast Data",
+        "netclass": "SPI_DISPLAY",
         "pattern": "/SPI0_SCK (SCL)"
       },
       {
-        "netclass": "USB",
-        "pattern": "/USB_DM_MCU"
+        "netclass": "SERIAL_CTRL",
+        "pattern": "/GPIO12_TX"
+      },
+      {
+        "netclass": "SERIAL_CTRL",
+        "pattern": "/GPIO13_DE"
+      },
+      {
+        "netclass": "SERIAL_CTRL",
+        "pattern": "/GPIO14_RE"
+      },
+      {
+        "netclass": "SERIAL_CTRL",
+        "pattern": "/GPIO15_RX"
       },
       {
         "netclass": "USB",
-        "pattern": "/USB_DP_MCU"
+        "pattern": "/USB_MCU_D+"
+      },
+      {
+        "netclass": "USB",
+        "pattern": "/USB_MCU_D-"
       }
     ]
   },
@@ -862,7 +927,7 @@
     "annotate_start_num": 0,
     "annotation": {
       "method": 0,
-      "sort_order": 1
+      "sort_order": 0
     },
     "bom_export_filename": "${PROJECTNAME}_BOM.csv",
     "bom_fmt_presets": [],
@@ -1197,7 +1262,7 @@
         "uuid": "8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
       }
     ],
-    "used_designators": "H1-2,CN1-2,J1-6,USB1,VARIANT1,D1-2,U1-5,Q1-2,P1,SBREV1,C1-22,SW1,USBC1,#FLG1-3,FPC1,JP1,R1-14,TP1-5,PCB1,Y1,#PWR1-65",
+    "used_designators": "USBC1,SW1,P1,SBREV1,Q1-2,U1-5,D1-2,C1-22,#PWR1-65,Y1,PCB1,TP1-5,R1-14,JP1,FPC1,VARIANT1,#FLG1-3,H1-2,USB1,CN1-2,J1-6",
     "variants": []
   },
   "sheets": [
