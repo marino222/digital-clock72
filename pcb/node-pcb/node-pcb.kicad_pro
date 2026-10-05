@@ -555,7 +555,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "Power",
-        "pcb_color": "rgb(255, 0, 0)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 5,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.4,
@@ -565,7 +565,7 @@
         "wire_width": 6
       },
       {
-        "clearance": 0.3,
+        "clearance": 0.2,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "QSPI",
@@ -660,11 +660,11 @@
     "netclass_assignments": null,
     "netclass_patterns": [
       {
-        "netclass": "Power",
+        "netclass": "Default",
         "pattern": "+1V1"
       },
       {
-        "netclass": "Power",
+        "netclass": "Default",
         "pattern": "+3V3"
       },
       {
@@ -856,7 +856,7 @@
         "pattern": "Net-(R4-Pad2)"
       },
       {
-        "netclass": "Power",
+        "netclass": "Default",
         "pattern": "VBUS +5V"
       },
       {
@@ -906,6 +906,10 @@
       {
         "netclass": "USB",
         "pattern": "/USB_MCU_D-"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "/5V_LOCAL"
       }
     ]
   },
@@ -1262,7 +1266,7 @@
         "uuid": "8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
       }
     ],
-    "used_designators": "USBC1,SW1,P1,SBREV1,Q1-2,U1-5,D1-2,C1-22,#PWR1-65,Y1,PCB1,TP1-5,R1-14,JP1,FPC1,VARIANT1,#FLG1-3,H1-2,USB1,CN1-2,J1-6",
+    "used_designators": "R1-14,TP1-5,PCB1,Y1,#PWR1-65,U1-5,D1-2,Q1-2,J1-6,CN1-2,USB1,H1-2,#FLG1-3,VARIANT1,JP1,FPC1,C1-22,USBC1,SW1,SBREV1,P1",
     "variants": []
   },
   "sheets": [

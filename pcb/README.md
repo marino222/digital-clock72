@@ -256,6 +256,15 @@ I = (5 V − 3.0 V − 0.2 V) / 47 Ω ≈ 38 mA
 
 with the 0.2 V accounting for Q1's collector-emitter saturation voltage. That lands just under the 40 mA rating, which is where we want to be.
 
+## PCB Layout
+
+In progress. Descriptions follow.
+
+## Current State
+
+![Progress](/docs/images/progress.png)
+
+
 
 ## Open uncertainties
 

@@ -8288,16 +8288,16 @@
 		(uuid "51278b3b-97d6-4f6a-ac94-94eab91352fd")
 	)
 	(no_connect
+		(at 228.6 140.97)
+		(uuid "56ed86b8-f2b7-45f7-acf4-af93daa45374")
+	)
+	(no_connect
 		(at 21.59 133.35)
 		(uuid "57cf7d4d-10ff-4578-844a-8e7a3f214fa8")
 	)
 	(no_connect
 		(at 167.64 133.35)
 		(uuid "69fd0cad-a887-4995-8902-eb8dcf094696")
-	)
-	(no_connect
-		(at 167.64 156.21)
-		(uuid "6d4783c8-56cb-4841-a147-846afec517e5")
 	)
 	(no_connect
 		(at 167.64 140.97)
@@ -8564,6 +8564,16 @@
 			(type default)
 		)
 		(uuid "128d8606-407a-4fc9-a025-0148fb0c83cb")
+	)
+	(wire
+		(pts
+			(xy 43.18 41.91) (xy 63.5 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "128e01ae-f37b-4d3b-945a-61016bd1b5aa")
 	)
 	(wire
 		(pts
@@ -9421,16 +9431,6 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 140.97) (xy 242.57 140.97)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "738426af-b91a-45b9-ae91-030464b63192")
-	)
-	(wire
-		(pts
 			(xy 196.85 73.66) (xy 207.01 73.66)
 		)
 		(stroke
@@ -9569,16 +9569,6 @@
 			(type default)
 		)
 		(uuid "84727f87-4913-482d-8d0d-b787dc01ef84")
-	)
-	(wire
-		(pts
-			(xy 43.18 41.91) (xy 63.5 41.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8473d3b6-7c80-4de9-bb39-bdf5a77ab646")
 	)
 	(wire
 		(pts
@@ -10359,6 +10349,16 @@
 	)
 	(wire
 		(pts
+			(xy 152.4 156.21) (xy 167.64 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d016b4b1-b0af-41bb-9a22-70f8d756ffe3")
+	)
+	(wire
+		(pts
 			(xy 53.34 22.86) (xy 53.34 20.32)
 		)
 		(stroke
@@ -10799,16 +10799,6 @@
 		)
 		(uuid "019f9e18-abcc-47d8-9cac-005dbc506274")
 	)
-	(label "SPARE_IN"
-		(at 242.57 140.97 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "05d56ad1-dcb2-46d1-b77d-6b5bf0653daf")
-	)
 	(label "USB_D+"
 		(at 76.2 54.61 180)
 		(effects
@@ -11109,7 +11099,7 @@
 		)
 		(uuid "6f2602da-bd2c-448f-8465-393fcb5a859f")
 	)
-	(label "ADDR_IN"
+	(label "SPARE_IN"
 		(at 152.4 161.29 0)
 		(effects
 			(font
@@ -11208,6 +11198,16 @@
 			(justify left bottom)
 		)
 		(uuid "96cdad23-2bd1-4bee-bdfd-a390e1eb41d8")
+	)
+	(label "ADDR_IN"
+		(at 152.4 156.21 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "991ba64d-be1e-481e-9658-03edb0a6829d")
 	)
 	(label "QSPI_SCLK"
 		(at 191.77 100.33 270)
