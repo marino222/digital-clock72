@@ -7,6 +7,7 @@
 	(title_block
 		(title "Digital Clock 72 Node PCB")
 		(date "2026-09-11")
+		(rev "v1.0")
 		(company "Marino Zwyssig")
 	)
 	(lib_symbols
@@ -619,8 +620,8 @@
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J"
-				(at 0 22.225 0)
+			(property "Reference" "J1"
+				(at 0 19.558 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -629,8 +630,8 @@
 					)
 				)
 			)
-			(property "Value" "USB_C_Receptacle_USB2.0_16P"
-				(at 0 19.685 0)
+			(property "Value" "TYPE-C-31-M-12"
+				(at 11.176 -20.066 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -639,7 +640,7 @@
 					)
 				)
 			)
-			(property "Footprint" ""
+			(property "Footprint" "JLCPCB:USB-C_SMD-TYPE-C-31-M-12_1"
 				(at 3.81 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -650,7 +651,7 @@
 					)
 				)
 			)
-			(property "Datasheet" "https://www.usb.org/sites/default/files/documents/usb_type-c.zip"
+			(property "Datasheet" "https://lcsc.com/product-detail/USB-Type-C_Korean-Hroparts-Elec-TYPE-C-31-M-12_C165948.html"
 				(at 3.81 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -661,7 +662,29 @@
 					)
 				)
 			)
-			(property "Description" "USB 2.0-only 16P Type-C Receptacle connector"
+			(property "Description" "Right Angle, Type-C, SMD, USB Connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC Part" "C165948"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "JLCPCB Parts Type" "Extended"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1018,7 +1041,26 @@
 							)
 						)
 					)
-					(number "A1"
+					(number "A1B12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -22.86 90)
+					(length 5.08)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "A1B12"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1036,7 +1078,26 @@
 							)
 						)
 					)
-					(number "A4"
+					(number "A4B9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 15.24 15.24 180)
+					(length 5.08)
+					(hide yes)
+					(name "VBUS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "A4B9"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1117,17 +1178,17 @@
 					)
 				)
 				(pin passive line
-					(at 15.24 15.24 180)
+					(at 0 -22.86 90)
 					(length 5.08)
 					(hide yes)
-					(name "VBUS"
+					(name "GND"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "A9"
+					(number "B1A12"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1146,26 +1207,7 @@
 							)
 						)
 					)
-					(number "A12"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -22.86 90)
-					(length 5.08)
-					(hide yes)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "B1"
+					(number "B1A12"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1184,7 +1226,26 @@
 							)
 						)
 					)
-					(number "B4"
+					(number "B4A9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 15.24 15.24 180)
+					(length 5.08)
+					(hide yes)
+					(name "VBUS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "B4A9"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1257,44 +1318,6 @@
 						)
 					)
 					(number "B8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 15.24 15.24 180)
-					(length 5.08)
-					(hide yes)
-					(name "VBUS"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "B9"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -22.86 90)
-					(length 5.08)
-					(hide yes)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "B12"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -7860,7 +7883,7 @@
 		)
 		(uuid "a2a77fc4-e090-4097-bba5-35780d13f4f6")
 	)
-	(text "Place C18 as close as possible to pin 8. \nPlace C19 on the same 3V3 feed immediately\nupstream of C18, within 5 mm."
+	(text "Place C20 as close as possible to pin 8. \nPlace C19 on the same 3V3 feed immediately\nupstream of C20, within 5 mm."
 		(exclude_from_sim no)
 		(at 324.612 185.928 0)
 		(effects
@@ -7870,6 +7893,17 @@
 			(justify left bottom)
 		)
 		(uuid "a5eab553-69d2-421d-943e-a6591fae162a")
+	)
+	(text "Note: The pin numbering of the connectors are flipped,\nbecause the footprints are mirrored in the layout.\nThis is intentional."
+		(exclude_from_sim no)
+		(at 268.732 117.094 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cda62ee5-53b5-40a5-a41a-91addd215a66")
 	)
 	(text "Keep QSPI traces as short as possible"
 		(exclude_from_sim no)
@@ -8389,16 +8423,6 @@
 	)
 	(wire
 		(pts
-			(xy 339.09 151.13) (xy 350.52 151.13)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0449d6a8-1ec6-4a0b-9252-46b33c0acfd9")
-	)
-	(wire
-		(pts
 			(xy 43.18 49.53) (xy 57.15 49.53)
 		)
 		(stroke
@@ -8406,6 +8430,16 @@
 			(type default)
 		)
 		(uuid "04553813-250a-428a-b137-eece84115035")
+	)
+	(wire
+		(pts
+			(xy 307.34 148.59) (xy 307.34 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "05b275af-8f38-46fd-9bc5-220dc896224e")
 	)
 	(wire
 		(pts
@@ -8619,6 +8653,16 @@
 	)
 	(wire
 		(pts
+			(xy 336.55 160.02) (xy 346.71 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "203a608d-0747-4e10-a044-c2a156200777")
+	)
+	(wire
+		(pts
 			(xy 63.5 167.64) (xy 63.5 176.53)
 		)
 		(stroke
@@ -8626,6 +8670,16 @@
 			(type default)
 		)
 		(uuid "215fb03f-ab32-42e4-9aa7-5b1b939d2326")
+	)
+	(wire
+		(pts
+			(xy 303.53 160.02) (xy 307.34 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "21bcafdf-7620-4743-a2f4-6c4e6e29e181")
 	)
 	(wire
 		(pts
@@ -8656,6 +8710,16 @@
 			(type default)
 		)
 		(uuid "25aa7e3e-d193-458b-9a27-e2ecdd2088ea")
+	)
+	(wire
+		(pts
+			(xy 361.95 160.02) (xy 356.87 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "261626c1-94ca-47a9-9ff7-8eb39514bb2d")
 	)
 	(wire
 		(pts
@@ -8756,16 +8820,6 @@
 			(type default)
 		)
 		(uuid "2c7ef20c-f8e1-48db-9c8d-200fd3264711")
-	)
-	(wire
-		(pts
-			(xy 312.42 151.13) (xy 325.12 151.13)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2f7d8fc6-8a66-43d9-9711-c845b1e7cc1a")
 	)
 	(wire
 		(pts
@@ -8921,7 +8975,7 @@
 	)
 	(wire
 		(pts
-			(xy 312.42 143.51) (xy 350.52 143.51)
+			(xy 300.99 143.51) (xy 361.95 143.51)
 		)
 		(stroke
 			(width 0)
@@ -8958,6 +9012,16 @@
 			(type default)
 		)
 		(uuid "46ea0253-90ef-4916-ba12-0d9129e7df38")
+	)
+	(wire
+		(pts
+			(xy 317.5 152.4) (xy 330.2 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4a8d256e-683f-463d-94a2-5bd1031825f9")
 	)
 	(wire
 		(pts
@@ -9171,16 +9235,6 @@
 	)
 	(wire
 		(pts
-			(xy 312.42 148.59) (xy 325.12 148.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5e229efc-5407-43d9-88a4-16875f226834")
-	)
-	(wire
-		(pts
 			(xy 201.93 114.3) (xy 201.93 111.76)
 		)
 		(stroke
@@ -9312,6 +9366,16 @@
 	)
 	(wire
 		(pts
+			(xy 300.99 151.13) (xy 303.53 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6cc08813-6182-4a2d-bbf5-86e02debe2a5")
+	)
+	(wire
+		(pts
 			(xy 186.69 175.26) (xy 186.69 190.5)
 		)
 		(stroke
@@ -9359,16 +9423,6 @@
 			(type default)
 		)
 		(uuid "6fb25506-a67e-4ff1-bccb-75417f8d6ebc")
-	)
-	(wire
-		(pts
-			(xy 339.09 148.59) (xy 350.52 148.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6ffa7530-595a-4660-a5ce-1cde123e9a35")
 	)
 	(wire
 		(pts
@@ -9443,7 +9497,7 @@
 	)
 	(wire
 		(pts
-			(xy 321.31 133.35) (xy 350.52 133.35)
+			(xy 321.31 133.35) (xy 361.95 133.35)
 		)
 		(stroke
 			(width 0)
@@ -9565,7 +9619,7 @@
 	)
 	(wire
 		(pts
-			(xy 339.09 138.43) (xy 350.52 138.43)
+			(xy 339.09 138.43) (xy 361.95 138.43)
 		)
 		(stroke
 			(width 0)
@@ -9592,6 +9646,16 @@
 			(type default)
 		)
 		(uuid "879223b6-dbd7-42fa-bdc5-b0102860f127")
+	)
+	(wire
+		(pts
+			(xy 317.5 160.02) (xy 330.2 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8887adce-34ec-4c6d-90c3-ab657a4e1288")
 	)
 	(wire
 		(pts
@@ -9655,7 +9719,7 @@
 	)
 	(wire
 		(pts
-			(xy 312.42 135.89) (xy 339.09 135.89)
+			(xy 300.99 135.89) (xy 339.09 135.89)
 		)
 		(stroke
 			(width 0)
@@ -9672,6 +9736,16 @@
 			(type default)
 		)
 		(uuid "8d7dbdf5-f8cb-4608-8a2e-060f0be92ab9")
+	)
+	(wire
+		(pts
+			(xy 356.87 148.59) (xy 356.87 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8dfcb2b6-ed36-4875-b112-2425ec45c6cc")
 	)
 	(wire
 		(pts
@@ -10068,7 +10142,7 @@
 	)
 	(wire
 		(pts
-			(xy 312.42 140.97) (xy 321.31 140.97)
+			(xy 300.99 140.97) (xy 321.31 140.97)
 		)
 		(stroke
 			(width 0)
@@ -10085,6 +10159,16 @@
 			(type default)
 		)
 		(uuid "b77e3739-3708-49e7-8100-23b4544ab208")
+	)
+	(wire
+		(pts
+			(xy 300.99 148.59) (xy 307.34 148.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba6f5e2e-c7fb-4936-b835-a591a65cc552")
 	)
 	(wire
 		(pts
@@ -10189,7 +10273,7 @@
 	)
 	(wire
 		(pts
-			(xy 321.31 140.97) (xy 350.52 140.97)
+			(xy 321.31 140.97) (xy 361.95 140.97)
 		)
 		(stroke
 			(width 0)
@@ -10381,7 +10465,7 @@
 	)
 	(wire
 		(pts
-			(xy 312.42 138.43) (xy 339.09 138.43)
+			(xy 300.99 138.43) (xy 339.09 138.43)
 		)
 		(stroke
 			(width 0)
@@ -10412,7 +10496,7 @@
 	)
 	(wire
 		(pts
-			(xy 312.42 146.05) (xy 350.52 146.05)
+			(xy 300.99 146.05) (xy 361.95 146.05)
 		)
 		(stroke
 			(width 0)
@@ -10462,7 +10546,7 @@
 	)
 	(wire
 		(pts
-			(xy 312.42 133.35) (xy 321.31 133.35)
+			(xy 300.99 133.35) (xy 321.31 133.35)
 		)
 		(stroke
 			(width 0)
@@ -10592,7 +10676,7 @@
 	)
 	(wire
 		(pts
-			(xy 339.09 135.89) (xy 350.52 135.89)
+			(xy 339.09 135.89) (xy 361.95 135.89)
 		)
 		(stroke
 			(width 0)
@@ -10612,6 +10696,16 @@
 	)
 	(wire
 		(pts
+			(xy 303.53 151.13) (xy 303.53 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e736d0a9-4b1a-4338-ab42-b2fe304fdf9f")
+	)
+	(wire
+		(pts
 			(xy 44.45 181.61) (xy 43.18 181.61)
 		)
 		(stroke
@@ -10619,6 +10713,16 @@
 			(type default)
 		)
 		(uuid "e73b0962-0678-4d88-8db8-02f0e7893d9c")
+	)
+	(wire
+		(pts
+			(xy 336.55 152.4) (xy 346.71 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7716fb2-84e9-44ca-a2c6-138dd034658b")
 	)
 	(wire
 		(pts
@@ -10642,6 +10746,16 @@
 	)
 	(wire
 		(pts
+			(xy 361.95 148.59) (xy 356.87 148.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed715c24-cc12-46f9-b344-e71093f4fd0e")
+	)
+	(wire
+		(pts
 			(xy 57.15 54.61) (xy 76.2 54.61)
 		)
 		(stroke
@@ -10649,6 +10763,16 @@
 			(type default)
 		)
 		(uuid "ef9f38ae-0d4b-4fbe-8f34-02865e685493")
+	)
+	(wire
+		(pts
+			(xy 361.95 151.13) (xy 361.95 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f0867fe1-714f-4951-bf65-87199fdc1a19")
 	)
 	(wire
 		(pts
@@ -10771,7 +10895,7 @@
 		)
 		(uuid "019f9e18-abcc-47d8-9cac-005dbc506274")
 	)
-	(label "USB_D+"
+	(label "USB_D-"
 		(at 76.2 54.61 180)
 		(effects
 			(font
@@ -10792,7 +10916,7 @@
 		(uuid "0ecc4071-cf65-4dfe-9589-42d7373b1331")
 	)
 	(label "SPARE_IN"
-		(at 339.09 151.13 0)
+		(at 336.55 160.02 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10931,16 +11055,6 @@
 		)
 		(uuid "33316a49-a578-4d9c-bf87-b945ec79a0ae")
 	)
-	(label "GPIO13_DE"
-		(at 184.15 190.5 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "35f1741c-fe13-4f93-b630-57ad05c9a8a9")
-	)
 	(label "USB_D+"
 		(at 175.26 81.28 0)
 		(effects
@@ -11001,7 +11115,7 @@
 		)
 		(uuid "4ad7df49-b86e-4a79-b7c3-ea78e3e536a2")
 	)
-	(label "GPIO15_RX"
+	(label "GPIO13_RX"
 		(at 312.42 215.9 0)
 		(effects
 			(font
@@ -11031,7 +11145,7 @@
 		)
 		(uuid "57145403-6fe2-450a-96d3-b13472d12e4c")
 	)
-	(label "GPIO14_RE"
+	(label "GPIO15_RE"
 		(at 280.67 218.44 0)
 		(effects
 			(font
@@ -11082,7 +11196,7 @@
 		(uuid "716f49ab-1209-441d-8364-8733afb4e8ec")
 	)
 	(label "SPARE_OUT"
-		(at 325.12 151.13 180)
+		(at 330.2 160.02 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -11101,7 +11215,7 @@
 		)
 		(uuid "7ab69162-9fbc-4668-97c3-37994116c474")
 	)
-	(label "USB_D-"
+	(label "USB_D+"
 		(at 76.2 59.69 180)
 		(effects
 			(font
@@ -11111,7 +11225,7 @@
 		)
 		(uuid "7e72fa22-960a-409b-9552-b7d6306ccd73")
 	)
-	(label "GPIO14_RE"
+	(label "GPIO14_DE"
 		(at 186.69 190.5 90)
 		(effects
 			(font
@@ -11119,7 +11233,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "84e12e2a-df63-4468-8d82-54bfd95095f9")
+		(uuid "847b15a0-2934-43f3-b3ba-e3955d8b50b6")
 	)
 	(label "ADDR_OUT"
 		(at 152.4 158.75 0)
@@ -11132,7 +11246,7 @@
 		(uuid "8a67e3e4-5d97-4850-90eb-9b01557df20b")
 	)
 	(label "ADDR_OUT"
-		(at 325.12 148.59 180)
+		(at 330.2 152.4 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -11160,6 +11274,16 @@
 			(justify left bottom)
 		)
 		(uuid "991ba64d-be1e-481e-9658-03edb0a6829d")
+	)
+	(label "GPIO13_RX"
+		(at 184.15 190.5 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a2ef1198-b6c7-45a0-a9a6-054fd90c9d74")
 	)
 	(label "QSPI_SCLK"
 		(at 191.77 100.33 270)
@@ -11191,16 +11315,6 @@
 		)
 		(uuid "b029a9ea-6d21-4859-87a1-89576f0f81bf")
 	)
-	(label "GPIO15_RX"
-		(at 189.23 190.5 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b7d46d17-8c51-40e9-99d5-30dabef7f080")
-	)
 	(label "USB_MCU_D+"
 		(at 204.47 97.79 270)
 		(effects
@@ -11211,7 +11325,7 @@
 		)
 		(uuid "b7dc7701-a335-47ad-b7d4-383b90bbea03")
 	)
-	(label "GPIO13_DE"
+	(label "GPIO14_DE"
 		(at 280.67 220.98 0)
 		(effects
 			(font
@@ -11252,7 +11366,7 @@
 		(uuid "bda8e14f-b278-4e47-9e21-a237075e0326")
 	)
 	(label "ADDR_IN"
-		(at 339.09 148.59 0)
+		(at 336.55 152.4 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -11280,6 +11394,16 @@
 			(justify right bottom)
 		)
 		(uuid "c6125a44-5e65-43af-9cd7-c8bc4162bca7")
+	)
+	(label "GPIO15_RE"
+		(at 189.23 190.5 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c723afcc-7a7f-4581-8642-ef42ff523c14")
 	)
 	(label "SWCLK"
 		(at 81.28 227.33 180)
@@ -11817,6 +11941,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 198.12 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Extended"
 			(at 198.12 144.78 0)
 			(hide yes)
 			(show_name no)
@@ -13612,6 +13747,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 227.33 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "0b312ffe-cbe6-4d5d-b46d-c55ad4f89539")
 		)
@@ -13622,6 +13768,239 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "C14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB:0402WGF1001TCE")
+		(at 312.42 152.4 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0a78bf9c-da04-423d-a215-44c9c063f3a1")
+		(property "Reference" "R14"
+			(at 312.42 148.082 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 312.42 150.114 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R0402"
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_1KR-1001-1_C11702.html"
+			(at 312.42 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Thick Film Resistor, SMD"
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
+			(at 312.42 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0402WGF1001TCE"
+			(at 312.42 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C11702"
+			(at 312.42 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "manufacturer_pn" "0402WGF1001TCE"
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "package" "0402"
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "power" "62.5mW"
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "temp_coefficient" "±100ppm/℃"
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "tolerance" "± 1%"
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "voltage" "50V"
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "manufacturer" ""
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "packaging" ""
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "packaging_qty" ""
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "part_uid" ""
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 312.42 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "124669d8-39c5-45cd-b9c4-a764c9251e22")
+		)
+		(pin "1"
+			(uuid "d86d6b82-d6a7-48b0-ab87-99a59dc1fc8e")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "R14")
 					(unit 1)
 				)
 			)
@@ -14002,6 +14381,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 351.79 196.85 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "e050359d-edb1-46b9-808f-f01d67fd0322")
 		)
@@ -14370,6 +14760,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" ""
+			(at 63.5 118.11 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "51aba87b-c096-43eb-b565-94f34b7b0f32")
 		)
@@ -14430,7 +14831,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_muRata_GRM21BR61C106KE15L_10uF-106-10-16V_C77075.html"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C15850.html?s_z=n_q_C15850&globalKeyword=C15850"
 			(at 78.74 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -14452,7 +14853,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Murata Electronics"
+		(property "Manufacturer" "Samsung Electro-Mechanics"
 			(at 76.2 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -14474,7 +14875,7 @@
 				)
 			)
 		)
-		(property "LCSC Part" "C77075"
+		(property "LCSC Part" "C15850"
 			(at 71.12 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -14628,7 +15029,7 @@
 				)
 			)
 		)
-		(property "voltage" "16V"
+		(property "voltage" "25 V"
 			(at 88.9 52.07 90)
 			(hide yes)
 			(show_name no)
@@ -14760,6 +15161,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 88.9 52.07 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f4afe660-dcab-4628-99af-a0d0c22bc3b8")
 		)
@@ -14777,7 +15189,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB:BM08B-GHS-TBT")
-		(at 308.61 142.24 0)
+		(at 297.18 142.24 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -14788,7 +15200,7 @@
 		(dnp no)
 		(uuid "19366674-bcf0-4b4a-ae1c-f11dc87644df")
 		(property "Reference" "J2"
-			(at 302.26 140.9699 0)
+			(at 290.83 140.9699 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14799,7 +15211,7 @@
 			)
 		)
 		(property "Value" "BM08B-GHS-TBT(LF)(SN)"
-			(at 332.486 155.448 0)
+			(at 291.084 155.702 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14810,7 +15222,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:CONN-SMD_BM08B-GHS-TBT-LF-SN"
-			(at 308.61 163.83 0)
+			(at 297.18 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14821,7 +15233,7 @@
 			)
 		)
 		(property "Datasheet" "https://lcsc.com/product-detail/Wire-To-Board-Wire-To-Wire-Connector_JST-Sales-America-BM08B-GHS-TBT-LF-SN_C133062.html"
-			(at 308.61 166.37 0)
+			(at 297.18 166.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14832,7 +15244,7 @@
 			)
 		)
 		(property "Description" "Wire To Board Connector, Surface Mount, Vertical"
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14843,7 +15255,7 @@
 			)
 		)
 		(property "Manufacturer" "JST"
-			(at 308.61 168.91 0)
+			(at 297.18 168.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14854,7 +15266,7 @@
 			)
 		)
 		(property "MPN" "BM08B-GHS-TBT(LF)(SN)"
-			(at 308.61 171.45 0)
+			(at 297.18 171.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14865,7 +15277,7 @@
 			)
 		)
 		(property "LCSC Part" "C133062"
-			(at 308.61 173.99 0)
+			(at 297.18 173.99 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14876,7 +15288,7 @@
 			)
 		)
 		(property "capacitance" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14887,7 +15299,7 @@
 			)
 		)
 		(property "capacity" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14898,7 +15310,7 @@
 			)
 		)
 		(property "current" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14909,7 +15321,7 @@
 			)
 		)
 		(property "dielectric" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14920,7 +15332,7 @@
 			)
 		)
 		(property "esr" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14931,7 +15343,7 @@
 			)
 		)
 		(property "freq_stability" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14942,7 +15354,7 @@
 			)
 		)
 		(property "frequency" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14953,7 +15365,7 @@
 			)
 		)
 		(property "load_capacitance" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14964,7 +15376,7 @@
 			)
 		)
 		(property "material" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14975,7 +15387,7 @@
 			)
 		)
 		(property "power" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14986,7 +15398,7 @@
 			)
 		)
 		(property "resistance" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14997,7 +15409,7 @@
 			)
 		)
 		(property "temp_coefficient" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15008,7 +15420,7 @@
 			)
 		)
 		(property "tolerance" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15019,7 +15431,7 @@
 			)
 		)
 		(property "voltage" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15030,7 +15442,7 @@
 			)
 		)
 		(property "xdata1" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15041,7 +15453,7 @@
 			)
 		)
 		(property "xdata2" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15052,7 +15464,7 @@
 			)
 		)
 		(property "z_height_max" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15063,7 +15475,7 @@
 			)
 		)
 		(property "LCSC Part #" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15074,7 +15486,7 @@
 			)
 		)
 		(property "LSCS Part" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15085,7 +15497,7 @@
 			)
 		)
 		(property "manufacturer_pn" "BM08B-GHS-TBT(LF)(SN)"
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15096,7 +15508,7 @@
 			)
 		)
 		(property "package" "SMD,P=1.25mm"
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15107,7 +15519,7 @@
 			)
 		)
 		(property "manufacturer" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15118,7 +15530,7 @@
 			)
 		)
 		(property "packaging" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15129,7 +15541,7 @@
 			)
 		)
 		(property "packaging_qty" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15140,7 +15552,18 @@
 			)
 		)
 		(property "part_uid" ""
-			(at 308.61 142.24 0)
+			(at 297.18 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Extended"
+			(at 297.18 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15346,7 +15769,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 356.87 128.27 180)
+		(at 368.3 128.27 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -15356,7 +15779,7 @@
 		(dnp no)
 		(uuid "220b9938-f75b-4546-b72f-c64e5f5bdf00")
 		(property "Reference" "#PWR030"
-			(at 356.87 121.92 0)
+			(at 368.3 121.92 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15367,7 +15790,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 356.87 124.333 0)
+			(at 368.3 124.333 0)
 			(show_name no)
 			(do_not_autoplace yes)
 			(effects
@@ -15377,7 +15800,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 356.87 128.27 0)
+			(at 368.3 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15388,7 +15811,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 356.87 128.27 0)
+			(at 368.3 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15399,7 +15822,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 356.87 128.27 0)
+			(at 368.3 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15972,6 +16395,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" ""
+			(at 134.62 41.91 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "327c0b2a-651d-49a4-a505-bb0ccb3f8689")
 		)
@@ -16427,6 +16861,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 361.95 213.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 361.95 213.36 90)
 			(hide yes)
 			(show_name no)
@@ -16981,6 +17426,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 68.58 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "8b141101-fe61-49fd-bfd2-f90e15efcb34")
 		)
@@ -17348,6 +17804,17 @@
 		)
 		(property "part_uid" ""
 			(at 52.07 179.07 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Extended"
+			(at 52.07 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17757,6 +18224,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 191.77 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "2328359d-35ef-4256-995c-cf52cb0d583d")
 		)
@@ -17959,6 +18437,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 152.4 240.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 152.4 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -18357,6 +18846,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 78.74 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "cdb9726e-84e5-4a30-98b0-bcffeff92ca7")
 		)
@@ -18735,6 +19235,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 57.15 31.75 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 57.15 31.75 90)
 			(hide yes)
 			(show_name no)
@@ -19133,6 +19644,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 66.04 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "3708d09e-3c9b-4956-905b-3fd930b2a713")
 		)
@@ -19512,6 +20034,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 173.99 248.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Extended"
 			(at 173.99 248.92 0)
 			(hide yes)
 			(show_name no)
@@ -19947,6 +20480,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 234.95 242.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "51180e5f-9884-4f5e-aedb-1ebd5d8659fa")
 		)
@@ -19964,7 +20508,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 356.87 156.21 0)
+		(at 368.3 156.21 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -19974,7 +20518,7 @@
 		(dnp no)
 		(uuid "53adbe82-f353-4a59-844a-ffae35db51b0")
 		(property "Reference" "#PWR036"
-			(at 356.87 162.56 0)
+			(at 368.3 162.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19985,7 +20529,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 356.87 160.147 0)
+			(at 368.3 160.147 0)
 			(show_name no)
 			(do_not_autoplace yes)
 			(effects
@@ -19995,7 +20539,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 356.87 156.21 0)
+			(at 368.3 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20006,7 +20550,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 356.87 156.21 0)
+			(at 368.3 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20017,7 +20561,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 356.87 156.21 0)
+			(at 368.3 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20412,6 +20956,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 36.83 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "9bd61391-1390-4275-b4c8-a1964e31553e")
 		)
@@ -20429,7 +20984,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB:BM08B-GHS-TBT")
-		(at 354.33 142.24 0)
+		(at 365.76 142.24 0)
 		(mirror x)
 		(unit 1)
 		(body_style 1)
@@ -20440,7 +20995,7 @@
 		(dnp no)
 		(uuid "58280d4f-8a54-47a9-8088-0a8f97bdfb31")
 		(property "Reference" "J3"
-			(at 360.68 143.5101 0)
+			(at 372.11 143.5101 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -20451,7 +21006,7 @@
 			)
 		)
 		(property "Value" "BM08B-GHS-TBT(LF)(SN)"
-			(at 361.95 155.702 0)
+			(at 373.38 155.702 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -20462,7 +21017,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:CONN-SMD_BM08B-GHS-TBT-LF-SN"
-			(at 354.33 120.65 0)
+			(at 365.76 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20473,7 +21028,7 @@
 			)
 		)
 		(property "Datasheet" "https://lcsc.com/product-detail/Wire-To-Board-Wire-To-Wire-Connector_JST-Sales-America-BM08B-GHS-TBT-LF-SN_C133062.html"
-			(at 354.33 118.11 0)
+			(at 365.76 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20484,7 +21039,7 @@
 			)
 		)
 		(property "Description" "Wire To Board Connector, Surface Mount, Vertical"
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20495,7 +21050,7 @@
 			)
 		)
 		(property "Manufacturer" "JST"
-			(at 354.33 115.57 0)
+			(at 365.76 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20506,7 +21061,7 @@
 			)
 		)
 		(property "MPN" "BM08B-GHS-TBT(LF)(SN)"
-			(at 354.33 113.03 0)
+			(at 365.76 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20517,7 +21072,7 @@
 			)
 		)
 		(property "LCSC Part" "C133062"
-			(at 354.33 110.49 0)
+			(at 365.76 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20528,7 +21083,7 @@
 			)
 		)
 		(property "capacitance" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20539,7 +21094,7 @@
 			)
 		)
 		(property "capacity" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20550,7 +21105,7 @@
 			)
 		)
 		(property "current" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20561,7 +21116,7 @@
 			)
 		)
 		(property "dielectric" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20572,7 +21127,7 @@
 			)
 		)
 		(property "esr" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20583,7 +21138,7 @@
 			)
 		)
 		(property "freq_stability" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20594,7 +21149,7 @@
 			)
 		)
 		(property "frequency" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20605,7 +21160,7 @@
 			)
 		)
 		(property "load_capacitance" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20616,7 +21171,7 @@
 			)
 		)
 		(property "material" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20627,7 +21182,7 @@
 			)
 		)
 		(property "power" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20638,7 +21193,7 @@
 			)
 		)
 		(property "resistance" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20649,7 +21204,7 @@
 			)
 		)
 		(property "temp_coefficient" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20660,7 +21215,7 @@
 			)
 		)
 		(property "tolerance" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20671,7 +21226,7 @@
 			)
 		)
 		(property "voltage" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20682,7 +21237,7 @@
 			)
 		)
 		(property "xdata1" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20693,7 +21248,7 @@
 			)
 		)
 		(property "xdata2" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20704,7 +21259,7 @@
 			)
 		)
 		(property "z_height_max" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20715,7 +21270,7 @@
 			)
 		)
 		(property "LCSC Part #" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20726,7 +21281,7 @@
 			)
 		)
 		(property "LSCS Part" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20737,7 +21292,7 @@
 			)
 		)
 		(property "manufacturer_pn" "BM08B-GHS-TBT(LF)(SN)"
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20748,7 +21303,7 @@
 			)
 		)
 		(property "package" "SMD,P=1.25mm"
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20759,7 +21314,7 @@
 			)
 		)
 		(property "manufacturer" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20770,7 +21325,7 @@
 			)
 		)
 		(property "packaging" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20781,7 +21336,7 @@
 			)
 		)
 		(property "packaging_qty" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20792,7 +21347,18 @@
 			)
 		)
 		(property "part_uid" ""
-			(at 354.33 142.24 0)
+			(at 365.76 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Extended"
+			(at 365.76 142.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21283,6 +21849,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 320.04 190.5 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 320.04 190.5 90)
 			(hide yes)
 			(show_name no)
@@ -21913,6 +22490,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 191.77 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "965a0a24-247b-43cd-9353-ebb732e9822b")
 		)
@@ -22325,6 +22913,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" ""
+			(at 88.9 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "ad54fa6d-957c-47c6-88aa-a83a6a782cdd")
 		)
@@ -22332,6 +22931,239 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "TP1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB:0402WGF1001TCE")
+		(at 351.79 160.02 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "705780b1-e234-4fb1-9049-35087093ad2b")
+		(property "Reference" "R17"
+			(at 351.79 155.702 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 351.79 157.734 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R0402"
+			(at 351.79 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_1KR-1001-1_C11702.html"
+			(at 351.79 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Thick Film Resistor, SMD"
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
+			(at 351.79 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0402WGF1001TCE"
+			(at 351.79 175.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C11702"
+			(at 351.79 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "manufacturer_pn" "0402WGF1001TCE"
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "package" "0402"
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "power" "62.5mW"
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "temp_coefficient" "±100ppm/℃"
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "tolerance" "± 1%"
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "voltage" "50V"
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "manufacturer" ""
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "packaging" ""
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "packaging_qty" ""
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "part_uid" ""
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "d92d8f3f-1789-467c-9fb7-27d9681908bd")
+		)
+		(pin "1"
+			(uuid "fcef8146-962f-43ba-896a-b0f7078d8b1b")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "R17")
 					(unit 1)
 				)
 			)
@@ -23041,6 +23873,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" ""
+			(at 64.77 227.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e2de0e40-515b-4379-85e6-684fdc1d2333")
 		)
@@ -23454,6 +24297,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 205.74 63.5 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" ""
 			(at 205.74 63.5 90)
 			(hide yes)
 			(show_name no)
@@ -23918,6 +24772,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 363.22 55.88 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 363.22 55.88 90)
 			(hide yes)
 			(show_name no)
@@ -24552,6 +25417,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 349.25 55.88 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "56f32955-c8b8-4f1e-a9d3-5104589bc581")
 		)
@@ -24719,19 +25595,30 @@
 				)
 			)
 		)
-		(pin "A1"
+		(property "JLCPCB Parts Type" "Extended"
+			(at 27.94 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "A1B12"
 			(uuid "f942ec2a-ed91-49ad-92c0-7eb1387ba48e")
 		)
 		(pin "SH"
 			(uuid "e76c3a74-f182-45c3-8a44-23e590314d21")
 		)
-		(pin "B9"
+		(pin "B4A9"
 			(uuid "14c617d5-b78f-42ec-bfa5-1df3e4487cd1")
 		)
 		(pin "B7"
 			(uuid "ec985aaf-dea5-4726-9d61-019c01f6373b")
 		)
-		(pin "A9"
+		(pin "A4B9"
 			(uuid "5bc5621c-4d46-4f4d-ae15-169a88fedcd1")
 		)
 		(pin "A5"
@@ -24755,19 +25642,19 @@
 		(pin "B8"
 			(uuid "7c8dce31-2848-4ec8-945a-142ce9629f00")
 		)
-		(pin "B12"
+		(pin "A1B12"
 			(uuid "7871e3bb-068a-4f62-bc74-a3ab3106fc78")
 		)
-		(pin "A4"
+		(pin "A4B9"
 			(uuid "b6a2a940-7715-47cf-9a58-789be8cf90b0")
 		)
-		(pin "A12"
+		(pin "B1A12"
 			(uuid "b6680a37-654a-4fa1-863f-5cd2b73ad551")
 		)
-		(pin "B1"
+		(pin "B1A12"
 			(uuid "15ac0a19-3a89-4123-a3c1-a971a67928d7")
 		)
-		(pin "B4"
+		(pin "B4A9"
 			(uuid "13bdc127-c888-4f3d-9a29-98f0d7f730af")
 		)
 		(instances
@@ -25232,6 +26119,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 335.28 55.88 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "21a392a3-8a53-403c-8c78-94811beb56f1")
 		)
@@ -25455,6 +26353,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 53.34 31.75 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "61951c6b-3779-4116-9410-b27a3426c7d1")
 		)
@@ -25472,7 +26381,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 306.07 128.27 180)
+		(at 294.64 128.27 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -25482,7 +26391,7 @@
 		(dnp no)
 		(uuid "a0807291-17ed-4a4d-9dbf-57161cd105a3")
 		(property "Reference" "#PWR029"
-			(at 306.07 121.92 0)
+			(at 294.64 121.92 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25493,7 +26402,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 306.07 124.333 0)
+			(at 294.64 124.333 0)
 			(show_name no)
 			(do_not_autoplace yes)
 			(effects
@@ -25503,7 +26412,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 306.07 128.27 0)
+			(at 294.64 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25514,7 +26423,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 306.07 128.27 0)
+			(at 294.64 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25525,7 +26434,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 306.07 128.27 0)
+			(at 294.64 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25922,6 +26831,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 289.56 55.88 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "1a4b343c-a9b9-4cd0-989a-10bb8bcddf94")
 		)
@@ -25980,7 +26900,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_muRata_GRM21BR61C106KE15L_10uF-106-10-16V_C77075.html"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C15850.html?s_z=n_q_C15850&globalKeyword=C15850"
 			(at 330.2 138.43 0)
 			(hide yes)
 			(show_name no)
@@ -26002,7 +26922,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Murata Electronics"
+		(property "Manufacturer" "Samsung Electro-Mechanics"
 			(at 330.2 140.97 0)
 			(hide yes)
 			(show_name no)
@@ -26024,7 +26944,7 @@
 				)
 			)
 		)
-		(property "LCSC Part" "C77075"
+		(property "LCSC Part" "C15850"
 			(at 330.2 146.05 0)
 			(hide yes)
 			(show_name no)
@@ -26178,7 +27098,7 @@
 				)
 			)
 		)
-		(property "voltage" "16V"
+		(property "voltage" "25 V"
 			(at 330.2 128.27 0)
 			(hide yes)
 			(show_name no)
@@ -26300,6 +27220,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 330.2 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 330.2 128.27 0)
 			(hide yes)
 			(show_name no)
@@ -26700,6 +27631,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 118.11 115.57 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "2b0c8227-0f6c-42c2-9113-485463dc7dd4")
 		)
@@ -26880,6 +27822,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Extended"
+			(at 335.28 220.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "43220228-3cea-4273-85ce-326977a78105")
 		)
@@ -26908,6 +27861,239 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "U4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB:0402WGF1001TCE")
+		(at 351.79 152.4 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "aececae2-62f0-4d7a-bc6d-610bf0a03e5b")
+		(property "Reference" "R16"
+			(at 351.79 148.082 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 351.79 150.114 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R0402"
+			(at 351.79 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_1KR-1001-1_C11702.html"
+			(at 351.79 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Thick Film Resistor, SMD"
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
+			(at 351.79 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0402WGF1001TCE"
+			(at 351.79 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C11702"
+			(at 351.79 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "manufacturer_pn" "0402WGF1001TCE"
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "package" "0402"
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "power" "62.5mW"
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "temp_coefficient" "±100ppm/℃"
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "tolerance" "± 1%"
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "voltage" "50V"
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "manufacturer" ""
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "packaging" ""
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "packaging_qty" ""
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "part_uid" ""
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 351.79 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "fe9c3343-799f-4134-b673-e4996597bc0a")
+		)
+		(pin "1"
+			(uuid "cb0c4777-808d-4885-a684-ee88561338b8")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "R16")
 					(unit 1)
 				)
 			)
@@ -27278,6 +28464,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 278.13 55.88 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 278.13 55.88 90)
 			(hide yes)
 			(show_name no)
@@ -27668,6 +28865,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 308.61 55.88 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 308.61 55.88 90)
 			(hide yes)
 			(show_name no)
@@ -28381,6 +29589,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Extended"
+			(at 115.57 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "5"
 			(uuid "c0ce53a3-15e6-4bb3-855d-0c82e70afc36")
 		)
@@ -28936,6 +30155,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 377.19 55.88 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "a4caa47d-f1ac-494b-881f-68c0e46f517d")
 		)
@@ -29052,6 +30282,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 214.63 242.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "f314ce4d-be86-4291-b882-7bd96b255e4a")
 		)
@@ -29115,7 +30356,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_muRata_GRM21BR61C106KE15L_10uF-106-10-16V_C77075.html"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C15850.html?s_z=n_q_C15850&globalKeyword=C15850"
 			(at 124.46 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -29137,7 +30378,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Murata Electronics"
+		(property "Manufacturer" "Samsung Electro-Mechanics"
 			(at 121.92 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -29148,7 +30389,7 @@
 				)
 			)
 		)
-		(property "MPN" "GRM21BR61C106KE15L"
+		(property "MPN" "CL21A106KAYNNNE"
 			(at 119.38 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -29159,7 +30400,7 @@
 				)
 			)
 		)
-		(property "LCSC Part" "C77075"
+		(property "LCSC Part" "C15850"
 			(at 116.84 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -29313,7 +30554,7 @@
 				)
 			)
 		)
-		(property "voltage" "16V"
+		(property "voltage" "25 V"
 			(at 134.62 50.8 90)
 			(hide yes)
 			(show_name no)
@@ -29379,7 +30620,7 @@
 				)
 			)
 		)
-		(property "manufacturer_pn" "GRM21BR61C106KE15L"
+		(property "manufacturer_pn" "CL21A106KAYNNNE"
 			(at 134.62 50.8 90)
 			(hide yes)
 			(show_name no)
@@ -29435,6 +30676,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 134.62 50.8 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 134.62 50.8 90)
 			(hide yes)
 			(show_name no)
@@ -29833,6 +31085,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 36.83 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "842f5a18-2002-4ae3-b94c-e627ebf7f4ce")
 		)
@@ -29850,7 +31113,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 306.07 156.21 0)
+		(at 294.64 156.21 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -29860,7 +31123,7 @@
 		(dnp no)
 		(uuid "de259ca7-d222-4e10-898c-5ab66bc52662")
 		(property "Reference" "#PWR035"
-			(at 306.07 162.56 0)
+			(at 294.64 162.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -29871,7 +31134,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 306.07 160.147 0)
+			(at 294.64 160.147 0)
 			(show_name no)
 			(do_not_autoplace yes)
 			(effects
@@ -29881,7 +31144,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 306.07 156.21 0)
+			(at 294.64 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -29892,7 +31155,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 306.07 156.21 0)
+			(at 294.64 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -29903,7 +31166,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 306.07 156.21 0)
+			(at 294.64 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -30290,6 +31553,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 321.31 55.88 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 321.31 55.88 90)
 			(hide yes)
 			(show_name no)
@@ -30844,6 +32118,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 392.43 55.88 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "b33b9da3-8b8e-4952-beb8-72d70f5babd7")
 		)
@@ -31314,6 +32599,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 229.87 248.92 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "5eee5391-d2ee-43a6-836e-bc3bec3491d2")
 		)
@@ -31426,6 +32722,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 26.67 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "95a87b83-a739-4c86-8f3a-f054a7cdde1f")
 		)
@@ -31492,7 +32799,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_muRata_GRM21BR61C106KE15L_10uF-106-10-16V_C77075.html"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C15850.html?s_z=n_q_C15850&globalKeyword=C15850"
 			(at 288.29 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -31514,7 +32821,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Murata Electronics"
+		(property "Manufacturer" "Samsung Electro-Mechanics"
 			(at 285.75 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -31536,7 +32843,7 @@
 				)
 			)
 		)
-		(property "LCSC Part" "C77075"
+		(property "LCSC Part" "C15850"
 			(at 280.67 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -31690,7 +32997,7 @@
 				)
 			)
 		)
-		(property "voltage" "16V"
+		(property "voltage" "25 V"
 			(at 298.45 82.55 90)
 			(hide yes)
 			(show_name no)
@@ -31812,6 +33119,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 298.45 82.55 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 298.45 82.55 90)
 			(hide yes)
 			(show_name no)
@@ -32157,6 +33475,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Extended"
+			(at 100.33 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e75311fc-2db4-4cbd-8714-3acfafad575c")
 		)
@@ -32398,6 +33727,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 50.8 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "00ab4e9b-f573-47c2-ab37-25d1163d2e77")
 		)
@@ -32408,6 +33748,239 @@
 			(project "node-pcb"
 				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
 					(reference "R6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB:0402WGF1001TCE")
+		(at 312.42 160.02 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "fa9f910e-1c0c-404a-bd1f-14e3ef0dc847")
+		(property "Reference" "R15"
+			(at 312.42 155.702 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 312.42 157.734 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R0402"
+			(at 312.42 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_1KR-1001-1_C11702.html"
+			(at 312.42 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Thick Film Resistor, SMD"
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
+			(at 312.42 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0402WGF1001TCE"
+			(at 312.42 175.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" "C11702"
+			(at 312.42 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "manufacturer_pn" "0402WGF1001TCE"
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "package" "0402"
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "power" "62.5mW"
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "temp_coefficient" "±100ppm/℃"
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "tolerance" "± 1%"
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "voltage" "50V"
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "manufacturer" ""
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "packaging" ""
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "packaging_qty" ""
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "part_uid" ""
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 312.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "6b1a4153-29e1-4c74-bc09-5cd1cdba2f00")
+		)
+		(pin "1"
+			(uuid "09f1b5be-23f8-4b36-9a15-4ba6eae09c96")
+		)
+		(instances
+			(project "node-pcb"
+				(path "/8c0b3d8b-46d3-4173-ab1e-a61765f77d61"
+					(reference "R15")
 					(unit 1)
 				)
 			)
@@ -32778,6 +34351,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 304.8 228.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
 			(at 304.8 228.6 90)
 			(hide yes)
 			(show_name no)
@@ -33178,6 +34762,17 @@
 				)
 			)
 		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 295.91 228.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "787bc332-2b0c-485c-951c-dcdd9c2b9222")
 		)
@@ -33503,6 +35098,17 @@
 			)
 		)
 		(property "part_uid" ""
+			(at 361.95 223.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" ""
 			(at 361.95 223.52 90)
 			(hide yes)
 			(show_name no)
@@ -33892,6 +35498,17 @@
 		)
 		(property "part_uid" ""
 			(at 227.33 63.5 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "JLCPCB Parts Type" "Basic"
+			(at 227.33 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

@@ -210,10 +210,12 @@ The eight lines are allocated as follows:
 
 Power and ground each get two pins on purpose. The GH series is rated for 1.0 A per contact with AWG #26 wire, so doubling up gives a comfortable 2 A budget.
 
-The last two lines are wired differently from the rest. Power, ground and the RS485 pair passed straight through the board, `ADDR` and `SPARE` are not. `ADDR_IN`/`SPARE_IN` on J3 and `ADDR_OUT`/`SPARE_OUT` on J2 are four separate nets going to four separate GPIOs. `ADDR` is used for the auto adressing feature. `SPARE` is the same arrangement with nothing assigned to it yet, wired up proactively so a future feature can use it without a board change.
+The last two lines are wired differently from the rest. Power, ground and the RS485 pair passed straight through the board, `ADDR` and `SPARE` are not. `ADDR_IN`/`SPARE_IN` on J3 and `ADDR_OUT`/`SPARE_OUT` on J2 are four separate nets going to four separate GPIOs. `ADDR` is used for the auto adressing feature. `SPARE` is the same arrangement with nothing assigned to it yet, wired up proactively so a future feature can use it without a board change. `ADDR` and `SPARE` are directly wired to the MCU's GPIO pins, which could in theory be damaged by too large current delivery. Therefore, four 1 kΩ resistors are wired in series.
 
 C20 (10 µF) provides local bulk decoupling between +5V and GND at the connector.
 AP2112K-3.3TRG1
+
+### SWD Debug
 
 ![Schematic SWD debug](/docs/images/schematic-debug.png)
 
@@ -258,7 +260,84 @@ with the 0.2 V accounting for Q1's collector-emitter saturation voltage. That la
 
 ## PCB Layout
 
-In progress. Descriptions follow.
+The board has to fit the **44 x 44 mm** grid pitch, which was defined in the [mechanical design](/mechanical/README.md). The display panel is mounted to the back of the board, and the boards are fully assembled by JLCPCB.
+
+<table>
+    <tr>
+        <td align="center" width="50%"><img src="/docs/images/pcb-render-top.png" alt="3D render of the node PCB, top view" /></td>
+        <td align="center" width="50%"><img src="/docs/images/pcb-render-bottom.png" alt="3D render of the node PCB, bottom view" /></td>
+    </tr>
+    <tr>
+        <td align="center"><sub>Top</sub></td>
+        <td align="center"><sub>Bottom</sub></td>
+    </tr>
+</table>
+
+### Board outline
+
+| Feature | Value | Why |
+| --- | --- | --- |
+| Outline | 44 x 44 mm, 3 mm corner radius | Grid pitch, see [mechanical design](/mechanical/README.md#pcb-outline) |
+| Cutouts left + right | 1.5 mm deep, 10.5 mm long | The display's FPC tail wraps around either edge |
+| Notch top edge | 2 mm deep, ~20 mm wide | USB-C plug access, so the connector face stays inside the defined outline|
+
+### Layer stackup
+
+A 4-layer board was chosen over a 2-layer one. The RP2040 needs a lot of short, clean decoupling and ground connections, and squeezing that plus the QSPI flash bus, USB and the display SPI onto two layers would mean compromises everywhere. The stackup is JLCPCB's standard  1.6 mm 4-layer build [JLC04161H-7628 Stackup](https://jlcpcb.com/impedance).
+
+| Layer | Name | Copper weight | Use |
+| --- | --- | --- | --- |
+| 1 | `Toplayer` | 1 oz | Signal, all components, almost all routing |
+| 2 | `GND` | 0.5 oz | Solid **GND** plane |
+| 3 | `+3V3` | 0.5 oz | Power plane: **+3V3** pour, with zones for `+5V_BUS` and `VBUS_USB-C` |
+| 4 | `Bottomlayer` | 1 oz | Additional signal lines|
+
+
+<p align="center">
+  <img src="/docs/images/pcb-stackup.png" alt="PCB layer stackup" width="520">
+</p>
+
+
+### Component Placement
+
+Placement follows the blocks from the [schematic](/pcb/schematic.pdf). The image below tries to classify each area of the pcb.
+
+<p align="center">
+  <img src="/docs/images/pcb-layout-description.png" alt="Top view of the layout with the functional blocks outlined" width="520">
+</p>
+
+
+### Routing
+
+Multiple net classes are used to define track widths and clearances. A custom ruleset for DRC was used (see below).
+
+These two main design principles were followed:
+
+**Critical nets stay on one layer.** The QSPI flash bus, the crystal lines and the display SPI signals are routed entirely on `F.Cu` with no vias at all, so the ground plane underneath them is never interrupted. A custom DRC rule enforces this, see [Design Verification](#design-verification).
+
+**The bottom layer stays almost empty.** Roughly nine out of ten track segments sit on the top layer; the bottom is used only for short crossovers that could not be solved on top. Everything else is left to the two inner planes, and about half of all vias on the board are ground stitching vias tying the top copper down to the GND plane.
+
+<table>
+    <tr>
+        <td align="center" width="50%"><img src="/docs/images/pcb-render-top.png" alt="Top side of the node PCB" /></td>
+        <td align="center" width="50%"><img src="/docs/images/pcb-routing-bottom.png" alt="Routing on the bottom copper layer" /></td>
+    </tr>
+    <tr>
+        <td align="center"><sub><b>Top side:</b> all components and nearly all routing</sub></td>
+        <td align="center"><sub><b>Bottom layer:</b> only a few short crossovers, the rest is left to the planes</sub></td>
+    </tr>
+</table>
+
+
+## Design Verification
+
+**Schematic review with AI.** The schematic was run through [traceformer.io](https://traceformer.io), an AI based design review tool, to look for electrical mistakes.
+
+**DRC inside KiCad.** KiCad's own defaults say nothing about what the fab can actually build, so the board is checked against [`node-pcb.kicad_dru`](node-pcb/node-pcb.kicad_dru). That file is a ruleset generated from JLCPCB's published [capabilities](https://jlcpcb.com/capabilities/pcb-capabilities), taken from [kicad-druid](https://github.com/Cimos/kicad-druid) in the `4L-1oz` variant matching this order (4 layer, 1 oz outer / 0.5 oz inner). One project-specific rule is appended: vias are disallowed on the `XTAL`, `QSPI` and `SPI_DISPLAY` net classes, which turns the routing principle above into something DRC enforces rather than something to remember.
+
+**JLCPCB DFM analysis** The exported gerbers were additionally run through JLCPCB's DFM analysis tool. It reviews the actual production files against their process and catches what a rules file cannot, such as silkscreen over pads or solder mask slivers.
+
+
 
 ## Current State
 
