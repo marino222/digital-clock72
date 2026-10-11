@@ -319,7 +319,7 @@ These two main design principles were followed:
 
 <table>
     <tr>
-        <td align="center" width="50%"><img src="/docs/images/pcb-render-top.png" alt="Top side of the node PCB" /></td>
+        <td align="center" width="50%"><img src="/docs/images/pcb-routing-top.png" alt="Top side of the node PCB" /></td>
         <td align="center" width="50%"><img src="/docs/images/pcb-routing-bottom.png" alt="Routing on the bottom copper layer" /></td>
     </tr>
     <tr>
@@ -339,17 +339,9 @@ These two main design principles were followed:
 
 
 
-## Current State
-
-![Progress](/docs/images/progress.png)
-
-
-
 ## Open uncertainties
 
-- The GC9A01 FPC tail spec (pin count, pitch, orientation) needs to be confirmed from physical samples, and the ZIF pin assignment corrected to match (see the SPI section).
 - Real per node power draw (idle, full white, inrush) hasn't been measured yet.
-- The THVD1450 is in the schematic, but the slower, lower-EMI THVD1410 may be the better fit for this bus.
 - How many of the 12 branches actually need their 120 Ω termination jumper bridged has to be measured.
 - Baud rate vs. max bus length for the largest planned install needs to be decided.
 
