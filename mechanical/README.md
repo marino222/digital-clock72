@@ -2,6 +2,8 @@
 
 The project needs an enclosure, plus parts to hold the node PCBs in place.
 
+The development of the mechanical design is underway. All 3D models are made with OnShape and are available under this [public link](https://cad.onshape.com/documents/53aa7c255b66f5562a1ca156/w/211967f8d6f687de7cb12e88/e/a9185ed7945d5b9016d4c432?renderMode=0&uiState=6acfdefbca73a9d6ca868085).
+
 ## Contents
 
 - [Concept](#concept)
