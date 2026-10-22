@@ -2,9 +2,8 @@
 
 This project is the digital successor to my [ClockClock24 Project](https://github.com/marino222/clockclock24-replica), a replica of the kinetic art piece by [Humans Since 1982](https://www.humanssince1982.com/en-int). The original features physical clock hands driven by stepper motors, which brings challenges around power supply and makes scaling difficult.
 
-This version replaces the clock hands with round LCD displays, which opens up new possibilities beyond just showing the time: animations, a snake game across all displays, or custom widgets. Since the digital version draws significantly less current and is expected to cost less overall, the target scale is a 12×6 display array rather than the 8×3 clocks of the predecessor.
+This version replaces the clock hands with round LCD displays, which opens up new possibilities beyond just showing the time: animations, a snake game across all displays, or custom widgets.
 
-> **Status:** A work in progress
 
 ---
 
@@ -21,7 +20,7 @@ This version replaces the clock hands with round LCD displays, which opens up ne
 
 ## 🌅 Vision
 
-My goal is to build a wall mounted array of round LCD displays that act together as one big synchronized screen. Each display sits in its own spot in a grid, similar to the clocks in the predecessor, but instead of physical hands every spot now has its own small screen.
+The goal is to build a wall mounted array of round LCD displays that act together as one big synchronized screen. Each display sits in its own spot in a grid, similar to the clocks in the predecessor, but instead of physical hands every spot now has its own small screen.
 
 At first, the array will simply show the time. But since every spot is now a real screen and not just a pair of clock hands, I plan to add more features over time. This includes smooth animations where the hands ease in and out instead of jumping, geometric patterns that move across the whole grid, a snake game that can be played across all displays at once, and small widgets like weather or notifications.
 
@@ -125,7 +124,7 @@ Digital Clock 72/
 
 ## 🗺️ Roadmap
 
-This roadmap tracks the project progress. The approach is to test cheap, risky parts first before committing to PCB production. The prototype is a **3×3 (9-node)** array, large enough to validate the bus, addressing, and power distribution without high cost. Notes for each phase are listed in [`tests/`](tests/).
+This roadmap tracks the project progress. The approach is to test cheap, risky parts first before committing to PCB production. The prototype is a **2×2 (4-node)** array, large enough to validate the bus, addressing, and power distribution without high cost. Notes for each phase are listed in [`tests/`](tests/).
 
 | Phase | Goal | Status |
 |---|---|---|

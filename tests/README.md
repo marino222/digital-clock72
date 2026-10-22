@@ -463,7 +463,192 @@ The steady-state clock run matches the master's 60 Hz TX rate, with render times
 
 ### Objective
 
-Test if everything works, measure resistance, current and voltage.
+Bring up the first prototype boards step by step and record the results. The design itself is documented in the [PCB README](/pcb/README.md).
+
+Work through the steps in order, on one board first. If a step fails, stop and find the cause before continuing. Number the boards (1–5) with a marker so the results can be traced back to a board.
+
+### Equipment
+
+| Short | Tool |
+| --- | --- |
+| MM | Multimeter (resistance, diode test, DC volts, mA) |
+| Scope | Oscilloscope |
+| PC | PC with USB-C cable, PlatformIO |
+| Probe | Second Pico running debugprobe |
+| 5V | 5 V hobby supply with a JST GH cable |
+
+There is no bench supply with a current limit, so the unpowered checks (step B) are the only protection against a short. Don't skip them.
+
+### Reference
+
+**Power nets**
+
+| Net | Where to probe | Expected |
+| --- | --- | --- |
+| `VBUS_USB-C` | D2 anode | ≈ 5.0 V when powered over USB |
+| `+5V_BUS` | D1 anode, or JST pins | ≈ 5.0 V when powered over JST |
+| `5V_LOCAL` | D1/D2 cathode (band), LDO input | Source minus one diode drop, ≈ 4.7 V |
+| `+3V3` | LDO output, J4 pin 1 | 3.3 V |
+| `+1V1` | Decoupling cap next to the RP2040 | 1.1 V (RP2040 internal regulator) |
+
+**JST connectors.** The two connectors are mirrored, so the pin numbers differ:
+
+| Signal | J2 | J3 |
+| --- | --- | --- |
+| GND | 1, 4 | 5, 8 |
+| +5V_BUS | 2, 3 | 6, 7 |
+| RS485_P | 5 | 4 |
+| RS485_N | 6 | 3 |
+| ADDR / SPARE | 7, 8 | 1, 2 |
+
+**GPIOs**
+
+| GPIO | Function |
+| --- | --- |
+| 8 / 11 | SPARE_OUT / SPARE_IN |
+| 9 / 10 | ADDR_IN / ADDR_OUT |
+| 12 / 13 | RS485 TX / RX |
+| 14 | RS485 DE (high = transmit) |
+| 15 | RS485 RE, active low (low = receive) |
+| 16 / 17 | Display RESET / D/C |
+| 18 / 19 / 20 | Display SCK / MOSI / CS |
+| 21 | Backlight PWM |
+
+**Differences from the breadboard firmware:**
+- The display pins (GPIO16–20) are the same as in phases 1.1 and 3.2. The backlight is new: GPIO21 must be driven high, otherwise the display stays dark.
+- The old firmware uses GPIO15 for both DE and RE. On the board, GPIO15 is only RE, and DE is on GPIO14 with a pull-down. Receiving works unchanged. To transmit, GPIO14 must also be driven high.
+
+### Checklist
+
+Fill in the result column as you go. Tick a step with ✅ or ❌ and note the measured value.
+
+**A. Visual inspection**
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| A1 | Check for solder bridges on the RP2040, flash chip and USB-C connector | Eye / magnifier | No bridges | |
+| A2 | Check that all parts are placed, and the orientation of the diodes, transistor and ICs | Eye | Matches the [render](/docs/images/pcb-render-top.png) | |
+| A3 | Check silkscreen and outline: cutouts, size | Eye, ruler | 44 x 44 mm, cutouts as in the [mechanical design](/mechanical/README.md#pcb-outline) | |
+| A4 | Scan the QR code on the back | Phone | Opens the GitHub repository | |
+
+**B. Unpowered checks**
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| B1 | Resistance `5V_LOCAL` to GND | MM (Ω) | Not near 0 Ω (reading may climb as caps charge) | |
+| B2 | Resistance `+3V3` to GND | MM (Ω) | Not near 0 Ω | |
+| B3 | Resistance `+1V1` to GND | MM (Ω) | Not near 0 Ω | |
+| B4 | Resistance `+5V_BUS` to GND | MM (Ω) | Not near 0 Ω | |
+| B5 | D1 and D2 in both directions | MM (diode) | ≈ 0.2–0.3 V forward, OL reverse | |
+| B6 | Pass-through: J2 to J3 for GND, +5V_BUS, RS485_P, RS485_N | MM (Ω) | Continuity on each | |
+| B7 | Pass-through resistance J2 +5V to J3 +5V (zero the leads first) | MM (Ω) | Well below 1 Ω | |
+| B8 | ADDR and SPARE are *not* passed through: J2 pin 7 to J3 pin 2 etc. | MM (Ω) | No continuity | |
+
+**C. Power over USB-C**
+
+Plug into the PC and keep a hand near the cable. If the PC reports a USB error, or anything gets warm, unplug immediately.
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| C1 | Measure `VBUS_USB-C` | MM (V) | ≈ 5.0 V | |
+| C2 | Measure `5V_LOCAL` | MM (V) | ≈ 4.7 V | |
+| C3 | Measure `+3V3` | MM (V) | 3.3 V | |
+| C4 | Measure `+1V1` | MM (V) | 1.1 V | |
+| C5 | Measure `+5V_BUS` at the JST pins (no backfeed through D1) | MM (V) | ≈ 0 V | |
+| C6 | Ripple on `+3V3` | Scope (AC coupled) | Small, note the peak-to-peak value | |
+| C7 | Touch the LDO and RP2040 after one minute | Finger | Not warm | |
+| C8 | Power with a C-to-C cable from a phone charger (checks the CC resistors) | Charger, MM | `+3V3` present | |
+| C9 | Flip the USB-C plug and repeat C3 | MM (V) | 3.3 V | |
+
+**D. Power over JST**
+
+Before plugging in, measure the cable end of the hobby supply and check the polarity against the JST pin table above. Reversed polarity will damage the board.
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| D1 | Supply voltage unloaded, at the cable end | MM (V) | ≈ 5.0 V, correct polarity | |
+| D2 | Plug into J3, measure `+5V_BUS` | MM (V) | ≈ 5.0 V | |
+| D3 | Measure `5V_LOCAL` | MM (V) | ≈ 4.7 V | |
+| D4 | Measure `+3V3` | MM (V) | 3.3 V | |
+| D5 | Measure `+1V1` | MM (V) | 1.1 V | |
+| D6 | Measure `VBUS_USB-C` at D2 anode (no backfeed through D2) | MM (V) | ≈ 0 V | |
+| D7 | Measure `+5V_BUS` at J2 (passed through) | MM (V) | Same as D2 | |
+| D8 | Current draw: MM in series with the +5V wire | MM (mA) | Note the value | |
+
+**E. Both sources at once**
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| E1 | Connect JST and USB-C, measure `5V_LOCAL` | MM (V) | Higher of the two sources minus one diode drop | |
+| E2 | Measure `VBUS_USB-C` and `+5V_BUS` | MM (V) | Each at its own source voltage, not pulled together | |
+| E3 | Unplug one source, then the other | Eye, MM | Board keeps running on the remaining source | |
+
+**F. BOOTSEL and flashing over USB**
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| F1 | Hold BOOTSEL (SW1) and plug in USB | PC | `RPI-RP2` drive appears | |
+| F2 | Flash a minimal program that prints to serial once a second | PC | Upload succeeds | |
+| F3 | Open the serial monitor | PC | Text appears | |
+| F4 | Unplug and replug without BOOTSEL | PC | Program starts again (runs from flash) | |
+| F5 | Re-upload without pressing BOOTSEL | PC | Upload succeeds | |
+
+**G. Flashing over SWD**
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| G1 | Connect the debug probe to J4 (pogo pins or header) | Probe | — | |
+| G2 | Upload with `upload_protocol = cmsis-dap` | Probe, PC | Upload succeeds | |
+| G3 | Start a debug session, set a breakpoint, step | Probe, PC | Breakpoint hits | |
+
+**H. Display**
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| H1 | Insert the FPC tail (contacts facing away from the display) and close the ZIF latch | Eye | Tail fully seated | |
+| H2 | Flash phase 1.1 with GPIO21 driven high | PC | Clock hands rotate | |
+| H3 | Note the FPS from the serial monitor | PC | Same as phase 1.1 (≈ 80+) | |
+| H4 | Voltage across R11 with the backlight fully on | MM (V) | ≈ 1.8 V (≈ 38 mA) | |
+| H5 | Sweep the backlight PWM duty cycle | Eye | Brightness changes smoothly | |
+| H6 | Reset the board and watch the backlight before the firmware starts | Eye | Stays dark until driven | |
+| H7 | PWM signal at `LEDK` | Scope | Clean switching at the PWM frequency | |
+
+**I. RS485 on one board**
+
+Use a lower baud rate first (e.g. 9600 baud) so the bits are easy to read on the scope. Send `0x55` repeatedly: with the start and stop bits, this gives a clean alternating pattern.
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| I1 | Drive GPIO14 (DE) high, send `0x55` in a loop | PC | — | |
+| I2 | Probe GPIO12 (TX), U4 pin 4 | Scope | UART frame: start bit low, `0x55` LSB first, stop bit high | |
+| I3 | Probe RS485_P and RS485_N at the JST pins (two channels) | Scope | Same pattern, the two lines mirrored | |
+| I4 | Drive DE low | Scope | Bus lines go idle | |
+| I5 | Repeat I2–I3 at 1 Mbaud | Scope | Edges still clean | |
+
+**J. Two nodes**
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| J1 | Connect board 1 J2 to board 2 J3, power from the JST supply on board 1 | MM (V) | Both boards power up | |
+| J2 | Measure `+5V_BUS` on both boards | MM (V) | Note the drop over one hop | |
+| J3 | Board 1 sends `0x55`, board 2 prints what it receives | PC | Correct bytes received | |
+| J4 | Send a full frame with `buildFrame()`, parse it on board 2 | PC | `ParseResult` OK | |
+| J5 | Toggle ADDR_OUT on board 1, read ADDR_IN on board 2 | PC | Level follows | |
+| J6 | Same for SPARE_OUT / SPARE_IN | PC | Level follows | |
+| J7 | Bridge JP1 on both boards and repeat J4 | PC | Still OK | |
+
+**K. Phase 3.2 firmware**
+
+| # | Step | Tool | Expected | Result |
+| --- | --- | --- | --- | --- |
+| K1 | Flash the phase 3.2 slave onto two nodes (with GPIO21 high) | PC | Both boot and print their node ID | |
+| K2 | Run the phase 3.2 master on a node (GPIO14 + GPIO15 high) or on the breadboard Pico | PC | Master sends | |
+| K3 | Run checks 1–7 from phase 3.2 "How to test" | PC, Eye | Same behavior as on the breadboard | |
+| K4 | Current per node: idle, full white screen, clock running | MM (mA) | Note the values, target < 100 mA | |
+
+### Results
+
+Results and notes for each board go here.
 
 
 </details>

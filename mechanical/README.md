@@ -1,38 +1,58 @@
 # Mechanical Design
 
-The project needs an enclosure, plus parts to hold the node PCBs in place.
+The mechanical design covers the enclosure, the front plate and the 3D printed parts that hold the node PCBs in place. It also sets the constraints for the PCB outline.
 
-The development of the mechanical design is underway. All 3D models are made with OnShape and are available under this [public link](https://cad.onshape.com/documents/53aa7c255b66f5562a1ca156/w/211967f8d6f687de7cb12e88/e/a9185ed7945d5b9016d4c432?renderMode=0&uiState=6acfdefbca73a9d6ca868085).
+All 3D models are made in OnShape and are available under this [public link](https://cad.onshape.com/documents/53aa7c255b66f5562a1ca156/w/211967f8d6f687de7cb12e88/e/a9185ed7945d5b9016d4c432?renderMode=0&uiState=6acfdefbca73a9d6ca868085).
 
 ## Contents
 
 - [Concept](#concept)
-- [Node assembly](#node-assembly)
-- [FPC tail routing](#fpc-tail-routing)
 - [PCB outline](#pcb-outline)
+  - [Summary](#summary)
+  - [Outer dimensions](#outer-dimensions)
+  - [Display mounting](#display-mounting)
+  - [FPC tail routing](#fpc-tail-routing)
+  - [Bracket mounting](#bracket-mounting)
+  - [Resulting outline](#resulting-outline)
+- [Enclosure](#enclosure)
 
 ## Concept
 
-The clock is a 12 x 6 grid of round displays, aligned vertically (see Figure 1). A software change could tilt this alignment instead.
+The clock is a 12 x 6 grid of round displays, aligned vertically (Figure 1). A software change could tilt this alignment instead.
 
-The display's [technical drawing](/docs/datasheets/HZ0128QVPHGWS01N-AA.pdf) gives an outer diameter of ≈36 mm. A pitch of 44 mm between displays gives a visually pleasing result. Consequently, each PCB must fit within **44 x 44 mm** (Figure 2).
+<p align="center">
+  <img src="/docs/images/mechanical-concept.jpg" alt="Concept sketch" height="380"><br>
+  <sub><b>Figure 1:</b> Concept sketch of the clock layout</sub>
+</p>
 
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="/docs/images/mechanical-concept.jpg" alt="Concept sketch" height="380"></td>
-    <td align="center" width="50%"><img src="/docs/images/pcb-outer-dimensions.png" alt="PCB outer dimensions" height="380"></td>
-  </tr>
-  <tr>
-    <td align="center"><sub><b>Figure 1:</b> Concept sketch of the clock layout</sub></td>
-    <td align="center"><sub><b>Figure 2:</b> PCB outer dimensions (44 x 44 mm)</sub></td>
-  </tr>
-</table>
+## PCB outline
 
-## Node assembly
+> This section explains why the node PCB outline looks the way it does. It is the reference for the [PCB design](/pcb/README.md).
 
-Figure 3 shows how a node is assembled. The display panel is stuck onto the back of the PCB, and its FPC connector tail wraps around the PCB's edge to reach the connector. A small cutout is needed for the tail so it doesn't interfere with neighboring PCBs.
+### Summary
 
-The connector must be positioned so that the FPC contacts face the correct side. According to the display's [technical drawing](/docs/datasheets/HZ0128QVPHGWS01N-AA.pdf), the contact side faces away from the display (Figure 4).
+| Requirement | Value | Reason |
+| --- | --- | --- |
+| Board size | Max. 44 x 44 mm | Display grid pitch |
+| FPC connector | Vertical ZIF, contacts facing the PCB center | Excess tail forms a loop in Z, not in X/Y |
+| Side cutouts | One on the left, one on the right | FPC tail can wrap around either edge |
+| Bottom cutouts | Two round cutouts | Bracket pins slide in here |
+| Top slot | One slot | Bracket clip grips the board here |
+
+### Outer dimensions
+
+The display's [technical drawing](/docs/datasheets/HZ0128QVPHGWS01N-AA.pdf) gives an outer diameter of ≈36 mm. A pitch of 44 mm between displays looks good, so each PCB must fit within **44 x 44 mm** (Figure 2).
+
+<p align="center">
+  <img src="/docs/images/pcb-outer-dimensions.png" alt="PCB outer dimensions" height="380"><br>
+  <sub><b>Figure 2:</b> PCB outer dimensions (44 x 44 mm)</sub>
+</p>
+
+### Display mounting
+
+The display panel sits behind the PCB. Its FPC tail wraps around the PCB edge to reach the connector (Figure 3). The tail needs a small cutout in the edge so it doesn't hit the neighboring PCBs.
+
+The FPC contacts face away from the display (Figure 4, from the [technical drawing](/docs/datasheets/HZ0128QVPHGWS01N-AA.pdf)). The connector must be oriented to match.
 
 <table>
   <tr>
@@ -45,13 +65,11 @@ The connector must be positioned so that the FPC contacts face the correct side.
   </tr>
 </table>
 
-## FPC tail routing
+### FPC tail routing
 
-The tail can be routed in many ways, and different suppliers of the same display use different tail lengths. The routing must therefore accommodate a range of lengths.
+Different suppliers of the same display use different tail lengths, so the routing must work for a range of lengths.
 
-During [PCB design](/pcb/README.md#list-of-components) a **vertical-facing ZIF connector** was chosen. Space in X and Y is limited by neighboring PCBs, so the tail must not stick out to the side. With a vertical connector, excess tail length can be absorbed in a loop that expands in the Z direction.
-
-This restricts the routing to the three options in Figure 5:
+The neighboring PCBs leave no room in X and Y, so the tail must not stick out to the side. A **vertical ZIF connector** solves this: any excess tail forms a loop in the Z direction. That leaves three routing options (Figure 5).
 
 <p align="center">
   <img src="/docs/images/fpc-tail-routing-options.png" alt="FPC tail routing options" width="380"><br>
@@ -60,21 +78,33 @@ This restricts the routing to the three options in Figure 5:
 
 | Option | Contacts face | Best for |
 | ------ | ------------- | -------- |
-| 1 | PCB center | longer tails |
-| 2 | PCB center | longer tails |
-| 3 | PCB edge | short tails |
+| 1 | PCB center | Longer tails |
+| 2 | PCB center | Longer tails |
+| 3 | PCB edge | Short tails |
 
-### Decision
+**Decision: options 1 and 2, contacts facing the PCB center.** The connector can only face one way, so a choice had to be made. Very short tails will not reach.
 
-The connector orientation has to be fixed, so one option must be chosen. **Options 1 and 2 are used, with the contacts facing the center of the PCB.** This limits the usable tail lengths (very short tails will not reach), but a decision has to be made.
+Options 1 and 2 wrap the tail around opposite edges, so the PCB needs a cutout on both sides.
 
-Because options 1 and 2 wrap the tail around opposite PCB edges (left or right), cutouts are needed on both sides.
+### Bracket mounting
 
-## PCB outline
+The PCB is mounted on a 3D printed bracket, with the display on the back of the bracket. The PCB clips on without screws (Figure 6):
 
-The resulting PCB outline, with a cutout on each side, is shown in Figure 6.
+- **Bottom:** two round cutouts. Two inward-facing pins on the bracket slide into them.
+- **Top:** a slot. A clip on the bracket grips the board here.
+
+<p align="center">
+  <img src="/docs/images/node-bracket-concept.png" alt="PCB bracket concept" width="340"><br>
+  <sub><b>Figure 6:</b> Bracket concept: pins at the bottom, clip at the top</sub>
+</p>
+
+### Resulting outline
 
 <p align="center">
   <img src="/docs/images/pcb-outline.png" alt="PCB outline" width="340"><br>
-  <sub><b>Figure 6:</b> Suggested PCB outline with cutouts for the FPC tail</sub>
+  <sub><b>Figure 7:</b> PCB outline with cutouts for the FPC tail and the bracket</sub>
 </p>
+
+## Enclosure
+
+*In progress.* The 3D printed parts and the front plate will be documented here.

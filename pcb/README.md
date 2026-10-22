@@ -219,7 +219,7 @@ AP2112K-3.3TRG1
 
 ![Schematic SWD debug](/docs/images/schematic-debug.png)
 
-An SWD header (J4) was added alongside USB-C to make flashing and debugging easier. The footprint is a standard TC2030, which needs no connector on the board at all. A pogo pin cable is simply pressed against the pads.
+An SWD header (J4) was added alongside USB-C to make flashing and debugging easier. The footprint is from a 2.54 mm header pin. Spring loaded pogo pins with the same pitch can be inserted into the through holes.
 
 On the other end, the plan is to drive it from a second Raspberry Pi Pico running the official debugprobe firmware, which handles both flashing and interactive debugging over the same three wires.
 
@@ -227,7 +227,7 @@ On the other end, the plan is to drive it from a second Raspberry Pi Pico runnin
 
 ![Schematic SPI](/docs/images/schematic-spi.png)
 
-The display's FPC tail plugs into J5, a 12-pin ZIF (zero insertion force) connector, so the panel can be swapped without soldering. The assignment follows the tail pinout given in the panel [datasheet](/docs/datasheets/HZ0128QVPHGWS01N-AA).
+The display's flex cable plugs into J5, a 12-pin ZIF connector, so the panel can be swapped without soldering. The pinout follows the panel [datasheet](/docs/datasheets/HZ0128QVPHGWS01N-AA).
 
 | Pin | Net | Purpose |
 | --- | --- | --- |
@@ -244,23 +244,26 @@ The display's FPC tail plugs into J5, a 12-pin ZIF (zero insertion force) connec
 | 12 | GND | |
 | 13, 14 | GND | Mounting tabs |
 
-Ten of the twelve pins are unremarkable: the 4-wire SPI signals, `RESET`, the 3V3 analog supply and four grounds. Note that VDD is specified as 2.8 V typical with an absolute maximum of 4.6 V, so it belongs on the logic rail, the +5V rail is only for the backlight.
+Most pins are straightforward: SPI signals, `RESET`, power and ground. VDD runs from +3V3 (2.8 V typical, 4.6 V max). Only the backlight uses +5V.
 
-**The backlight.** This is the one block that needs more than a wire. The panel carries two white LEDs in parallel, specified at VF ≈ 3.0 V and IF = 40 mA, and it has no driver of its own.
+**Backlight.** The panel has two white LEDs in parallel (VF ≈ 3.0 V, IF = 40 mA) and no driver of its own.
 
-`LEDA` (pin 3) is fed from +5V rather than the 3V3 rail, because 3.3 V leaves almost no headroom above the 3.0 V forward voltage. `LEDK` (pin 2) is then switched low-side by Q1, an S8050 NPN. `BL_PWM` drives the base through R13 (2.2 kΩ), and R14 (10 kΩ) pulls the base down so the backlight stays dark until the firmware deliberately drives the pin. Varying the PWM duty cycle dims the display.
+- **Anode (`LEDA`)** is fed from +5V, since 3.3 V leaves too little headroom above the 3.0 V forward voltage.
+- **Cathode (`LEDK`)** is switched to ground by Q1, an S8050 NPN transistor.
+- **`BL_PWM`** drives Q1's base through R13 (2.2 kΩ). PWM duty cycle sets the brightness.
+- **R14** (10 kΩ) pulls the base low, so the backlight stays off until the firmware turns it on.
 
-R11 (47 Ω) sits in series with the anode and sets the current:
+R11 (47 Ω) in series with the anode sets the current:
 
 ```
 I = (5 V − 3.0 V − 0.2 V) / 47 Ω ≈ 38 mA
 ```
 
-with the 0.2 V accounting for Q1's collector-emitter saturation voltage. That lands just under the 40 mA rating, which is where we want to be.
+The 0.2 V is Q1's saturation voltage. The result sits just under the 40 mA rating.
 
 ## PCB Layout
 
-The board has to fit the **44 x 44 mm** grid pitch, which was defined in the [mechanical design](/mechanical/README.md). The display panel is mounted to the back of the board, and the boards are fully assembled by JLCPCB.
+The board follows the outline, which was defined in the [mechanical design](/mechanical/README.md#pcb-outline). The display panel is mounted to the back of the board, and the boards are fully assembled by JLCPCB.
 
 <table>
     <tr>
@@ -273,13 +276,6 @@ The board has to fit the **44 x 44 mm** grid pitch, which was defined in the [me
     </tr>
 </table>
 
-### Board outline
-
-| Feature | Value | Why |
-| --- | --- | --- |
-| Outline | 44 x 44 mm, 3 mm corner radius | Grid pitch, see [mechanical design](/mechanical/README.md#pcb-outline) |
-| Cutouts left + right | 1.5 mm deep, 10.5 mm long | The display's FPC tail wraps around either edge |
-| Notch top edge | 2 mm deep, ~20 mm wide | USB-C plug access, so the connector face stays inside the defined outline|
 
 ### Layer stackup
 
@@ -291,11 +287,6 @@ A 4-layer board was chosen over a 2-layer one. The RP2040 needs a lot of short, 
 | 2 | `GND` | 0.5 oz | Solid **GND** plane |
 | 3 | `+3V3` | 0.5 oz | Power plane: **+3V3** pour, with zones for `+5V_BUS` and `VBUS_USB-C` |
 | 4 | `Bottomlayer` | 1 oz | Additional signal lines|
-
-
-<p align="center">
-  <img src="/docs/images/pcb-stackup.png" alt="PCB layer stackup" width="520">
-</p>
 
 
 ### Component Placement
@@ -313,9 +304,9 @@ Multiple net classes are used to define track widths and clearances. A custom ru
 
 These two main design principles were followed:
 
-**Critical nets stay on one layer.** The QSPI flash bus, the crystal lines and the display SPI signals are routed entirely on `F.Cu` with no vias at all, so the ground plane underneath them is never interrupted. A custom DRC rule enforces this, see [Design Verification](#design-verification).
+**Critical nets stay on one layer.** The QSPI flash bus, the crystal lines and the display SPI signals are routed entirely on `F.Cu` with no vias at all, so the ground plane underneath them is never interrupted.
 
-**The bottom layer stays almost empty.** Roughly nine out of ten track segments sit on the top layer; the bottom is used only for short crossovers that could not be solved on top. Everything else is left to the two inner planes, and about half of all vias on the board are ground stitching vias tying the top copper down to the GND plane.
+**The bottom layer stays almost empty.** The bottom is used only for short crossovers that could not be solved on top. Everything else is left to the two inner planes, and about half of all vias on the board are ground stitching vias tying the top copper down to the GND plane.
 
 <table>
     <tr>
@@ -333,10 +324,26 @@ These two main design principles were followed:
 
 **Schematic review with AI.** The schematic was run through [traceformer.io](https://traceformer.io), an AI based design review tool, to look for electrical mistakes.
 
-**DRC inside KiCad.** KiCad's own defaults say nothing about what the fab can actually build, so the board is checked against [`node-pcb.kicad_dru`](node-pcb/node-pcb.kicad_dru). That file is a ruleset generated from JLCPCB's published [capabilities](https://jlcpcb.com/capabilities/pcb-capabilities), taken from [kicad-druid](https://github.com/Cimos/kicad-druid) in the `4L-1oz` variant matching this order (4 layer, 1 oz outer / 0.5 oz inner). One project-specific rule is appended: vias are disallowed on the `XTAL`, `QSPI` and `SPI_DISPLAY` net classes, which turns the routing principle above into something DRC enforces rather than something to remember.
+**DRC inside KiCad.** KiCad's own defaults say nothing about what the fab can actually build, so the board is checked against [`node-pcb.kicad_dru`](node-pcb/node-pcb.kicad_dru). That file is a ruleset generated from JLCPCB's published [capabilities](https://jlcpcb.com/capabilities/pcb-capabilities), taken from [kicad-druid](https://github.com/Cimos/kicad-druid) in the `4L-1oz` variant matching this order (4 layer, 1 oz outer / 0.5 oz inner).
 
 **JLCPCB DFM analysis** The exported gerbers were additionally run through JLCPCB's DFM analysis tool. It reviews the actual production files against their process and catches what a rules file cannot, such as silkscreen over pads or solder mask slivers.
 
+
+## Manufacturing
+
+The boards are made and assembled by JLCPCB. Everything needed for an order is in [`node-pcb/jlcpcb/production_files/`](node-pcb/jlcpcb/production_files/):
+
+| File | Upload as |
+| --- | --- |
+| `GERBER-node-pcb.zip` | Gerber files |
+| `BOM-node-pcb.csv` | Bill of materials |
+| `CPL-node-pcb.csv` | Pick and place file |
+
+Order settings that differ from the defaults:
+
+- **Layers:** 4
+- **Stackup:** JLC04161H-7628 (see [Layer stackup](#layer-stackup))
+- **PCB assembly:** yes, top side
 
 
 ## Open uncertainties
