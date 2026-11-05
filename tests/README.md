@@ -598,7 +598,6 @@ Before plugging in, measure the cable end of the hobby supply and check the pola
 Use the Arduino sketch in [`phase-5.1-serial-hello/`](phase-5.1-serial-hello/) (board: "Raspberry Pi Pico" from the earlephilhower core). It prints a counter, the uptime and the CPU clock once a second.
 
 | # | Step | Tool | Expected | Result |
-
 | --- | --- | --- | --- | --- |
 | F1 | Hold BOOTSEL (SW1) and plug in USB | PC | `RPI-RP2` drive appears | ✅ |
 | F2 | Flash a minimal program that prints to serial once a second | PC | Upload succeeds | ✅ |
