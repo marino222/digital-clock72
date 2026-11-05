@@ -10,6 +10,7 @@ All tests carried out are described in this directory. The tests are split into 
 | [`phase-3.1-protocol-design/`](phase-3.1-protocol-design/) | Protocol definitions and unit test code |
 | [`phase-3.2-protocol-test-master/`](phase-3.2-protocol-test-master/) | Master code broadcasting the state protocol to all 72 nodes |
 | [`phase-3.2-protocol-test-slave/`](phase-3.2-protocol-test-slave/) | Slave code receiving the broadcast and rendering its own node |
+| [`phase-5.1-serial-hello/`](phase-5.1-serial-hello/) | Minimal Arduino sketch for the first flash of the prototype PCB |
 
 
 <details>
@@ -522,27 +523,35 @@ There is no bench supply with a current limit, so the unpowered checks (step B) 
 
 Fill in the result column as you go. Tick a step with ✅ or ❌ and note the measured value.
 
+<p align="center">
+  <img src="/docs/images/pcb-v1.0-top.jpeg" alt="PCB v1.0 prototype, top side" width="49%">
+  <img src="/docs/images/pcb-v1.0-bottom.jpeg" alt="PCB v1.0 prototype, bottom side" width="49%">
+</p>
+<p align="center"><em>The assembled v1.0 prototype: top (left) and bottom (right)</em></p>
+
+
+
 **A. Visual inspection**
 
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
-| A1 | Check for solder bridges on the RP2040, flash chip and USB-C connector | Eye / magnifier | No bridges | |
-| A2 | Check that all parts are placed, and the orientation of the diodes, transistor and ICs | Eye | Matches the [render](/docs/images/pcb-render-top.png) | |
-| A3 | Check silkscreen and outline: cutouts, size | Eye, ruler | 44 x 44 mm, cutouts as in the [mechanical design](/mechanical/README.md#pcb-outline) | |
-| A4 | Scan the QR code on the back | Phone | Opens the GitHub repository | |
+| A1 | Check for solder bridges on the RP2040, flash chip and USB-C connector | Eye / magnifier | No bridges | ✅ |
+| A2 | Check that all parts are placed, and the orientation of the diodes, transistor and ICs | Eye | Matches the [render](/docs/images/pcb-render-top.png) | ✅ |
+| A3 | Check silkscreen and outline: cutouts, size | Eye, ruler | 44 x 44 mm, cutouts as in the [mechanical design](/mechanical/README.md#pcb-outline) | ❌ Looks fine, except the border of the testpoint-table on tha bottom sikscreen is clipped.|
+| A4 | Scan the QR code on the back | Phone | Opens the GitHub repository | ✅ |
 
 **B. Unpowered checks**
 
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
-| B1 | Resistance `5V_LOCAL` to GND | MM (Ω) | Not near 0 Ω (reading may climb as caps charge) | |
-| B2 | Resistance `+3V3` to GND | MM (Ω) | Not near 0 Ω | |
-| B3 | Resistance `+1V1` to GND | MM (Ω) | Not near 0 Ω | |
-| B4 | Resistance `+5V_BUS` to GND | MM (Ω) | Not near 0 Ω | |
-| B5 | D1 and D2 in both directions | MM (diode) | ≈ 0.2–0.3 V forward, OL reverse | |
-| B6 | Pass-through: J2 to J3 for GND, +5V_BUS, RS485_P, RS485_N | MM (Ω) | Continuity on each | |
-| B7 | Pass-through resistance J2 +5V to J3 +5V (zero the leads first) | MM (Ω) | Well below 1 Ω | |
-| B8 | ADDR and SPARE are *not* passed through: J2 pin 7 to J3 pin 2 etc. | MM (Ω) | No continuity | |
+| B1 | Resistance `5V_LOCAL` to GND | MM (Ω) | Not near 0 Ω (reading may climb as caps charge) | ✅ 6-10 MΩ depending on measurement location |
+| B2 | Resistance `+3V3` to GND | MM (Ω) | Not near 0 Ω | ✅ 6-10 MΩ depending on measurement location  |
+| B3 | Resistance `+1V1` to GND | MM (Ω) | Not near 0 Ω | ✅ ≈ 8kΩ |
+| B4 | Resistance `+5V_BUS` to GND | MM (Ω) | Not near 0 Ω | ✅ 15-20 MΩ depending on measurement location |
+| B5 | D1 and D2 in both directions | MM (diode) | ≈ 0.2–0.3 V forward, OL reverse | ✅ 0.18 v|
+| B6 | Pass-through: J2 to J3 for GND, +5V_BUS, RS485_P, RS485_N | MM (Ω) | Continuity on each | ✅ |
+| B7 | Pass-through resistance J2 +5V to J3 +5V (zero the leads first) | MM (Ω) | Well below 1 Ω | ✅  near zero|
+| B8 | ADDR and SPARE are *not* passed through: J2 pin 7 to J3 pin 2 etc. | MM (Ω) | No continuity | ✅ |
 
 **C. Power over USB-C**
 
@@ -550,15 +559,15 @@ Plug into the PC and keep a hand near the cable. If the PC reports a USB error, 
 
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
-| C1 | Measure `VBUS_USB-C` | MM (V) | ≈ 5.0 V | |
-| C2 | Measure `5V_LOCAL` | MM (V) | ≈ 4.7 V | |
-| C3 | Measure `+3V3` | MM (V) | 3.3 V | |
-| C4 | Measure `+1V1` | MM (V) | 1.1 V | |
-| C5 | Measure `+5V_BUS` at the JST pins (no backfeed through D1) | MM (V) | ≈ 0 V | |
-| C6 | Ripple on `+3V3` | Scope (AC coupled) | Small, note the peak-to-peak value | |
-| C7 | Touch the LDO and RP2040 after one minute | Finger | Not warm | |
-| C8 | Power with a C-to-C cable from a phone charger (checks the CC resistors) | Charger, MM | `+3V3` present | |
-| C9 | Flip the USB-C plug and repeat C3 | MM (V) | 3.3 V | |
+| C1 | Measure `VBUS_USB-C` | MM (V) | ≈ 5.0 V | ✅ 5.09 V |
+| C2 | Measure `5V_LOCAL` | MM (V) | ≈ 4.7 V | ✅ 4.84 V|
+| C3 | Measure `+3V3` | MM (V) | 3.3 V | ✅ 3.27 V|
+| C4 | Measure `+1V1` | MM (V) | 1.1 V | ✅ 1.09 V|
+| C5 | Measure `+5V_BUS` at the JST pins (no backfeed through D1) | MM (V) | ≈ 0 V | ✅ |
+| C6 | Ripple on `+3V3` | Scope (AC coupled) | Small, note the peak-to-peak value | ✅ ≈ 0 V |
+| C7 | Touch the LDO and RP2040 after one minute | Finger | Not warm | ✅ |
+| C8 | Power with a C-to-C cable from a phone charger (checks the CC resistors) | Charger, MM | `+3V3` present | ✅ 4.94 V|
+| C9 | Flip the USB-C plug and repeat C3 | MM (V) | 3.3 V | ✅ |
 
 **D. Power over JST**
 
@@ -566,32 +575,36 @@ Before plugging in, measure the cable end of the hobby supply and check the pola
 
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
-| D1 | Supply voltage unloaded, at the cable end | MM (V) | ≈ 5.0 V, correct polarity | |
-| D2 | Plug into J3, measure `+5V_BUS` | MM (V) | ≈ 5.0 V | |
-| D3 | Measure `5V_LOCAL` | MM (V) | ≈ 4.7 V | |
-| D4 | Measure `+3V3` | MM (V) | 3.3 V | |
-| D5 | Measure `+1V1` | MM (V) | 1.1 V | |
-| D6 | Measure `VBUS_USB-C` at D2 anode (no backfeed through D2) | MM (V) | ≈ 0 V | |
-| D7 | Measure `+5V_BUS` at J2 (passed through) | MM (V) | Same as D2 | |
-| D8 | Current draw: MM in series with the +5V wire | MM (mA) | Note the value | |
+| D1 | Supply voltage unloaded, at the cable end | MM (V) | ≈ 5.0 V, correct polarity | ✅ 4.95 V |
+| D2 | Plug into J3, measure `+5V_BUS` | MM (V) | ≈ 5.0 V | ✅ 4.93 V |
+| D3 | Measure `5V_LOCAL` | MM (V) | ≈ 4.7 V | ✅ 4.65 V |
+| D4 | Measure `+3V3` | MM (V) | 3.3 V | ✅ 3.26 V |
+| D5 | Measure `+1V1` | MM (V) | 1.1 V | ✅ 1.13 V|
+| D6 | Measure `VBUS_USB-C` at D2 anode (no backfeed through D2) | MM (V) | ≈ 0 V | ✅ |
+| D7 | Measure `+5V_BUS` at J2 (passed through) | MM (V) | Same as D2 | ✅ 4.93 V |
+| D8 | Current draw: MM in series with the +5V wire | MM (mA) | Note the value | ✅ ≈ 20mA JST / ≈ 30mA USB-C |
 
 **E. Both sources at once**
 
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
-| E1 | Connect JST and USB-C, measure `5V_LOCAL` | MM (V) | Higher of the two sources minus one diode drop | |
-| E2 | Measure `VBUS_USB-C` and `+5V_BUS` | MM (V) | Each at its own source voltage, not pulled together | |
-| E3 | Unplug one source, then the other | Eye, MM | Board keeps running on the remaining source | |
+| E1 | Connect JST and USB-C, measure `5V_LOCAL` | MM (V) | Higher of the two sources minus one diode drop | ✅ |
+| E2 | Measure `VBUS_USB-C` and `+5V_BUS` | MM (V) | Each at its own source voltage, not pulled together | ✅ |
+| E3 | Unplug one source, then the other | Eye, MM | Board keeps running on the remaining source | ✅ |
+| E4 | Connect two boards with a JST cable, power board 1 over USB-C only, measure `5V_LOCAL` and `+3V3` on board 2 | MM (V) | Board 2 stays off: `+3V3` ≈ 0 V (no backfeed onto the bus) | ✅ `+3V3` 0 V, `5V_LOCAL` ≈ 0.5 V (diode leakage) |
 
 **F. BOOTSEL and flashing over USB**
 
+Use the Arduino sketch in [`phase-5.1-serial-hello/`](phase-5.1-serial-hello/) (board: "Raspberry Pi Pico" from the earlephilhower core). It prints a counter, the uptime and the CPU clock once a second.
+
 | # | Step | Tool | Expected | Result |
+
 | --- | --- | --- | --- | --- |
-| F1 | Hold BOOTSEL (SW1) and plug in USB | PC | `RPI-RP2` drive appears | |
-| F2 | Flash a minimal program that prints to serial once a second | PC | Upload succeeds | |
-| F3 | Open the serial monitor | PC | Text appears | |
-| F4 | Unplug and replug without BOOTSEL | PC | Program starts again (runs from flash) | |
-| F5 | Re-upload without pressing BOOTSEL | PC | Upload succeeds | |
+| F1 | Hold BOOTSEL (SW1) and plug in USB | PC | `RPI-RP2` drive appears | ✅ |
+| F2 | Flash a minimal program that prints to serial once a second | PC | Upload succeeds | ✅ |
+| F3 | Open the serial monitor | PC | Text appears | ✅ |
+| F4 | Unplug and replug without BOOTSEL | PC | Program starts again (runs from flash) | ✅ |
+| F5 | Re-upload without pressing BOOTSEL | PC | Upload succeeds | ✅ |
 
 **G. Flashing over SWD**
 
