@@ -11,6 +11,7 @@ All tests carried out are described in this directory. The tests are split into 
 | [`phase-3.2-protocol-test-master/`](phase-3.2-protocol-test-master/) | Master code broadcasting the state protocol to all 72 nodes |
 | [`phase-3.2-protocol-test-slave/`](phase-3.2-protocol-test-slave/) | Slave code receiving the broadcast and rendering its own node |
 | [`phase-5.1-serial-hello/`](phase-5.1-serial-hello/) | Minimal Arduino sketch for the first flash of the prototype PCB |
+| [`phase-5.1-swd-debug/`](phase-5.1-swd-debug/) | PlatformIO project for flashing and debugging the prototype PCB over SWD |
 
 
 <details>
@@ -607,11 +608,13 @@ Use the Arduino sketch in [`phase-5.1-serial-hello/`](phase-5.1-serial-hello/) (
 
 **G. Flashing over SWD**
 
+Use the PlatformIO project in [`phase-5.1-swd-debug/`](phase-5.1-swd-debug/). The probe is a second Pico running the [debugprobe](https://github.com/raspberrypi/debugprobe) firmware. Upload and debug both go through CMSIS-DAP. The program prints a counter, the uptime and a Fibonacci number once a second over USB serial.
+
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
-| G1 | Connect the debug probe to J4 (pogo pins or header) | Probe | — | |
-| G2 | Upload with `upload_protocol = cmsis-dap` | Probe, PC | Upload succeeds | |
-| G3 | Start a debug session, set a breakpoint, step | Probe, PC | Breakpoint hits | |
+| G1 | Connect the debug probe to J4 (pogo pins or header) | Probe | — | ✅ |
+| G2 | Upload with `upload_protocol = cmsis-dap` | Probe, PC | Upload succeeds | ✅ |
+| G3 | Start a debug session, set a breakpoint, step | Probe, PC | Breakpoint hits |  |
 
 **H. Display**
 
