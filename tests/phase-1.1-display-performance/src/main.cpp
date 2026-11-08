@@ -39,6 +39,10 @@ void setup() {
   Serial.begin(921600); //serial output for reporting of measurements via USB-C
   while (!Serial) delay(10);
 
+  // Backlight on (node PCB: GPIO21 -> Q1 -> LEDK)
+  pinMode(PIN_BL, OUTPUT);
+  digitalWrite(PIN_BL, HIGH);
+
   display.init();
   display.setRotation(0);
   display.setBrightness(255);

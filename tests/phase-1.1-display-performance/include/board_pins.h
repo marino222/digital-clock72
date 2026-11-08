@@ -2,14 +2,17 @@
 
 #include <cstdint>
 
-// Definition of breadboard wiring
+// Display wiring, identical on the breadboard and the node PCB v1.0
 constexpr int PIN_SCLK = 18; // SCL
 constexpr int PIN_MOSI = 19;  // SDA
 constexpr int PIN_MISO = -1;  // not wired, GC9A01 used write-only
 constexpr int PIN_CS = 20;
 constexpr int PIN_DC = 17;
 constexpr int PIN_RST = 16;
-constexpr int PIN_BL = -1;  // backlight tied to a fixed rail on this breakout
+// Backlight: on the node PCB, GPIO21 (BL_PWM) switches LEDK via Q1. R13 holds it
+// off, so it must be driven high or the display stays dark. On the breadboard
+// breakout the backlight is tied to a fixed rail and GPIO21 is unconnected.
+constexpr int PIN_BL = 21;
 
 
 // Starting point for the GC9A01 SPI write clock. No datasheet-guaranteed

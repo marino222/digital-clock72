@@ -12,6 +12,7 @@ All tests carried out are described in this directory. The tests are split into 
 | [`phase-3.2-protocol-test-slave/`](phase-3.2-protocol-test-slave/) | Slave code receiving the broadcast and rendering its own node |
 | [`phase-5.1-serial-hello/`](phase-5.1-serial-hello/) | Minimal Arduino sketch for the first flash of the prototype PCB |
 | [`phase-5.1-swd-debug/`](phase-5.1-swd-debug/) | PlatformIO project for flashing and debugging the prototype PCB over SWD |
+| [`phase-5.1-backlight-pwm/`](phase-5.1-backlight-pwm/) | Phase 1.1 clock animation plus backlight PWM control for tests H5–H7 |
 
 
 <details>
@@ -614,19 +615,21 @@ Use the PlatformIO project in [`phase-5.1-swd-debug/`](phase-5.1-swd-debug/). Th
 | --- | --- | --- | --- | --- |
 | G1 | Connect the debug probe to J4 (pogo pins or header) | Probe | — | ✅ |
 | G2 | Upload with `upload_protocol = cmsis-dap` | Probe, PC | Upload succeeds | ✅ |
-| G3 | Start a debug session, set a breakpoint, step | Probe, PC | Breakpoint hits |  |
+| G3 | Start a debug session, set a breakpoint, step | Probe, PC | Breakpoint hits | ✅ |
 
 **H. Display**
 
+For H5–H7, use the PlatformIO project in [`phase-5.1-backlight-pwm/`](phase-5.1-backlight-pwm/) (`pico` env for USB upload, `pico_swd` for the debug probe). It runs the phase 1.1 clock animation and drives GPIO21 with hardware PWM (default 1 kHz). After reset it leaves GPIO21 undriven for 5 s while the clock face is already drawn (H6), then starts a 0 → 100 → 0 % duty sweep (H5). Serial commands: `s` sweep, `t` 10 % steps, `d <pct>` fixed duty, `f <Hz>` frequency, `p <ms>` sweep period, `g` gamma on/off, `?` help. For H7, use `d 50` and probe `LEDK`.
+
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
-| H1 | Insert the FPC tail (contacts facing away from the display) and close the ZIF latch | Eye | Tail fully seated | |
-| H2 | Flash phase 1.1 with GPIO21 driven high | PC | Clock hands rotate | |
-| H3 | Note the FPS from the serial monitor | PC | Same as phase 1.1 (≈ 80+) | |
-| H4 | Voltage across R11 with the backlight fully on | MM (V) | ≈ 1.8 V (≈ 38 mA) | |
-| H5 | Sweep the backlight PWM duty cycle | Eye | Brightness changes smoothly | |
-| H6 | Reset the board and watch the backlight before the firmware starts | Eye | Stays dark until driven | |
-| H7 | PWM signal at `LEDK` | Scope | Clean switching at the PWM frequency | |
+| H1 | Insert the FPC tail (contacts facing away from the display) and close the ZIF latch | Eye | Tail fully seated | ✅ |
+| H2 | Flash phase 1.1 with GPIO21 driven high | PC | Clock hands rotate | ✅ Occasional flicker still visible, likely software (no TE sync), not hardware |
+| H3 | Note the FPS from the serial monitor | PC | Same as phase 1.1 (≈ 80+) | ✅ 85.8–89.0 FPS, avg 87.2. Push max 3.35 ms, draw max 9.79 ms |
+| H4 | Voltage across R11 with the backlight fully on | MM (V) | ≈ 1.8 V (≈ 38 mA) | ✅ 1.83 V |
+| H5 | Sweep the backlight PWM duty cycle | Eye | Brightness changes smoothly | ✅ |
+| H6 | Reset the board and watch the backlight before the firmware starts | Eye | Stays dark until driven | ✅ |
+| H7 | PWM signal at `LEDK` | Scope | Clean switching at the PWM frequency | ✅ |
 
 **I. RS485 on one board**
 
