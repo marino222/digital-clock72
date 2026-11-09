@@ -13,6 +13,8 @@ All tests carried out are described in this directory. The tests are split into 
 | [`phase-5.1-serial-hello/`](phase-5.1-serial-hello/) | Minimal Arduino sketch for the first flash of the prototype PCB |
 | [`phase-5.1-swd-debug/`](phase-5.1-swd-debug/) | PlatformIO project for flashing and debugging the prototype PCB over SWD |
 | [`phase-5.1-backlight-pwm/`](phase-5.1-backlight-pwm/) | Phase 1.1 clock animation plus backlight PWM control for tests H5–H7 |
+| [`phase-5.1-rs485-sender/`](phase-5.1-rs485-sender/) | Sends a byte counter over RS485 and toggles ADDR/SPARE, for tests I and J |
+| [`phase-5.1-rs485-receiver/`](phase-5.1-rs485-receiver/) | Checks the byte counter for errors and shows ADDR/SPARE levels, for tests I and J |
 
 
 <details>
@@ -631,36 +633,39 @@ For H5–H7, use the PlatformIO project in [`phase-5.1-backlight-pwm/`](phase-5.
 | H6 | Reset the board and watch the backlight before the firmware starts | Eye | Stays dark until driven | ✅ |
 | H7 | PWM signal at `LEDK` | Scope | Clean switching at the PWM frequency | ✅ |
 
+![PCB test with display](/docs/images/display-test.jpeg)
+
 **I. RS485 on one board**
 
-Use a lower baud rate first (e.g. 9600 baud) so the bits are easy to read on the scope. Send `0x55` repeatedly: with the start and stop bits, this gives a clean alternating pattern.
+Use the Arduino sketch in [`phase-5.1-rs485-receiver/`](phase-5.1-rs485-receiver/). It prints the received bytes per second, an error count, and the ADDR_IN / SPARE_IN levels once a second.
 
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
-| I1 | Drive GPIO14 (DE) high, send `0x55` in a loop | PC | — | |
-| I2 | Probe GPIO12 (TX), U4 pin 4 | Scope | UART frame: start bit low, `0x55` LSB first, stop bit high | |
-| I3 | Probe RS485_P and RS485_N at the JST pins (two channels) | Scope | Same pattern, the two lines mirrored | |
-| I4 | Drive DE low | Scope | Bus lines go idle | |
-| I5 | Repeat I2–I3 at 1 Mbaud | Scope | Edges still clean | |
+| I1 | Flash the receiver, no cable connected, watch for 30 s | PC | `0 B/s`, `errors 0`. The bus is undriven, so the THVD1450 fail-safe must keep the receiver output idle | ✅ 30 of 30 s at `0 B/s`, `errors 0`. Done with the J cable connected and the sender held in BOOTSEL: its DE pull-down keeps the driver off, so the bus was undriven |
 
 **J. Two nodes**
 
+Flash [`phase-5.1-rs485-sender/`](phase-5.1-rs485-sender/) on board 1 and [`phase-5.1-rs485-receiver/`](phase-5.1-rs485-receiver/) on board 2. The sender sends a counter 0, 1, 2 … 255, 0, 1 … as fast as the baud rate allows. The receiver checks that every byte is the previous one plus 1, so a single wrong or missing byte shows up in `errors`. The baud rate is the `BAUD` define at the top of both sketches. It must be the same on both. Resetting the sender while the receiver keeps running counts one error, which is expected. Starting the receiver while the sender is already running can count a few more (seen: up to 44): the stream has no gaps between bytes, so the UART needs a moment to find the byte boundaries. What matters is that the count stays flat afterwards.
+
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
-| J1 | Connect board 1 J2 to board 2 J3, power from the JST supply on board 1 | MM (V) | Both boards power up | |
+| J1 | Connect board 1 J2 to board 2 J3, power from the JST supply on board 1 | MM (V) | Both boards power up | ✅ |
 | J2 | Measure `+5V_BUS` on both boards | MM (V) | Note the drop over one hop | |
-| J3 | Board 1 sends `0x55`, board 2 prints what it receives | PC | Correct bytes received | |
-| J4 | Send a full frame with `buildFrame()`, parse it on board 2 | PC | `ParseResult` OK | |
-| J5 | Toggle ADDR_OUT on board 1, read ADDR_IN on board 2 | PC | Level follows | |
-| J6 | Same for SPARE_OUT / SPARE_IN | PC | Level follows | |
-| J7 | Bridge JP1 on both boards and repeat J4 | PC | Still OK | |
+| J3 | `BAUD 9600`, run for 1 min | PC | ≈ 960 B/s, `errors 0` | ✅ 960 B/s steady, 354'234 bytes (≈ 6 min), `errors 0` |
+| J4 | `BAUD 1000000`, run for 5 min | PC | ≈ 100'000 B/s, `errors 0` | ✅ 99'999–100'001 B/s, 29.9 M bytes in 5 min, no new errors (1 from start-up). One receiver hang seen once before this run, not reproducible: restarting either board into live traffic 3× each worked |
+| J5 | Watch ADDR_IN on board 2 | PC | Toggles 0 / 1 every second, in step with the sender | ✅ Follows ADDR_OUT, 30 of 30 s |
+| J6 | Watch SPARE_IN on board 2 | PC | Same as J5 | ✅ Follows SPARE_OUT, 30 of 30 s. ADDR and SPARE toggle together, so a swap or short between them would not show |
+| J7 | Swap the sketches (board 2 sends, board 1 receives) and repeat J4 | PC | `errors 0` | |
+| J8 | Bridge JP1 on both boards (120 Ω at each end) and repeat J4 | PC | `errors 0` | |
+
+Both boards come from the same layout, so RS485_P/N swapped on the PCB would go unnoticed in J: it would be swapped the same way on both ends. Running the phase 3.2 master on the breadboard Pico with its separate RS485 module (K2) checks the polarity against a different transceiver.
 
 **K. Phase 3.2 firmware**
 
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
 | K1 | Flash the phase 3.2 slave onto two nodes (with GPIO21 high) | PC | Both boot and print their node ID | |
-| K2 | Run the phase 3.2 master on a node (GPIO14 + GPIO15 high) or on the breadboard Pico | PC | Master sends | |
+| K2 | Run the phase 3.2 master on the breadboard Pico (checks P/N polarity against another transceiver), then on a node (GPIO14 + GPIO15 high) | PC | Master sends, slaves render in both cases | |
 | K3 | Run checks 1–7 from phase 3.2 "How to test" | PC, Eye | Same behavior as on the breadboard | |
 | K4 | Current per node: idle, full white screen, clock running | MM (mA) | Note the values, target < 100 mA | |
 

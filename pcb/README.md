@@ -184,7 +184,7 @@ The only changes here are replacing the BOOTSEL jumper J2 with a button (SW1) fo
 **What the circuit does.** U4 runs off +3V3 and connects the RP2040's UART to the differential pair:
 
 - `GPIO12_TX` → `DI` and `RO` → `GPIO13_RX` carry the data.
-- `GPIO15_DE` and `GPIO14_RE` control the direction. Both are pulled to GND through 10 kΩ (R6, R9), so on power-up the driver is disabled and the receiver is enabled.
+- `GPIO14_DE` and `GPIO15_RE` control the direction. Both are pulled to GND through 10 kΩ (R6, R9), so on power-up the driver is disabled and the receiver is enabled.
 - C18 (100 nF) sits directly at pin 8, with C19 (1 µF) immediately upstream on the same 3V3 feed.
 
 This follows the layout guidelines in the chip's [datasheet](/docs/datasheets/thvd1450.pdf), which ask for a 100–220 nF cap as close as possible to VCC, at least two vias per decoupling connection, and 1–10 kΩ resistors on the enable lines to limit noise currents during transients. 
