@@ -650,13 +650,13 @@ Flash [`phase-5.1-rs485-sender/`](phase-5.1-rs485-sender/) on board 1 and [`phas
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
 | J1 | Connect board 1 J2 to board 2 J3, power from the JST supply on board 1 | MM (V) | Both boards power up | ✅ |
-| J2 | Measure `+5V_BUS` on both boards | MM (V) | Note the drop over one hop | |
+| J2 | Measure `+5V_BUS` on both boards | MM (V) | Note the drop over one hop | ✅ ≈ 0 V with ≈ 20 mA per board (no display). Drop under real load to be checked once a full row is wired |
 | J3 | `BAUD 9600`, run for 1 min | PC | ≈ 960 B/s, `errors 0` | ✅ 960 B/s steady, 354'234 bytes (≈ 6 min), `errors 0` |
 | J4 | `BAUD 1000000`, run for 5 min | PC | ≈ 100'000 B/s, `errors 0` | ✅ 99'999–100'001 B/s, 29.9 M bytes in 5 min, no new errors (1 from start-up). One receiver hang seen once before this run, not reproducible: restarting either board into live traffic 3× each worked |
 | J5 | Watch ADDR_IN on board 2 | PC | Toggles 0 / 1 every second, in step with the sender | ✅ Follows ADDR_OUT, 30 of 30 s |
 | J6 | Watch SPARE_IN on board 2 | PC | Same as J5 | ✅ Follows SPARE_OUT, 30 of 30 s. ADDR and SPARE toggle together, so a swap or short between them would not show |
-| J7 | Swap the sketches (board 2 sends, board 1 receives) and repeat J4 | PC | `errors 0` | |
-| J8 | Bridge JP1 on both boards (120 Ω at each end) and repeat J4 | PC | `errors 0` | |
+| J7 | Swap the sketches (board 2 sends, board 1 receives) and repeat J4 | PC | `errors 0` | ✅ |
+| J8 | Bridge JP1 on both boards (120 Ω at each end) and repeat J4 | PC | `errors 0` | ✅ |
 
 Both boards come from the same layout, so RS485_P/N swapped on the PCB would go unnoticed in J: it would be swapped the same way on both ends. Running the phase 3.2 master on the breadboard Pico with its separate RS485 module (K2) checks the polarity against a different transceiver.
 
@@ -664,10 +664,28 @@ Both boards come from the same layout, so RS485_P/N swapped on the PCB would go 
 
 | # | Step | Tool | Expected | Result |
 | --- | --- | --- | --- | --- |
-| K1 | Flash the phase 3.2 slave onto two nodes (with GPIO21 high) | PC | Both boot and print their node ID | |
-| K2 | Run the phase 3.2 master on the breadboard Pico (checks P/N polarity against another transceiver), then on a node (GPIO14 + GPIO15 high) | PC | Master sends, slaves render in both cases | |
-| K3 | Run checks 1–7 from phase 3.2 "How to test" | PC, Eye | Same behavior as on the breadboard | |
-| K4 | Current per node: idle, full white screen, clock running | MM (mA) | Note the values, target < 100 mA | |
+| K1 | Flash the phase 3.2 slave onto two nodes (`slave0` and `slave1` envs). It drives GPIO21 high for the backlight | PC | Both boot and print their node ID | ✅ `RS485 Slave Initializing as node 36`, then `Waiting for CLOCK_INIT...` |
+| K2 | Flash the phase 3.2 master onto a third node and chain it: master J2 → slave 0 J3, slave 0 J2 → slave 1 J3. The master drives GPIO14 (DE) and GPIO15 high | PC | Master sends, both slaves render | ✅ 60 frames/s, 17.6–17.7 kB/s, both slaves at 60 f/s |
+| K3 | Run checks 1–7 from phase 3.2 "How to test" | PC, Eye | Same behavior as on the breadboard | ✅ All 7 checks passed, details below |
+| K4 | Reset one slave while `c` is running | PC, Eye | It renders again within 5 s (the master re-sends `CLOCK_INIT` every 5 s) | ✅ Node 36: `rx` 60 f/s from 1.8 s after reset, first frame drawn at 5.8 s, 60/60 from 6.8 s, `0 bad` |
+| K5 | `c` at 60 Hz for 10 min | PC | `bad` and `gaps` stay 0 | ✅ 605 s, 36'414 frames sent, 36'416 / 36'417 received. `bad 0`, `gaps 0`, `superseded 0`, `fifo ok`, draw time avg 11.83 ms, max 12.71 ms |
+
+All boards in K are node PCBs, so swapped RS485_P/N on the PCB would go unnoticed here. The schematic routes RS485_P to A (U4 pin 6) and RS485_N to B (pin 7), the standard assignment. Polarity only needs checking again when something other than a node joins the bus, e.g. the final master board.
+
+K3 details, master on a node, slaves 0 and 36 behind it:
+
+| Check | Result |
+| --- | --- |
+| 1 Boot | Slaves print their node ID, the master its payload and frame sizes |
+| 2 `c` | Both faces turn smoothly, half a revolution apart |
+| 3 Stats at 60 Hz | `rx` 60–61, `render` 60, draw time ≈ 12 ms, `0 bad`, `0 gaps`, `fifo ok` on both |
+| 4 `i` ×3 | Colours and hand lengths change on both, no ghosting. One full redraw per preset (max ≈ 24 ms) |
+| 5 `w`, `I`, `u`, `c` | Widget background and "N0" / "N36" text on the right node, then a clean clock face |
+| 6 90 / 120 Hz | Master 90 / 120 frames/s (26.5 / 35.3 kB/s). `rx` follows exactly, `render` plateaus at 83–87 f/s, `superseded` 3–7 / 33–37 per s, `0 bad`, `0 gaps` |
+| 7 `s`, `c` | Both drop to 0 f/s and freeze, then resume at 60 within a second |
+
+**Bug found and fixed:** the slave counted a sequence gap for every widget frame addressed to the other node. The sequence check ran after the address filter, but all frames share one counter. It now runs before the filter. Verified afterwards: `gaps 0` in `ALL` and `WIDGET` mode on both nodes.
+
 
 ### Results
 

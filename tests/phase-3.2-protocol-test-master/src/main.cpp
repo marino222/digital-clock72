@@ -326,6 +326,8 @@ void setup() {
   // 2. Configure the RS485 module for transmit mode
   pinMode(RS485_CTRL_PIN, OUTPUT);
   digitalWrite(RS485_CTRL_PIN, HIGH);
+  pinMode(RS485_DE_PIN, OUTPUT);       // node PCB: the driver enable lives here
+  digitalWrite(RS485_DE_PIN, HIGH);
 
   // 3. Setup Hardware Serial (UART0) pins and baud rate
   Serial1.setTX(RS485_TX_PIN);

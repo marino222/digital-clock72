@@ -25,3 +25,7 @@ const int PIN_CS = 20;
 const int PIN_DC = 17;
 const int PIN_RST = 16;
 const int PIN_BL = -1;  // backlight tied to a fixed rail on this breakout
+
+// Node PCB v1.0: the backlight is switched by Q1 on GPIO21 and stays dark
+// unless driven high. Not connected on the breadboard setup.
+const int PIN_BL_PCB = 21;

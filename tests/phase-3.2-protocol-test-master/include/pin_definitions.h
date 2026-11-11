@@ -13,5 +13,9 @@ const int RS485_CTRL_PIN = 15; // Connects to BOTH DE and RE on the RS485 module
                               // HIGH = Transmit Mode
                               // LOW  = Receive Mode
 
+// Node PCB v1.0: DE and /RE are separate there. GPIO15 is /RE only, DE is on
+// GPIO14 (10 kOhm pull-down). Not connected on the breadboard setup.
+const int RS485_DE_PIN = 14;   // HIGH = driver on
+
 // Serial Communication Speed
 const long RS485_BAUD_RATE = 1000000;

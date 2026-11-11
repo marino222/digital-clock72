@@ -196,21 +196,23 @@ static void deliverFrame(const Frame& f) {
 }
 
 static void acceptFrame(const Frame& f) {
-  // Ignore anything addressed to a different node. CLOCK_UPDATE is always a
-  // broadcast, so it never gets filtered out here.
-  if (f.header.targetNode != GLOBAL_BROADCAST_ID &&
-      f.header.targetNode != MY_NODE_ID) {
-    return;
-  }
-
-  // A gap in the rolling counter means frames were dropped on the bus. Widget
-  // and init frames share the counter, so this tracks the whole stream.
+  // A gap in the rolling counter means frames were dropped on the bus. Every
+  // frame shares the counter, including those addressed to other nodes, so
+  // this check must run before the address filter below. Otherwise a widget
+  // frame for another node would count as a gap here.
   if (haveLastSequence) {
     uint8_t expected = lastSequence + 1;   // deliberately wraps at 255
     if (f.header.sequence != expected) seqGaps++;
   }
   lastSequence = f.header.sequence;
   haveLastSequence = true;
+
+  // Ignore anything addressed to a different node. CLOCK_UPDATE is always a
+  // broadcast, so it never gets filtered out here.
+  if (f.header.targetNode != GLOBAL_BROADCAST_ID &&
+      f.header.targetNode != MY_NODE_ID) {
+    return;
+  }
 
   deliverFrame(f);
 }
@@ -241,6 +243,10 @@ void setup() {
   // 2. Configure the Direction Control Pin for permanent listening
   pinMode(RS485_CTRL_PIN, OUTPUT);
   digitalWrite(RS485_CTRL_PIN, LOW); // Lock into Receive mode
+  // On the node PCB, DE (GPIO14) is held low by its pull-down, so the driver stays off.
+
+  pinMode(PIN_BL_PCB, OUTPUT);       // node PCB: backlight on
+  digitalWrite(PIN_BL_PCB, HIGH);
 
   // 3. Setup Hardware Serial (UART0) pins and baud rate.
   //
