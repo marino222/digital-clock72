@@ -106,6 +106,8 @@ Digital Clock 72/
 ├── pcb/
 │   ├── node-pcb/
 │   └── README.md
+├── power/
+│   └── README.md
 ├── tests/
 │   ├── phase-1.1-display-performance/
 │   └── README.md
@@ -117,6 +119,7 @@ Digital Clock 72/
 | **master/** | C# on Pi 3 | Global logic, time sync, vector math, games, web UI, RS485 broadcast | Conceptual |
 | **slave/** | C++ (PlatformIO), RP2040 | Framebuffer + SPI/DMA rendering, RS485 receive, local draw, auto-addressing | Conceptual |
 | **node_pcb/** | KiCad | Single-node board (RP2040 + GC9A01 display header + RS485 + power + USB-C/SWD) | In design |
+| **power/** | — | Power supply and wiring for all 72 nodes, based on measured values | In design |
 | **tests/** | — | Bring-up plan test procedures and recorded results, one folder per phase | Not started |
 
 
@@ -225,7 +228,7 @@ Before any further testing we should design the PCB as best as we can. Since the
 
 ## ❓ Open questions
 
-- **Power at scale.** See node_pcb's
+- **Power at scale.** Per-node draw and voltage drop are measured, see [power/](power/README.md). Still open: inrush current, fusing, master power.
 - **Broadcast protocol definition.** Exact protocol definition. Needs to be implemented in `master` and `slave`.
 - **Addressing scheme (firmware).** Daisy-chain auto-addressing to be *implemented* in firmware.
 - **Syncing** How to make sure all displays run in sync

@@ -89,14 +89,14 @@ During normal operation the board is not powered over USB, that port is only for
 
 That means both sources can be present at the same time, so two Schottky diodes keep them apart:
 
-- **D1** sits between the USB-C VBUS pin and the board's internal +5 V node. It lets the USB port feed the board, but blocks current from flowing back into the USB connector.
-- **D2** sits between the bus (JST) +5 V net and that same internal node. It lets the bus feed the board, but stops the USB port from feeding the other boards on the bus.
+- **D1** sits between the bus (JST) +5 V net and the board's internal +5 V node (`5V_LOCAL`). It lets the bus feed the board, but stops the USB port from feeding the other boards on the bus.
+- **D2** sits between the USB-C VBUS pin and that same internal node. It lets the USB port feed the board, but blocks current from flowing back into the USB connector.
 
 If both sources are active, the board is simply supplied from the one with the higher potential. The price for this protection is a voltage drop across the diode, which is what the rest of this section is about.
 
 #### How much input voltage does one board need?
 
-Figure 1 shows a simplified version of our power supply circuit. The standard case is that the board is supplied from the VBUS line, so the path is JST → D2 → LDO.
+Figure 1 shows a simplified version of our power supply circuit. The standard case is that the board is supplied over the bus, so the path is JST → D1 → LDO.
 
 <table>
     <tr>
@@ -110,7 +110,7 @@ Figure 1 shows a simplified version of our power supply circuit. The standard ca
 </table>
 
 
-In our [tests](/tests/README.md), a single Raspberry Pi Pico plus a display and RS485 module drew around 60 mA. We round this up generously to **100 mA per board**.
+Measured on the prototype ([tests](/tests/README.md), section L), one board draws at most 84 mA. The calculation below uses **100 mA per board** as a round upper bound.
 
 Two parts in that path define the minimum input voltage, both taken at 100 mA:
 
@@ -130,34 +130,7 @@ So the +5 V on the bus connector must never drop below **≈3.7 V**, anywhere in
 
 #### How much is left at the last board?
 
-Since we're not living in an ideal world, the supply voltage won't be exactly 5.0 V. We assume the boards are arranged in 12 rows of 6, with a power injection point at the start of each row, as shown in the diagram below. Each row then draws around 6 × 100 mA = 600 mA, which the JST connectors handle comfortably (the GH series is rated for 1.0 A). Most power supply manufacturers specify a voltage tolerance of ±5 %, so in the worst case the PSU delivers 4.75 V instead of 5.00 V.
-
-![Wiring diagram](/docs/images/wiring-diagram.png)
-
-The worst case is node a6: it is the last board of a row and therefore the furthest away from the PSU. Between it and the injection point sit 5 boards and the wires between them, and each of them adds resistance (contacts, pcb traces, wires).
-
-**Estimated resistance per board**
-
-The [datasheet](/docs/datasheets/BM08B-GHS-TBT(LF)(SN).pdf) specifies a contact resistance of 30 mΩ.
-
-
-Together with the PCB traces and the wire to the next board, we estimate roughly **100 mΩ per hop** for the whole current loop (supply and ground return). The table below shows the resulting voltage drops, with U_n and I_n as labelled in the diagram above:
-
-| Hop | Current | Voltage drop (U = R × I) |
-| --- | --- | --- |
-| U1 | I1 = 600 mA | 60 mV |
-| U2 | I2 = 500 mA | 50 mV |
-| U3 | I3 = 400 mA | 40 mV |
-| U4 | I4 = 300 mA | 30 mV |
-| U5 | I5 = 200 mA | 20 mV |
-| **Total** | | **200 mV** |
-
-
-```
-4.75 V (PSU worst case) - 0.20 V (wiring) = 4.55 V at node a6
-```
-
-That is well above the minimum of **3.7 V** we calculated earlier.
+How the boards are chained, how much voltage is left at the last board of a row, and how to size the PSU is described in the [power supply README](/power/README.md). In short: with the measured values, the last board of a row still gets more than 4.5 V, well above the 3.7 V minimum.
 
 
 ### Flash storage
@@ -213,8 +186,6 @@ Power and ground each get two pins on purpose. The GH series is rated for 1.0 A 
 The last two lines are wired differently from the rest. Power, ground and the RS485 pair passed straight through the board, `ADDR` and `SPARE` are not. `ADDR_IN`/`SPARE_IN` on J3 and `ADDR_OUT`/`SPARE_OUT` on J2 are four separate nets going to four separate GPIOs. `ADDR` is used for the auto adressing feature. `SPARE` is the same arrangement with nothing assigned to it yet, wired up proactively so a future feature can use it without a board change. `ADDR` and `SPARE` are directly wired to the MCU's GPIO pins, which could in theory be damaged by too large current delivery. Therefore, four 1 kΩ resistors are wired in series.
 
 C20 (10 µF) provides local bulk decoupling between +5V and GND at the connector.
-AP2112K-3.3TRG1
-
 ### SWD Debug
 
 ![Schematic SWD debug](/docs/images/schematic-debug.png)
@@ -260,6 +231,12 @@ I = (5 V − 3.0 V − 0.2 V) / 47 Ω ≈ 38 mA
 ```
 
 The 0.2 V is Q1's saturation voltage. The result sits just under the 40 mA rating.
+
+**Measured** ([tests](/tests/README.md), sections H and M): 39 mA at 5.09 V. Since nothing regulates the current, it follows the supply: about 2 mA less for every 0.1 V less, 31 mA at 4.75 V on the bus. At 5.25 V it would be about 42 mA, above the rating. Two options for the next revision:
+- R11 = 56 Ω keeps the LEDs below 40 mA up to 5.25 V.
+- A constant-current LED driver would also make the brightness independent of the supply voltage.
+
+What this means for the whole clock is described in the [power supply README](/power/README.md#brightness).
 
 ## PCB Layout
 
@@ -348,7 +325,7 @@ Order settings that differ from the defaults:
 
 ## Open uncertainties
 
-- Real per node power draw (idle, full white, inrush) hasn't been measured yet.
+- Inrush current at power-up hasn't been measured yet.
 - How many of the 12 branches actually need their 120 Ω termination jumper bridged has to be measured.
 - Baud rate vs. max bus length for the largest planned install needs to be decided.
 

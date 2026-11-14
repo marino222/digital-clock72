@@ -15,6 +15,7 @@ All tests carried out are described in this directory. The tests are split into 
 | [`phase-5.1-backlight-pwm/`](phase-5.1-backlight-pwm/) | Phase 1.1 clock animation plus backlight PWM control for tests H5–H7 |
 | [`phase-5.1-rs485-sender/`](phase-5.1-rs485-sender/) | Sends a byte counter over RS485 and toggles ADDR/SPARE, for tests I and J |
 | [`phase-5.1-rs485-receiver/`](phase-5.1-rs485-receiver/) | Checks the byte counter for errors and shows ADDR/SPARE levels, for tests I and J |
+| [`phase-5.1-power-chain/`](phase-5.1-power-chain/) | Steps through backlight, CPU and screen scenarios for the power test in L |
 
 
 <details>
@@ -686,6 +687,99 @@ K3 details, master on a node, slaves 0 and 36 behind it:
 
 **Bug found and fixed:** the slave counted a sequence gap for every widget frame addressed to the other node. The sequence check ran after the address filter, but all frames share one counter. It now runs before the filter. Verified afterwards: `gaps 0` in `ALL` and `WIDGET` mode on both nodes.
 
+**L. Power of one node**
+
+Setup: USB charger → USB-C power meter → node. Use a charger, not a PC: an active USB connection adds current that a real node doesn't have.
+
+Flash [`phase-5.1-power-chain/`](phase-5.1-power-chain/). After power-up it runs the steps below in order, 20 s each, and stays on L9. The step number is shown at the bottom of the screen. L1 and L2 have the backlight off, so they are the first 40 s. Note the current from the meter for each step.
+
+| # | Backlight | Screen | CPU | Current (mA) |
+| --- | --- | --- | --- | --- |
+| L1 | off | white | idle | ✅ 33 |
+| L2 | off | white | stress | ✅ 41 |
+| L3 | 25 % | white | idle | ✅ 45 |
+| L4 | 50 % | white | idle | ✅ 57 |
+| L5 | 75 % | white | idle | ✅ 68 |
+| L6 | 100 % | white | idle | ✅ 75 |
+| L7 | 100 % | white | stress | ✅ 84 |
+| L8 | 100 % | black | idle | ✅ 75 |
+| L9 | 100 % | clock | real | ✅ 77 |
+
+`stress` = both cores and SPI busy without pause. `real` = clock animation at 60 FPS.
+
+**Evaluation**
+
+| Effect | Calculation | Result |
+| --- | --- | --- |
+| Backlight 100 % | L6 − L1 | 42 mA, matches H4 (39 mA) |
+| Backlight 25 / 50 / 75 % | L3–L5 − L1 | 12 / 24 / 35 mA, close to linear in the duty |
+| CPU stress | L2 − L1 | 8 mA |
+| Check | L1 + 42 + 8 | 83 mA vs L7 84 mA: the effects are independent and add up |
+| Colour | L8 − L6 | 0 mA: colour doesn't matter |
+| Worst case | L7 | 84 mA, 0.42 W at 5 V |
+| Typical (clock) | L9 | 77 mA, 0.39 W at 5 V |
+
+```mermaid
+xychart-beta
+    title "Node current vs backlight (CPU idle, L1, L3–L6)"
+    x-axis "Backlight (%)" [0, 25, 50, 75, 100]
+    y-axis "Current (mA)" 0 --> 90
+    line [33, 45, 57, 68, 75]
+```
+
+Close to linear: I ≈ 34 mA + 0.43 mA per % backlight, within ±2 mA of every point. The last step (75 → 100 %) adds a little less than the others. With the CPU busy, add 8 mA.
+
+The estimate of 100 mA per node in the [PCB README](/pcb/README.md#how-much-is-left-at-the-last-board) holds with margin. The backlight is the main load (half of the worst case), and the CPU adds little. Worst case for 72 nodes: 72 × 84 mA ≈ 6.1 A ≈ 30 W. One row of 6: ≈ 0.5 A, well within the 2 A connector budget.
+
+**M. Power of a 4-node chain**
+
+Setup: JST supply → node 1 J3, node 1 J2 → node 2 J3, and so on up to node 4. Same firmware as L on all 4 nodes, USB unplugged. All nodes power up together, so they run the steps in sync.
+
+**M1. Current**, MM (10 A range) in series with the supply's +5V. Compared with 4 × the single-node value from L:
+
+| # | Chain (mA) | 4 × L (mA) | Per node (mA) | Chain / 4 × L |
+| --- | --- | --- | --- | --- |
+| L1 | ✅ 110 | 132 | 27.5 | 0.83 |
+| L2 | ✅ 150 | 164 | 37.5 | 0.91 |
+| L3 | ✅ 140 | 180 | 35.0 | 0.78 |
+| L4 | ✅ 170 | 228 | 42.5 | 0.75 |
+| L5 | ✅ 190 | 272 | 47.5 | 0.70 |
+| L6 | ✅ 210 | 300 | 52.5 | 0.70 |
+| L7 | ✅ 250 | 336 | 62.5 | 0.74 |
+| L8 | ✅ 210 | 300 | 52.5 | 0.70 |
+| L9 | ✅ 230 | 308 | 57.5 | 0.75 |
+
+The 10 A range resolves only 10 mA, so each value is ± 2.5 mA per node.
+
+| Effect per node | Chain | Single node (L) |
+| --- | --- | --- |
+| CPU stress (L2 − L1, L7 − L6) | 10 / 10 mA | 8 / 9 mA |
+| Backlight 25 / 50 / 75 / 100 % (L3–L6 − L1) | 8 / 15 / 20 / 25 mA | 12 / 24 / 35 / 42 mA |
+
+Everything except the backlight scales as expected: the CPU effect matches, colour still doesn't matter (L8 = L6), and the baseline is within the meter's resolution and accuracy on the 10 A range. The backlight, however, draws only about 60 % of its single-node current at every duty.
+
+The cause is the backlight: it has no current regulation. It runs from +5V through R11 (47 Ω), so its current is (V − 3.0 V − 0.2 V) / 47 Ω and drops by about 2 mA for every 0.1 V less supply. M3 confirms it (see below). The remaining gap to the 25 mA in the table comes from the MM's 10 A range, which reads a few mA low per node at these small currents.
+
+**M2. Voltages**, MM removed, all nodes in L9:
+
+| # | Step | Tool | Result |
+| --- | --- | --- | --- |
+| M2 | Supply voltage at its terminals (V0), then `+5V_BUS` to GND on each node (V1–V4) | MM (V) | ✅ V0: 4.84 <br> V1: 4.75 <br> V2: 4.74 <br> V3: 4.73 <br> V4: 4.73 |
+| M3 | Voltage across R11 on node 1 and node 4 (as in H4). Backlight current = U / 47 Ω | MM (V) | ✅ Node 1: 1.47 V (31 mA) <br> Node 4: 1.39 V (30 mA) |
+
+M3 confirms that the backlight current follows the supply voltage. H4 measured 1.83 V across R11 (39 mA) on USB at 5.09 V. Here the nodes get about 4.75 V, 0.35 V less, and the voltage across R11 is 0.36 V lower (1.47 V). LED and transistor take a fixed share, so every volt the supply loses comes off R11. The 0.08 V between node 1 and node 4 is mostly part tolerance (LED forward voltage, R11), since the chain itself only loses 0.02 V between them.
+
+**Evaluation**, with I_L9 = 57.5 mA per node from M1. The cable from the supply carries 4 · I, the hops between the nodes 3, 2 and 1 · I:
+
+| Quantity | Calculation | Result |
+| --- | --- | --- |
+| Feed cable resistance R_feed | (V0 − V1) / (4 · I_L9) | 0.39 Ω (includes the supply's own cable and terminals) |
+| Hop resistance R_hop | (V1 − V4) / (6 · I_L9), estimate 100 mΩ | ≈ 60 mΩ. The MM resolves only 10 mV, so anything from 30 to 90 mΩ fits |
+| Last node of a row of 6, worst case | 4.75 V − 6 · 84 mA · R_feed − 15 · 84 mA · R_hop, must be ≥ 3.7 V | ✅ 4.48 V (4.43 V with R_hop = 100 mΩ) |
+
+The worst case uses 84 mA per node from L7, not the lower chain value: at full supply voltage the backlight draws its full current again.
+
+The conclusions from L and M for the whole clock are in the [power supply README](/power/README.md).
 
 ### Results
 
