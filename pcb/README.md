@@ -323,10 +323,29 @@ Order settings that differ from the defaults:
 - **PCB assembly:** yes, top side
 
 
-## Open uncertainties
+## Known issues and ideas for revision 2
 
-- Inrush current at power-up hasn't been measured yet.
-- How many of the 12 branches actually need their 120 Ω termination jumper bridged has to be measured.
-- Baud rate vs. max bus length for the largest planned install needs to be decided.
+Everything still to do on the PCB, collected until the next order. Test numbers refer to the [bring-up tests](/tests/README.md#pcb-prototype-design).
+
+**Changes**
+
+| Item | Source |
+| --- | --- |
+| R11 → 56 Ω, so the backlight stays below 40 mA up to 5.25 V. Or a constant-current LED driver, which also makes the brightness independent of the supply voltage | H4, M3, [power](/power/README.md#brightness) |
+| Silkscreen border of the test-point table on the bottom is clipped | A3 |
+
+**Limitations**
+
+| Item | Source |
+| --- | --- |
+| The display's flex cable has no TE pin, so frame updates can't be synced to the panel's refresh. Only a different panel would fix this | H2 |
+
+**Open uncertainties**
+
+| Item | Source |
+| --- | --- |
+| Inrush current at power-up hasn't been measured yet | — |
+| How many of the 12 branches actually need their 120 Ω termination jumper bridged | — |
+| Baud rate vs. max bus length for the largest planned install | — |
 
 See the root [README.md](../README.md) for full system context.
