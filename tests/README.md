@@ -787,3 +787,40 @@ Results and notes for each board go here.
 
 
 </details>
+
+<details id="mechanical-assembly">
+<summary><strong>5.2a Mechanical assembly</strong></summary>
+
+### Objective
+
+Assemble four node PCBs from 5.1 with their displays into a 2×2 array, using 3D printed brackets, cover rings and a front plate. This checks that the PCB outline from the [mechanical design](/mechanical/README.md#pcb-outline) works with real parts before the firmware for 5.2b goes on top.
+
+The CAD model of the prototype is in this [Onshape document](https://cad.onshape.com/documents/d55b10068fb33a524e8c4e4d/w/84b95b0ccae9089db622bf7f/e/f4772f66619908edfe1659af).
+
+### Assembly
+
+Each node is a stack of five parts (Figure 1, front to back): the cover ring, the front plate, the display, the bracket and the PCB. The PCB clips onto the back of the bracket, the display sits in front of it, and the cover ring locks it into the front plate.
+
+<p align="center">
+  <img src="/docs/images/prototype-exploded-view.png" alt="Exploded view of the 2x2 prototype" width="600"><br>
+  <sub><b>Figure 1:</b> Exploded view of one node in the 2×2 front plate</sub>
+</p>
+
+### Results
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="/docs/images/prototype-assembled-front.jpeg" alt="Assembled prototype, front" width="380"></td>
+    <td align="center" width="50%"><img src="/docs/images/prototype-assembled-back.jpeg" alt="Assembled prototype, back" width="380"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub><b>Figure 2:</b> Assembled 2×2 prototype, front</sub></td>
+    <td align="center"><sub><b>Figure 3:</b> Back, with the nodes chained over JST cables</sub></td>
+  </tr>
+</table>
+
+### Findings
+
+<!-- TODO: findings -->
+
+</details>
