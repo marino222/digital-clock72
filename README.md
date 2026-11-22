@@ -95,6 +95,7 @@ Because every node hears the same packet at the same time, the array stays in sy
 | [`mechanical/`](mechanical/README.md) | Onshape | Brackets, front plate, PCB outline constraints | 2×2 prototype in progress |
 | [`power/`](power/README.md) | — | Power supply and wiring, based on measured values | Measured, wiring defined |
 | [`tests/`](tests/README.md) | — | Test procedures and results, one section per phase | Ongoing |
+| [`tools/`](tools/) | HTML | Helper tools, e.g. a to-scale [mockup](tools/clock-grid-mockup.html) of the front with clock-hand animations | Draft |
 | `docs/` | — | Datasheets and images | — |
 
 ---

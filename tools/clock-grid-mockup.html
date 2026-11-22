@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clock Grid Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: workbench. Control panel on the left, a to-scale canvas of the front plate on the right that stays in view while you tweak. */
+:root{
+  --paper:#EDEFEE; --panel:#F9FAF9; --ink:#17202A; --muted:#5A6570; --rule:#D2D8D7;
+  --accent:#B4471A; --on-accent:#FFFFFF; --stage:#D8D6D0;
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121619; --panel:#192026; --ink:#E5EAEE; --muted:#9AA5AF; --rule:#2A333B;
+  --accent:#EC8A55; --on-accent:#1A0F08; --stage:#262B30; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#121619; --panel:#192026; --ink:#E5EAEE; --muted:#9AA5AF; --rule:#2A333B;
+  --accent:#EC8A55; --on-accent:#1A0F08; --stage:#262B30; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 32px;display:grid;gap:16px;max-width:1500px;margin:0 auto}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:8px 24px}
+h1{font-family:var(--f-display);font-weight:800;font-size:26px;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.readout{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.readout b{color:var(--ink);font-weight:500}
+.app{display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px;align-items:start}
+.panel{display:grid;gap:16px;min-width:0}
+fieldset{border:0;border-top:1px solid var(--rule);margin:0;padding:10px 0 0;display:grid;gap:9px;min-width:0}
+legend{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 8px 0 0}
+.f{display:grid;grid-template-columns:104px minmax(0,1fr) 46px;align-items:center;gap:8px}
+.f.two{grid-template-columns:104px minmax(0,1fr)}
+.f > label{color:var(--muted);font-size:13px}
+.val{font-family:var(--f-mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+select,input[type=number]{font:inherit;font-size:13.5px;padding:5px 8px;border:1px solid var(--rule);border-radius:4px;background:var(--panel);color:var(--ink);width:100%;min-width:0}
+.pair{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
+.pair span{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip,.btn{font:500 12.5px var(--f-body);padding:5px 11px;border:1px solid var(--rule);border-radius:999px;background:var(--panel);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.btn{border-radius:5px;padding:7px 12px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.chip:focus-visible,.btn:focus-visible,.sw:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.colors{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.sw{width:22px;height:22px;border-radius:50%;border:1px solid var(--rule);cursor:pointer;padding:0}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--accent)}
+input[type=color]{width:30px;height:24px;border:1px solid var(--rule);border-radius:4px;padding:0;background:none;cursor:pointer}
+label.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;cursor:pointer}
+.hint{font-size:12.5px;color:var(--muted)}
+.warn{font-size:12.5px;color:var(--accent)}
+.stagewrap{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:grid;gap:10px;min-width:0}
+.stage{position:relative;height:clamp(320px,74vh,860px);border-radius:8px;display:flex;overflow:auto;background:var(--stage)}
+.stage canvas{margin:auto;display:block;flex:none}
+.card{position:absolute;left:12px;top:12px;border:1.5px dashed var(--accent);border-radius:3.2mm;pointer-events:none;display:grid;place-items:center;font-family:var(--f-mono);font-size:11px;color:var(--accent);background:color-mix(in srgb,var(--stage) 60%,transparent)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.bar .chips{gap:8px}
+@media (max-width:880px){
+  .app{grid-template-columns:1fr}
+  .stagewrap{position:static;order:-1}
+  .stage{height:56vh}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <div class="eyebrow">Digital Clock 72 · front mockup · to scale</div>
+      <h1>Clock grid mockup</h1>
+    </div>
+    <div class="readout" id="readout"></div>
+  </div>
+
+  <div class="app">
+    <div class="panel">
+      <fieldset>
+        <legend>Grid</legend>
+        <div class="chips" id="sizes">
+          <button class="chip" data-c="2" data-r="2">2×2 prototype</button>
+          <button class="chip" data-c="8" data-r="3">8×3 desktop</button>
+          <button class="chip" data-c="6" data-r="12">6×12 wall</button>
+        </div>
+        <div class="f two"><label for="cols">Columns × rows</label>
+          <div class="pair"><input type="number" id="cols" data-k="cols" min="1" max="16" step="1"><span>×</span><input type="number" id="rows" data-k="rows" min="1" max="16" step="1"></div>
+        </div>
+        <div class="f"><label for="margin">Plate border</label><input type="range" id="margin" data-k="margin" min="0" max="40" step="1"><span class="val" data-v="margin"></span></div>
+        <div class="f"><label for="radius">Corner radius</label><input type="range" id="radius" data-k="radius" min="0" max="30" step="1"><span class="val" data-v="radius"></span></div>
+        <p class="hint">Pitch 45 mm · ring Ø44 / Ø32 · display area Ø32</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Colours</legend>
+        <div class="f two"><label>Front plate</label><div class="colors" data-sw="plate"></div></div>
+        <div class="f two"><label>Cover rings</label><div class="colors" data-sw="ring"></div></div>
+        <div class="f two"><label>Display background</label><div class="colors" data-sw="disp"></div></div>
+        <div class="f two"><label>Wall / desk</label><div class="colors" data-sw="wall"></div></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Clock hands</legend>
+        <div class="f two"><label>Colour</label><div class="colors" data-sw="hand"></div></div>
+        <div class="f"><label for="len">Length</label><input type="range" id="len" data-k="len" min="30" max="100" step="1"><span class="val" data-v="len"></span></div>
+        <div class="f"><label for="width">Thickness</label><input type="range" id="width" data-k="width" min="0.5" max="6" step="0.1"><span class="val" data-v="width"></span></div>
+        <div class="f two"><label for="cap">Hand ends</label><select id="cap" data-k="cap"><option value="round">Round</option><option value="butt">Flat</option></select></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Animation</legend>
+        <div class="f two"><label for="preset">Preset</label><select id="preset">
+          <option value="calm">Calm: all at once</option>
+          <option value="sweep">Sweep left to right</option>
+          <option value="ripple">Ripple from centre, bounce back</option>
+          <option value="spin">Spin: hands turn opposite ways</option>
+          <option value="burst">Burst outward, then time</option>
+          <option value="swirl">Swirl, then time</option>
+          <option value="fade">Fade out and in, random order</option>
+          <option value="windup">Wind-up, top to bottom</option>
+          <option value="elastic">Elastic sweep</option>
+          <option value="drop">Drop and bounce</option>
+          <option value="custom">Custom</option>
+        </select></div>
+        <div class="f two"><label for="easing">Transition</label><select id="easing" data-k="easing">
+          <option value="inOut">Ease in and out</option>
+          <option value="linear">Linear</option>
+          <option value="overshoot">Bounce back (overshoot)</option>
+          <option value="anticipate">Wind-up (pull back first)</option>
+          <option value="elastic">Elastic</option>
+          <option value="bounce">Bounce at the end</option>
+          <option value="fade">Fade out, then fade in</option>
+          <option value="fadeTurn">Fade while turning</option>
+        </select></div>
+        <div class="f two"><label for="dir">Direction</label><select id="dir" data-k="dir">
+          <option value="shortest">Shortest way</option>
+          <option value="cw">Clockwise</option>
+          <option value="ccw">Counter-clockwise</option>
+          <option value="opposite">Hands turn opposite ways</option>
+          <option value="extra">Clockwise + one extra turn</option>
+          <option value="spin">Opposite ways + extra turn</option>
+        </select></div>
+        <div class="f two"><label for="stagger">Order</label><select id="stagger" data-k="stagger">
+          <option value="none">All at once</option>
+          <option value="ltr">Left to right</option>
+          <option value="rtl">Right to left</option>
+          <option value="ttb">Top to bottom</option>
+          <option value="diag">Diagonal</option>
+          <option value="center">From the centre</option>
+          <option value="random">Random</option>
+        </select></div>
+        <div class="f"><label for="staggerMs">Delay step</label><input type="range" id="staggerMs" data-k="staggerMs" min="0" max="400" step="10"><span class="val" data-v="staggerMs"></span></div>
+        <div class="f"><label for="dur">Duration</label><input type="range" id="dur" data-k="dur" min="0.3" max="5" step="0.1"><span class="val" data-v="dur"></span></div>
+        <div class="f two"><label for="via">Pass through</label><select id="via" data-k="via">
+          <option value="none">Nothing, go straight</option>
+          <option value="vertical">All vertical</option>
+          <option value="diagonal">All diagonal</option>
+          <option value="burst">Burst from centre</option>
+          <option value="swirl">Swirl around centre</option>
+        </select></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Time</legend>
+        <div class="f two"><label for="mode">Show</label><select id="mode" data-k="mode">
+          <option value="digits">Digits across the grid</option>
+          <option value="analog">An analog clock per display</option>
+        </select></div>
+        <p class="warn" id="fitNote" hidden>Digits need at least 8×3 or 4×6 displays. Showing an analog clock per display instead.</p>
+        <div class="f two"><label for="source">Time source</label><select id="source" data-k="source">
+          <option value="live">Live time</option>
+          <option value="demo">Demo: random time</option>
+        </select></div>
+        <div class="f" id="intervalRow"><label for="interval">Change every</label><input type="range" id="interval" data-k="interval" min="2" max="20" step="1"><span class="val" data-v="interval"></span></div>
+        <label class="chk"><input type="checkbox" id="h24" data-k="h24"> 24-hour</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>View</legend>
+        <div class="chips" id="views">
+          <button class="chip" data-view="fit">Fit to window</button>
+          <button class="chip" data-view="real">Real size</button>
+        </div>
+        <div class="f"><label for="pxmm">Screen scale</label><input type="range" id="pxmm" data-k="pxmm" min="2.5" max="8" step="0.01"><span class="val" data-v="pxmm"></span></div>
+        <label class="chk"><input type="checkbox" id="card" data-k="card"> Show bank card outline</label>
+        <p class="hint">For real size, hold a bank card against the screen and move the slider until the dashed outline matches it.</p>
+      </fieldset>
+    </div>
+
+    <div class="stagewrap">
+      <div class="stage" id="stage">
+        <canvas id="cv" aria-label="To-scale front plate with round displays and clock hands"></canvas>
+        <div class="card" id="cardEl" hidden>85.6 × 54 mm</div>
+      </div>
+      <div class="bar">
+        <div class="chips">
+          <button class="btn primary" id="replay">Replay from idle</button>
+          <button class="btn" id="next">Show next minute</button>
+        </div>
+        <span class="readout" id="shownTime"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const PITCH=45, RING_R=22, DISP_R=16, TAU=Math.PI*2;
+  const N=[225,225];
+  // cells: [TL, TR, ML, MR, BL, BR], angles clockwise from 12 o'clock
+  const DIGITS={
+    "0":[[90,180],[270,180],[0,180],[0,180],[0,90],[0,270]],
+    "1":[N,[180,180],N,[0,180],N,[0,0]],
+    "2":[[90,90],[270,180],[90,180],[270,0],[0,90],[270,270]],
+    "3":[[90,90],[270,180],[90,90],[0,180],[90,90],[0,270]],
+    "4":[[180,180],[180,180],[0,90],[0,180],N,[0,0]],
+    "5":[[90,180],[270,270],[0,90],[270,180],[90,90],[0,270]],
+    "6":[[90,180],[270,270],[0,180],[270,180],[0,90],[0,270]],
+    "7":[[90,90],[270,180],N,[0,180],N,[0,0]],
+    "8":[[90,180],[270,180],[90,180],[270,180],[0,90],[0,270]],
+    "9":[[90,180],[270,180],[0,90],[0,180],[90,90],[0,270]]
+  };
+  const PRESETS={
+    calm:{easing:"inOut",dir:"shortest",stagger:"none",staggerMs:80,dur:1.4,via:"none"},
+    sweep:{easing:"inOut",dir:"cw",stagger:"ltr",staggerMs:110,dur:1.6,via:"none"},
+    ripple:{easing:"overshoot",dir:"shortest",stagger:"center",staggerMs:140,dur:1.3,via:"none"},
+    spin:{easing:"inOut",dir:"spin",stagger:"diag",staggerMs:60,dur:2.6,via:"none"},
+    burst:{easing:"inOut",dir:"shortest",stagger:"center",staggerMs:70,dur:1.4,via:"burst"},
+    swirl:{easing:"inOut",dir:"cw",stagger:"none",staggerMs:0,dur:1.8,via:"swirl"},
+    fade:{easing:"fade",dir:"shortest",stagger:"random",staggerMs:90,dur:1.2,via:"none"},
+    windup:{easing:"anticipate",dir:"shortest",stagger:"ttb",staggerMs:150,dur:1.6,via:"none"},
+    elastic:{easing:"elastic",dir:"shortest",stagger:"ltr",staggerMs:50,dur:1.8,via:"none"},
+    drop:{easing:"bounce",dir:"cw",stagger:"ttb",staggerMs:120,dur:1.5,via:"vertical"}
+  };
+  const SWATCHES={
+    plate:[["#151517","Black"],["#3A3D42","Graphite"],["#8C8F93","Grey"],["#EFEEEA","White"],["#6B4A33","Walnut"],["#5E4570","Purple"]],
+    ring:[["#151517","Black"],["#3A3D42","Graphite"],["#B9BCC0","Silver"],["#EFEEEA","White"],["#B08D57","Brass"],["#8E6AA6","Purple"]],
+    disp:[["#000000","Black"],["#101418","Night"],["#1C2430","Navy"],["#F4F2EC","Paper"]],
+    hand:[["#F5F5F2","White"],["#E8B04A","Amber"],["#FF6A3D","Orange"],["#7FD1FF","Ice"],["#111111","Black"]],
+    wall:[["","Page"],["#E7E4DD","Light wall"],["#FAFAF8","White wall"],["#9A9C9E","Concrete"],["#2A2C2F","Dark wall"],["#B98E5F","Oak desk"]]
+  };
+  const DEF={cols:8,rows:3,margin:15,radius:8,plate:"#151517",ring:"#8E6AA6",disp:"#000000",hand:"#F5F5F2",wall:"",
+    len:92,width:2.2,cap:"round",preset:"sweep",easing:"inOut",dir:"cw",stagger:"ltr",staggerMs:110,dur:1.6,via:"none",
+    mode:"digits",source:"live",interval:6,h24:true,view:"fit",pxmm:3.78,card:false};
+  let S=Object.assign({},DEF);
+  try{const raw=localStorage.getItem("clockgrid-v1");if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}
+  const save=()=>{try{localStorage.setItem("clockgrid-v1",JSON.stringify(S));}catch(e){}};
+
+  const $=id=>document.getElementById(id);
+  const cv=$("cv"), ctx=cv.getContext("2d"), stage=$("stage");
+  const reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------- easing ----------
+  function bounceOut(p){const n=7.5625,d=2.75;if(p<1/d)return n*p*p;if(p<2/d){p-=1.5/d;return n*p*p+.75;}if(p<2.5/d){p-=2.25/d;return n*p*p+.9375;}p-=2.625/d;return n*p*p+.984375;}
+  const EASE={
+    linear:p=>p,
+    inOut:p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2,
+    overshoot:p=>{const c1=2.2,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2);},
+    anticipate:p=>{const c2=1.70158*1.525;return p<.5?(Math.pow(2*p,2)*((c2+1)*2*p-c2))/2:(Math.pow(2*p-2,2)*((c2+1)*(p*2-2)+c2)+2)/2;},
+    elastic:p=>{if(p<=0)return 0;if(p>=1)return 1;const c4=TAU/3;return Math.pow(2,-10*p)*Math.sin((p*10-.75)*c4)+1;},
+    bounce:bounceOut,
+    fade:p=>p<.5?0:1,
+    fadeTurn:p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2
+  };
+  function opacity(ease,p){
+    if(ease==="fade")return p<.5?Math.cos(p*Math.PI)**2:Math.sin((p-.5)*Math.PI)**2;
+    if(ease==="fadeTurn")return 1-.85*Math.sin(p*Math.PI);
+    return 1;
+  }
+
+  // ---------- nodes ----------
+  let nodes=[];
+  function buildNodes(){
+    nodes=[];
+    for(let r=0;r<S.rows;r++)for(let c=0;c<S.cols;c++)nodes.push({c,r,h:[{rest:N[0],segs:[]},{rest:N[1],segs:[]}]});
+  }
+  function handState(h,t){
+    if(!h.segs.length)return {a:h.rest,op:1};
+    let a=h.segs[0].from;
+    for(const s of h.segs){
+      if(t<s.start)return {a:s.from,op:1};
+      if(t<s.start+s.dur){const p=(t-s.start)/s.dur;return {a:s.from+(s.to-s.from)*EASE[s.ease](p),op:opacity(s.ease,p)};}
+      a=s.to;
+    }
+    return {a,op:1};
+  }
+  function delta(from,to,dir,k){
+    let d=((to-from)%360+360)%360; if(d>359.999)d=0;
+    switch(dir){
+      case "cw":return d;
+      case "ccw":return d===0?0:d-360;
+      case "opposite":return k===0?d:(d===0?0:d-360);
+      case "extra":return d+360;
+      case "spin":return k===0?d+360:(d===0?-360:d-360);
+      default:return d>180?d-360:d;
+    }
+  }
+
+  // ---------- time and targets ----------
+  function liveTime(){const d=new Date();return {h:d.getHours(),m:d.getMinutes(),s:d.getSeconds()};}
+  let shown=liveTime(), lastLive=liveTime(), lastDemo=performance.now();
+  function digitLayout(){
+    if(S.cols>=8&&S.rows>=3)return {lines:1,x0:Math.floor((S.cols-8)/2),y0:Math.floor((S.rows-3)/2)};
+    if(S.cols>=4&&S.rows>=6)return {lines:2,x0:Math.floor((S.cols-4)/2),y0:Math.floor((S.rows-6)/2)};
+    return null;
+  }
+  function effMode(){return S.mode==="digits"&&digitLayout()?"digits":"analog";}
+  function analogAngles(t){return [((t.h%12)+t.m/60)*30, t.m*6+(t.s||0)*.1];}
+  function targetsFor(t){
+    const L=effMode()==="digits"?digitLayout():null;
+    const hh=S.h24?t.h:((t.h%12)||12);
+    const str=String(hh).padStart(2,"0")+String(t.m).padStart(2,"0");
+    return nodes.map(n=>{
+      if(!L)return analogAngles(t);
+      const dx=n.c-L.x0, dy=n.r-L.y0;
+      let d,lc,lr;
+      if(L.lines===1){if(dx<0||dx>=8||dy<0||dy>=3)return N;d=Math.floor(dx/2);lc=dx%2;lr=dy;}
+      else{if(dx<0||dx>=4||dy<0||dy>=6)return N;d=(dy>=3?2:0)+Math.floor(dx/2);lc=dx%2;lr=dy%3;}
+      return DIGITS[str[d]][lr*2+lc];
+    });
+  }
+
+  // ---------- animation ----------
+  function staggerDelay(n){
+    const ms=S.staggerMs, cx=(S.cols-1)/2, cy=(S.rows-1)/2;
+    switch(S.stagger){
+      case "ltr":return n.c*ms;
+      case "rtl":return (S.cols-1-n.c)*ms;
+      case "ttb":return n.r*ms;
+      case "diag":return (n.c+n.r)*ms;
+      case "center":return Math.hypot(n.c-cx,n.r-cy)*ms;
+      case "random":return Math.random()*ms*Math.max(S.cols,S.rows)*.8;
+      default:return 0;
+    }
+  }
+  function viaPose(n){
+    const cx=(S.cols-1)/2, cy=(S.rows-1)/2, dx=n.c-cx, dy=n.r-cy;
+    const a=(dx===0&&dy===0)?0:Math.atan2(dx,-dy)*180/Math.PI;
+    switch(S.via){
+      case "vertical":return [0,180];
+      case "diagonal":return [45,225];
+      case "burst":return [a,a];
+      case "swirl":return [a+90,a+90];
+      default:return null;
+    }
+  }
+  function setInstant(targets){nodes.forEach((n,i)=>n.h.forEach((h,k)=>{h.segs=[];h.rest=targets[i][k];}));}
+  function animateTo(targets){
+    if(reduced){setInstant(targets);return;}
+    const now=performance.now(), dur=S.dur*1000;
+    nodes.forEach((n,i)=>{
+      const delay=staggerDelay(n), via=viaPose(n);
+      n.h.forEach((h,k)=>{
+        const cur=handState(h,now).a;
+        h.segs=[]; h.rest=cur;
+        let from=cur, st=now+delay;
+        if(via){const to=from+delta(from,via[k],S.dir==="ccw"?"ccw":"shortest",k);h.segs.push({start:st,dur:dur*.7,from,to,ease:"inOut"});from=to;st+=dur*.7+150;}
+        h.segs.push({start:st,dur,from,to:from+delta(from,targets[i][k],S.dir,k),ease:S.easing});
+      });
+    });
+  }
+  function play(){animateTo(targetsFor(shown));updateShown();}
+  function replay(){setInstant(nodes.map(()=>N));requestAnimationFrame(()=>setTimeout(play,250));}
+
+  // ---------- drawing ----------
+  let scale=1, dpr=1;
+  function dims(){return {W:(S.cols-1)*PITCH+2*RING_R+2*S.margin, H:(S.rows-1)*PITCH+2*RING_R+2*S.margin};}
+  function resize(){
+    const {W,H}=dims();
+    dpr=window.devicePixelRatio||1;
+    if(S.view==="real")scale=S.pxmm;
+    else{const pw=stage.clientWidth-40, ph=stage.clientHeight-40;scale=Math.max(.5,Math.min(pw/W,ph/H));}
+    cv.style.width=(W*scale)+"px"; cv.style.height=(H*scale)+"px";
+    cv.width=Math.round(W*scale*dpr); cv.height=Math.round(H*scale*dpr);
+    const card=$("cardEl");
+    card.hidden=!S.card;
+    card.style.width=(85.6*S.pxmm)+"px"; card.style.height=(53.98*S.pxmm)+"px";
+    $("readout").innerHTML=`Plate <b>${W} × ${H} mm</b> · <b>${S.cols*S.rows}</b> displays · ${S.view==="real"?"real size":"scaled "+(scale/3.78*100).toFixed(0)+" %"}`;
+  }
+  function rr(x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+  function frame(){
+    const t=performance.now(), {W,H}=dims(), k=scale*dpr;
+    const mode=effMode(), live=(mode==="analog"&&S.source==="live")?analogAngles(liveTime()):null;
+    ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.setTransform(k,0,0,k,0,0);
+    rr(0,0,W,H,S.radius); ctx.fillStyle=S.plate; ctx.fill();
+    ctx.lineCap=S.cap;
+    for(const n of nodes){
+      const x=S.margin+RING_R+n.c*PITCH, y=S.margin+RING_R+n.r*PITCH;
+      ctx.beginPath(); ctx.arc(x,y,RING_R,0,TAU); ctx.arc(x,y,DISP_R,0,TAU,true); ctx.fillStyle=S.ring; ctx.fill();
+      ctx.lineWidth=.35; ctx.strokeStyle="rgba(0,0,0,.22)";
+      ctx.beginPath(); ctx.arc(x,y,RING_R-.18,0,TAU); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x,y,DISP_R+.18,0,TAU); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x,y,DISP_R,0,TAU); ctx.fillStyle=S.disp; ctx.fill();
+      ctx.save(); ctx.beginPath(); ctx.arc(x,y,DISP_R,0,TAU); ctx.clip();
+      ctx.strokeStyle=S.hand; ctx.lineWidth=S.width;
+      n.h.forEach((h,i)=>{
+        if(h.segs.length){const last=h.segs[h.segs.length-1];if(t>=last.start+last.dur){h.rest=((last.to%360)+360)%360;h.segs=[];}}
+        if(live&&!h.segs.length)h.rest=live[i];
+        const st=handState(h,t), rad=st.a*Math.PI/180;
+        const L=DISP_R*S.len/100*(mode==="analog"&&i===0?.62:1);
+        ctx.globalAlpha=st.op;
+        ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+Math.sin(rad)*L,y-Math.cos(rad)*L); ctx.stroke();
+      });
+      ctx.globalAlpha=1; ctx.restore();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // ---------- time ticking ----------
+  function updateShown(){
+    const hh=S.h24?String(shown.h).padStart(2,"0"):String((shown.h%12)||12);
+    $("shownTime").textContent=`Showing ${hh}:${String(shown.m).padStart(2,"0")}${S.h24?"":(shown.h<12?" am":" pm")} · ${S.source==="live"?"live":"demo"}`;
+  }
+  setInterval(()=>{
+    if(S.source==="live"){
+      const t=liveTime();
+      if(t.m!==lastLive.m||t.h!==lastLive.h){lastLive=t;shown=t;play();}
+    }else if(performance.now()-lastDemo>S.interval*1000){
+      lastDemo=performance.now();
+      shown={h:Math.floor(Math.random()*24),m:Math.floor(Math.random()*60),s:0};
+      play();
+    }
+  },250);
+
+  // ---------- controls ----------
+  const GRID=new Set(["cols","rows","margin","radius"]);
+  const ANIM=new Set(["easing","dir","stagger","staggerMs","dur","via"]);
+  const fmt={margin:v=>v+" mm",radius:v=>v+" mm",len:v=>v+" %",width:v=>(+v).toFixed(1)+" mm",staggerMs:v=>v+" ms",dur:v=>(+v).toFixed(1)+" s",interval:v=>v+" s",pxmm:v=>(+v).toFixed(2)};
+  function syncInputs(){
+    document.querySelectorAll("[data-k]").forEach(el=>{
+      const k=el.dataset.k;
+      if(el.type==="checkbox")el.checked=!!S[k]; else el.value=S[k];
+    });
+    document.querySelectorAll("[data-v]").forEach(el=>{const k=el.dataset.v;el.textContent=fmt[k]?fmt[k](S[k]):S[k];});
+    $("preset").value=S.preset;
+    $("intervalRow").hidden=S.source!=="demo";
+    $("fitNote").hidden=!(S.mode==="digits"&&!digitLayout());
+    document.querySelectorAll("#sizes .chip").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.c===S.cols&&+b.dataset.r===S.rows));
+    document.querySelectorAll("#views .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.view===S.view));
+    document.querySelectorAll("[data-sw]").forEach(box=>{
+      const k=box.dataset.sw;
+      box.querySelectorAll(".sw").forEach(b=>b.setAttribute("aria-pressed",b.dataset.color.toLowerCase()===String(S[k]).toLowerCase()));
+      const ci=box.querySelector("input[type=color]"); if(ci&&S[k])ci.value=S[k];
+    });
+    stage.style.background=S.wall||"";
+  }
+  function regrid(){
+    S.cols=Math.max(1,Math.min(16,Math.round(S.cols)||1));
+    S.rows=Math.max(1,Math.min(16,Math.round(S.rows)||1));
+    buildNodes(); setInstant(targetsFor(shown)); resize();
+  }
+  document.querySelectorAll("[data-k]").forEach(el=>{
+    const ev=(el.tagName==="SELECT"||el.type==="checkbox"||el.type==="number")?"change":"input";
+    el.addEventListener(ev,()=>{
+      const k=el.dataset.k;
+      S[k]=el.type==="checkbox"?el.checked:(el.type==="range"||el.type==="number")?parseFloat(el.value):el.value;
+      if(GRID.has(k))regrid();
+      if(ANIM.has(k))S.preset="custom";
+      if(k==="mode"||k==="h24"){setTimeout(play,0);}
+      if(k==="source"){shown=S.source==="live"?liveTime():shown;lastDemo=performance.now();play();}
+      if(k==="pxmm"||k==="card")resize();
+      syncInputs(); save();
+    });
+  });
+  $("preset").addEventListener("change",e=>{
+    const p=PRESETS[e.target.value]; S.preset=e.target.value;
+    if(p)Object.assign(S,p);
+    syncInputs(); save(); if(p)replay();
+  });
+  document.querySelectorAll("#sizes .chip").forEach(b=>b.addEventListener("click",()=>{S.cols=+b.dataset.c;S.rows=+b.dataset.r;regrid();syncInputs();save();}));
+  document.querySelectorAll("#views .chip").forEach(b=>b.addEventListener("click",()=>{S.view=b.dataset.view;resize();syncInputs();save();}));
+  document.querySelectorAll("[data-sw]").forEach(box=>{
+    const k=box.dataset.sw;
+    SWATCHES[k].forEach(([c,name])=>{
+      const b=document.createElement("button");
+      b.className="sw"; b.type="button"; b.dataset.color=c; b.title=name; b.setAttribute("aria-label",name);
+      b.style.background=c||"var(--stage)";
+      b.addEventListener("click",()=>{S[k]=c;syncInputs();save();});
+      box.appendChild(b);
+    });
+    if(k!=="wall"){
+      const ci=document.createElement("input"); ci.type="color"; ci.id="c-"+k; ci.setAttribute("aria-label","Custom colour");
+      ci.addEventListener("input",()=>{S[k]=ci.value;syncInputs();save();});
+      box.appendChild(ci);
+    }
+  });
+  $("replay").addEventListener("click",replay);
+  $("next").addEventListener("click",()=>{
+    let m=shown.m+1,h=shown.h; if(m>=60){m=0;h=(h+1)%24;}
+    shown={h,m,s:0}; lastDemo=performance.now(); play();
+  });
+  window.addEventListener("resize",resize);
+  if(window.ResizeObserver)new ResizeObserver(resize).observe(stage);
+
+  // ---------- start ----------
+  buildNodes(); setInstant(targetsFor(shown)); syncInputs(); resize(); updateShown();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
