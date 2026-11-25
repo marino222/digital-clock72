@@ -134,8 +134,6 @@ The address is not stored in flash. It is found again at every boot and kept whi
 
 ## Build and flash
 
-*The project does not exist yet. Planned:*
-
 | Env | Upload |
 | --- | --- |
 | `pico` | USB (BOOTSEL) |
