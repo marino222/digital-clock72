@@ -799,14 +799,13 @@ The CAD model of the prototype is in this [Onshape document](https://cad.onshape
 
 ### Assembly
 
-Each node is a stack of five parts (Figure 1, front to back): the cover ring, the front plate, the display, the bracket and the PCB. The PCB clips onto the back of the bracket, the display sits in front of it, and the cover ring locks it into the front plate.
+Each node is a stack of five parts (Figure 1, front to back): the cover ring, the front plate, the display, the bracket and the PCB. The passes through slots in the front plate and clips into joints on the back plate. In this prototype the PCB is simply taped to the back plate, since the planned clipping mechanism was difficult to print.
 
 <p align="center">
   <img src="/docs/images/prototype-exploded-view.png" alt="Exploded view of the 2x2 prototype" width="600"><br>
   <sub><b>Figure 1:</b> Exploded view of one node in the 2×2 front plate</sub>
 </p>
 
-### Results
 
 <table>
   <tr>
@@ -821,6 +820,11 @@ Each node is a stack of five parts (Figure 1, front to back): the cover ring, th
 
 ### Findings
 
-<!-- TODO: findings -->
+**1. The JST cables stick out too far**
+The mechanics are designed to be as slim as possible, but the daisy-chain cables form a loop that sticks out far behind the PCBs (Figure 3). The vertical JST GH connectors make each cable leave the board straight back, and the cable has to be long enough to bend over to the next node. The next revision has to find a slimmer solution.
+
+**2. The PCB clip-on is not good enough**
+The pins and the clip on the bracket are too small to print properly. The snap features also stick out, so they need support material that is hard to remove.
+Next revision: replace the edge cutouts with 3–4 holes in the PCB. The cover ring gets matching pins that pass through the front plate and the bracket and clip into the PCB holes, which clamps the stack into a sandwich. The cover ring diameter sets where the holes go, so some PCB components may have to move to make room. The PCB can then no longer be removed on its own. That is acceptable, and the parts become easier to print.
 
 </details>

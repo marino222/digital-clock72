@@ -72,15 +72,13 @@ Why the nodes have to render locally comes down to three numbers:
 - **Streaming pixels would need ≈ 475 MB/s** for 72 screens at 60 FPS. The RS485 bus carries about 1 Mbit/s, several hundred times too little.
 - **A state packet for all 72 nodes is at most 295 bytes.** At 60 Hz that uses about 18 % of the bus, no matter how many screens are listening.
 
-Because every node hears the same packet at the same time, the array stays in sync automatically. The packet format is described in [`tests/`](tests/README.md) (phase 3.1). More on the master in [`master/README.md`](master/README.md), the nodes in [`slave/README.md`](slave/README.md), the hardware in [`pcb/README.md`](pcb/README.md) and the mechanics in [`mechanical/README.md`](mechanical/README.md).
+Because every node hears the same packet at the same time, the array stays in sync automatically. The packet format is described in [`tests/`](tests/README.md) (phase 3.1). The software principles are in [`software/README.md`](software/README.md), more on the master in [`software/master/README.md`](software/master/README.md), the nodes in [`software/slave/README.md`](software/slave/README.md), the hardware in [`pcb/README.md`](pcb/README.md) and the mechanics in [`mechanical/README.md`](mechanical/README.md).
 
 ### What will be displayed
 
 - **Time:** the original purpose, digits and clock faces drawn across the grid.
 - **Geometric and animated patterns:** motion across the whole grid, with easing instead of sudden jumps.
-- **A snake game:** one game played across the entire array at once.
 - **Small widgets:** controlled from the master's web page.
-- **GIFs**
 
 ---
 
@@ -89,8 +87,9 @@ Because every node hears the same packet at the same time, the array stays in sy
 
 | Path | Tech | Role | Status |
 |---|---|---|---|
-| [`master/`](master/README.md) | C++ (PlatformIO), ESP32-S3 | Global logic, time sync, animations, games, web UI, RS485 broadcast | Platform chosen, not started |
-| [`slave/`](slave/README.md) | C++ (PlatformIO), RP2040 | Framebuffer + SPI/DMA rendering, RS485 receive, auto-addressing | Test firmware in `tests/` |
+| [`software/`](software/README.md) | C++ (PlatformIO) | Base principles for master and slave, shared RS485 protocol | Principles defined |
+| [`software/master/`](software/master/README.md) | C++ (PlatformIO), ESP32-S3 | Global logic, time sync, animations, games, web UI, RS485 broadcast | Platform chosen, not started |
+| [`software/slave/`](software/slave/README.md) | C++ (PlatformIO), RP2040 | Framebuffer + SPI/DMA rendering, RS485 receive, auto-addressing | Test firmware in `tests/` |
 | [`pcb/`](pcb/README.md) | KiCad | Node board: RP2040, display connector, RS485, power, USB-C/SWD | v1.0 built and verified |
 | [`mechanical/`](mechanical/README.md) | Onshape | Brackets, front plate, PCB outline constraints | 2×2 prototype in progress |
 | [`power/`](power/README.md) | — | Power supply and wiring, based on measured values | Measured, wiring defined |

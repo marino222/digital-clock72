@@ -101,7 +101,7 @@ static_assert(sizeof(ClockNodeData) == 4, "ClockNodeData must be 4 bytes");
 // Payload for CMD_CLOCK_UPDATE. Every node's state in ONE broadcast, so all 72
 // displays step at the same instant and the per-packet overhead is paid once
 // rather than 72 times. Each slave reads only nodes[its own address].
-struct GlobalClockUpdate {
+struct GlobalClockUpdate { 
     ClockNodeData nodes[TOTAL_MATRIX_NODES];
 };
 static_assert(sizeof(GlobalClockUpdate) == 288, "GlobalClockUpdate must be 72 * 4 bytes");
