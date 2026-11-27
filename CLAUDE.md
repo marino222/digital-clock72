@@ -10,8 +10,10 @@ Applies to all docs, READMEs, code comments and replies.
 
 ## Workflow
 - The user designs the architecture. Claude is a sparring partner: explain options,
-  challenge decisions, review drafts. No firmware code until the user says the
-  architecture part is settled.
+  challenge decisions, review drafts. No firmware code for a module until the
+  user says its interface is settled.
+- Contracts first (protocol, mailbox, anything both cores or both sides use).
+  Then the code in vertical slices, each one testable on the hardware.
 - Everything written into architecture docs goes through the user first.
 
 ## Software
@@ -41,6 +43,12 @@ Applies to all docs, READMEs, code comments and replies.
 ## Code
 - One .h/.cpp pair per own module. The header is the interface.
   Exceptions: config headers (LGFX_Config.hpp, pin definitions) and shared/protocol.h.
+- Every module is a namespace, protocol.h is `namespace protocol`. Where the origin
+  of a name is not clear at first glance, write it out: `protocol::parseAddrFrame()`,
+  `mailbox::setAddress()`.
+- The user co-authors the code to understand it. One module at a time: Claude writes
+  it, walks the user through it in simple terms, and waits for feedback before the
+  next module. Larger modules go one function at a time.
 
 ## Tests (tests/)
 - Minimal test projects: one behaviour, envs `pico` (USB) and `pico_swd` (CMSIS-DAP).

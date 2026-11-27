@@ -16,6 +16,7 @@ All tests carried out are described in this directory. The tests are split into 
 | [`phase-5.1-rs485-sender/`](phase-5.1-rs485-sender/) | Sends a byte counter over RS485 and toggles ADDR/SPARE, for tests I and J |
 | [`phase-5.1-rs485-receiver/`](phase-5.1-rs485-receiver/) | Checks the byte counter for errors and shows ADDR/SPARE levels, for tests I and J |
 | [`phase-5.1-power-chain/`](phase-5.1-power-chain/) | Steps through backlight, CPU and screen scenarios for the power test in L |
+| [`phase-5.2b-addr-test-master/`](phase-5.2b-addr-test-master/) | Disposable ESP32 master for the auto-addressing test on the 2×2 |
 
 
 <details>
@@ -828,3 +829,75 @@ The pins and the clip on the bracket are too small to print properly. The snap f
 Next revision: replace the edge cutouts with 3–4 holes in the PCB. The cover ring gets matching pins that pass through the front plate and the bracket and clip into the PCB holes, which clamps the stack into a sandwich. The cover ring diameter sets where the holes go, so some PCB components may have to move to make room. The PCB can then no longer be removed on its own. That is acceptable, and the parts become easier to print.
 
 </details>
+
+<details id="auto-addressing">
+<summary><strong>5.2b Auto-addressing</strong></summary>
+
+### Objective
+
+First slice of the slave firmware on the 2×2 from 5.2a. Every node finds its address over the ADDR chain and shows it on screen. This tests:
+
+- `TRUNK` and `ROW` forwarding over `ADDR_OUT` and `ADDR_ROW_OUT`
+- the hand-soldered T-connectors
+- independence from boot order
+- `NONE` propagation after a layout error
+- a layout change at runtime
+
+The slave runs [`software/slave`](/software/slave/). The master is a disposable test master on a classic ESP32 dev board, not the final ESP32-S3. It uses [`software/shared/protocol.h`](/software/shared/protocol.h) directly, with no copy. The tag is set once the test passes.
+
+### Wiring
+
+| ESP32 | To | Job |
+|---|---|---|
+| GPIO17 (UART2 TX) | breakout DI | RS485 out |
+| GPIO16 (UART2 RX) | breakout RO | wired, not used |
+| GPIO4 | breakout DE and RE | held HIGH: always transmitting |
+| GPIO25 (UART1 TX) | T1, then `ADDR_IN` of node 0 | `TRUNK(0)` |
+| 3V3 | breakout VCC | breakout supply |
+| GND | breakout, nodes | shared ground |
+
+The breakout is the same RS485 module as in 2.1. The nodes are chained as in the [slave README](/software/slave/README.md#addressing): T1 joins the master and row 0, and T2 branches off to row 1.
+
+### What the test master sends
+
+| Link | Frame | Content | Repeat |
+|---|---|---|---|
+| ADDR | `TRUNK(0)` | layout, default `[2, 2]` | every 100 ms |
+| RS485 | `CMD_DISPLAY` | 90°, brightness 179 (70 %) | every 5 s |
+| RS485 | `CMD_DIAGNOSTIC` | mode, default 1 (show address) | every 5 s |
+
+A command sends its frame at once, then the repeat goes on. The test master prints only in reply to a command.
+
+| Command | Effect | Reply |
+|---|---|---|
+| `l 2 2` | layout: nodes per row, one number per row | `layout: 2 2` |
+| `d 1` / `d 0` | diagnostic mode: show address / normal | `diag: 1` |
+
+### How to test
+
+```bash
+pio run -d ./software/slave -e pico_swd -t upload                  # each node, same binary
+pio run -d ./tests/phase-5.2b-addr-test-master -t upload
+pio device monitor -d ./tests/phase-5.2b-addr-test-master
+```
+
+What to check, in order:
+
+| # | Step | Expected |
+|---|---|---|
+| 1 | Power on the master, then all nodes | Row 0: slot 0, 1. Row 1: slot 2, 3 |
+| 2 | Power the nodes in a different order | Same addresses within about 100 ms |
+| 3 | `d 0` | All four show "..." |
+| 4 | `d 1` | All four show their address again |
+| 5 | Unplug the ADDR wire at the master | Addresses stay |
+| 6 | Plug it back in, then `l 4` | Row 0 stays. Row 1 shows "No address" |
+| 7 | `l 2 2` | All four show their address again |
+
+Step 6 checks the error path: row 1 is not in the layout, so its first node drops its address and sends `NONE` to the next node.
+
+### Results
+
+Not run yet.
+
+</details>
+

@@ -70,7 +70,7 @@ Why the nodes have to render locally comes down to three numbers:
 
 - **One frame is 112.5 KiB.** 240 × 240 pixels at 16-bit color. The RP2040's 264 KiB of SRAM fits a double buffer for its own screen, but no more.
 - **Streaming pixels would need ≈ 475 MB/s** for 72 screens at 60 FPS. The RS485 bus carries about 1 Mbit/s, several hundred times too little.
-- **A state packet for all 72 nodes is at most 295 bytes.** At 60 Hz that uses about 18 % of the bus, no matter how many screens are listening.
+- **A state packet for all 72 nodes is at most 296 bytes.** At 60 Hz that uses about 18 % of the bus, no matter how many screens are listening.
 
 Because every node hears the same packet at the same time, the array stays in sync automatically. The packet format is described in [`tests/`](tests/README.md) (phase 3.1). The software principles are in [`software/README.md`](software/README.md), more on the master in [`software/master/README.md`](software/master/README.md), the nodes in [`software/slave/README.md`](software/slave/README.md), the hardware in [`pcb/README.md`](pcb/README.md) and the mechanics in [`mechanical/README.md`](mechanical/README.md).
 

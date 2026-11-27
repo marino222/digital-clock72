@@ -1,6 +1,9 @@
 #include <unity.h>
 #include "protocol.h"
 
+// This file only tests protocol.h, so the prefix is left out here.
+using namespace protocol;
+
 // Scratch buffers reused across tests. Sized to the protocol's own maxima so a
 // valid frame can never overflow them -- the same constants the real code uses.
 static uint8_t encoded[MAX_ENCODED_FRAME];
@@ -35,6 +38,7 @@ void test_clock_init_round_trip(void) {
     ParseResult r = parseFrame(encoded, n - 1,   // strip the delimiter, as the RX loop would
                                scratch, sizeof(scratch), &f);
     TEST_ASSERT_EQUAL(PARSE_OK, r);
+    TEST_ASSERT_EQUAL_UINT8(PROTOCOL_VERSION, f.header.version);
     TEST_ASSERT_EQUAL_UINT8(CMD_CLOCK_INIT, f.header.command);
     TEST_ASSERT_EQUAL_UINT8(5,  f.header.targetNode);
     TEST_ASSERT_EQUAL_UINT8(42, f.header.sequence);
@@ -91,7 +95,7 @@ void test_cobs_worst_case_round_trip(void) {
 // confirm the receiver recovers exactly the used length AND the right bytes.
 void test_widget_update_variable_length(void) {
     WidgetUpdateData w{};
-    w.fieldId = 7;
+    w.fieldId = MAX_WIDGET_FIELDS - 1;
     w.data[0] = 0xAB;
     w.data[1] = 0xCD;
     size_t used = 1 + 2;   // fieldId + two data bytes
@@ -104,7 +108,7 @@ void test_widget_update_variable_length(void) {
     TEST_ASSERT_EQUAL(PARSE_OK,
         parseFrame(encoded, n - 1, scratch, sizeof(scratch), &f));
     TEST_ASSERT_EQUAL_UINT32(used, f.payloadLen);   // recovered, not the full struct size
-    TEST_ASSERT_EQUAL_UINT8(7,    f.payload[0]);    // fieldId
+    TEST_ASSERT_EQUAL_UINT8(MAX_WIDGET_FIELDS - 1, f.payload[0]);    // fieldId
     TEST_ASSERT_EQUAL_UINT8(0xAB, f.payload[1]);
     TEST_ASSERT_EQUAL_UINT8(0xCD, f.payload[2]);
 }
@@ -114,6 +118,7 @@ void test_widget_update_variable_length(void) {
 void test_widget_update_length_bounds(void) {
     uint8_t buf[2 + MAX_WIDGET_DATA] = {};   // room to deliberately overshoot
     for (size_t i = 0; i < sizeof(buf); i++) buf[i] = uint8_t(i + 1);
+    buf[0] = 0;   // fieldId must stay in range
 
     Frame f{};
     size_t n;
@@ -153,9 +158,10 @@ void test_widget_update_length_bounds(void) {
 // which the COBS decoder rejects first and the checksum never sees.
 void test_corrupted_payload_fails_checksum(void) {
     uint8_t body[FRAME_OVERHEAD + sizeof(ClockInitData)] = {};
-    body[0] = CMD_CLOCK_INIT;
-    body[1] = 0;    // targetNode
-    body[2] = 0;    // sequence
+    body[0] = PROTOCOL_VERSION;
+    body[1] = CMD_CLOCK_INIT;
+    body[2] = 0;    // targetNode
+    body[3] = 0;    // sequence
     for (size_t i = 0; i < sizeof(ClockInitData); i++) {
         body[sizeof(ProtocolHeader) + i] = uint8_t(0x10 + i);
     }
@@ -163,7 +169,7 @@ void test_corrupted_payload_fails_checksum(void) {
     const size_t bodyLen = sizeof(ProtocolHeader) + sizeof(ClockInitData);
     body[bodyLen] = calculateChecksum(body, bodyLen);
 
-    body[5] ^= 0xFF;   // corrupt a payload byte AFTER checksumming it
+    body[6] ^= 0xFF;   // corrupt a payload byte AFTER checksumming it
 
     size_t enc = cobsEncode(body, bodyLen + 1, encoded, sizeof(encoded));
     TEST_ASSERT_NOT_EQUAL(0, enc);
@@ -175,11 +181,11 @@ void test_corrupted_payload_fails_checksum(void) {
 
 // A command byte that is not a known CommandType must be rejected as such.
 // buildFrame() only accepts a CommandType, so we forge the frame by hand: a
-// 3-byte header with a bogus command, a valid checksum, then COBS-encode it.
+// 4-byte header with a bogus command, a valid checksum, then COBS-encode it.
 void test_unknown_command_rejected(void) {
-    uint8_t frame[4] = { 0x7F, 0, 0, 0 };           // 0x7F is not a CommandType
-    frame[3] = calculateChecksum(frame, 3);         // checksum over the 3 header bytes
-    size_t enc = cobsEncode(frame, 4, encoded, sizeof(encoded));
+    uint8_t frame[5] = { PROTOCOL_VERSION, 0x7F, 0, 0, 0 };  // 0x7F is not a CommandType
+    frame[4] = calculateChecksum(frame, 4);         // checksum over the 4 header bytes
+    size_t enc = cobsEncode(frame, 5, encoded, sizeof(encoded));
     TEST_ASSERT_NOT_EQUAL(0, enc);
 
     Frame f{};
@@ -189,11 +195,9 @@ void test_unknown_command_rejected(void) {
 
 // A frame too short to hold even a header + checksum must be PARSE_ERR_SHORT.
 void test_short_frame_rejected(void) {
-    uint8_t body[] = { CMD_CLOCK_INIT, 0 };         // only 2 bytes, no room for a real frame
-    uint8_t frame[3];
-    frame[0] = body[0]; frame[1] = body[1];
-    frame[2] = calculateChecksum(frame, 2);
-    size_t enc = cobsEncode(frame, 3, encoded, sizeof(encoded));
+    uint8_t frame[4] = { PROTOCOL_VERSION, CMD_CLOCK_INIT, 0, 0 };  // 3 bytes + checksum, header needs 4
+    frame[3] = calculateChecksum(frame, 3);
+    size_t enc = cobsEncode(frame, 4, encoded, sizeof(encoded));
 
     Frame f{};
     ParseResult r = parseFrame(encoded, enc - 1, scratch, sizeof(scratch), &f);
@@ -303,7 +307,7 @@ void test_build_refuses_small_out_buffer(void) {
 // Same guarantee on the receive side: a scratch buffer too small for the
 // decoded frame must fail the parse, not overflow the slave's buffer.
 void test_parse_refuses_small_scratch(void) {
-    GlobalClockUpdate upd{};   // decodes to 292 bytes
+    GlobalClockUpdate upd{};   // decodes to 293 bytes
     size_t n = buildFrame(CMD_CLOCK_UPDATE, GLOBAL_BROADCAST_ID, 0, &upd, sizeof(upd),
                           encoded, sizeof(encoded));
     TEST_ASSERT_NOT_EQUAL(0, n);
@@ -312,6 +316,192 @@ void test_parse_refuses_small_scratch(void) {
     Frame f{};
     TEST_ASSERT_EQUAL(PARSE_ERR_COBS,
         parseFrame(encoded, n - 1, tinyScratch, sizeof(tinyScratch), &f));
+}
+
+// ---------------------------------------------------------------------------
+// Protocol version (byte 0 of every frame).
+// ---------------------------------------------------------------------------
+
+// A frame from another protocol version must be rejected, and the received
+// version must still reach the caller for the "Protocol vX, expected vY" screen.
+void test_version_mismatch_reported(void) {
+    uint8_t body[FRAME_OVERHEAD + sizeof(DiagnosticData)] = {
+        uint8_t(PROTOCOL_VERSION + 1), CMD_DIAGNOSTIC, 0, 0, DIAG_NORMAL, 0 };
+    const size_t bodyLen = sizeof(body) - 1;
+    body[bodyLen] = calculateChecksum(body, bodyLen);
+    size_t enc = cobsEncode(body, sizeof(body), encoded, sizeof(encoded));
+    TEST_ASSERT_NOT_EQUAL(0, enc);
+
+    Frame f{};
+    TEST_ASSERT_EQUAL(PARSE_ERR_VERSION,
+        parseFrame(encoded, enc - 1, scratch, sizeof(scratch), &f));
+    TEST_ASSERT_EQUAL_UINT8(PROTOCOL_VERSION + 1, f.header.version);
+}
+
+void test_diagnostic_round_trip(void) {
+    DiagnosticData d{ DIAG_SHOW_ADDRESS };
+    size_t n = buildFrame(CMD_DIAGNOSTIC, GLOBAL_BROADCAST_ID, 0, &d, sizeof(d),
+                          encoded, sizeof(encoded));
+    TEST_ASSERT_NOT_EQUAL(0, n);
+
+    Frame f{};
+    TEST_ASSERT_EQUAL(PARSE_OK,
+        parseFrame(encoded, n - 1, scratch, sizeof(scratch), &f));
+    TEST_ASSERT_EQUAL_UINT32(sizeof(DiagnosticData), f.payloadLen);
+    TEST_ASSERT_EQUAL_UINT8(DIAG_SHOW_ADDRESS, f.payload[0]);
+}
+
+void test_display_round_trip(void) {
+    DisplayData d{ 1, 200 };   // 90 degrees, duty 200
+    size_t n = buildFrame(CMD_DISPLAY, GLOBAL_BROADCAST_ID, 0, &d, sizeof(d),
+                          encoded, sizeof(encoded));
+    TEST_ASSERT_NOT_EQUAL(0, n);
+
+    Frame f{};
+    TEST_ASSERT_EQUAL(PARSE_OK,
+        parseFrame(encoded, n - 1, scratch, sizeof(scratch), &f));
+    TEST_ASSERT_EQUAL_UINT32(sizeof(DisplayData), f.payloadLen);
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(&d, f.payload, sizeof(d));
+}
+
+// ---------------------------------------------------------------------------
+// ADDR chain.
+// ---------------------------------------------------------------------------
+
+static uint8_t addrEncoded[MAX_ADDR_ENCODED_FRAME];
+static uint8_t addrScratch[MAX_ADDR_DECODED_FRAME];
+
+// The 2x2 from the slave README: two rows of two. Row 1 starts at slot 2.
+void test_addr_trunk_round_trip(void) {
+    AddrTrunkData t{};
+    t.row = 1;
+    t.rowCount = 2;
+    t.rowLengths[0] = 2;
+    t.rowLengths[1] = 2;
+
+    size_t n = buildAddrTrunk(t, addrEncoded, sizeof(addrEncoded));
+    TEST_ASSERT_NOT_EQUAL(0, n);
+
+    AddrFrame a{};
+    TEST_ASSERT_EQUAL(PARSE_OK,
+        parseAddrFrame(addrEncoded, n - 1, addrScratch, sizeof(addrScratch), &a));
+    TEST_ASSERT_EQUAL_UINT8(ADDR_TRUNK, a.type);
+    TEST_ASSERT_EQUAL_UINT8(1, a.row);
+    TEST_ASSERT_EQUAL_UINT8(0, a.pos);
+    TEST_ASSERT_EQUAL_UINT8(2, a.slot);
+    TEST_ASSERT_EQUAL_UINT8(2, a.rowLength);
+    TEST_ASSERT_EQUAL_UINT8(2, a.rowCount);
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(t.rowLengths, a.rowLengths, 2);
+}
+
+void test_addr_row_round_trip(void) {
+    AddrRowData r{ 1, 1, 3, 2 };   // row 1, pos 1, slot 3, row length 2
+
+    size_t n = buildAddrRow(r, addrEncoded, sizeof(addrEncoded));
+    TEST_ASSERT_NOT_EQUAL(0, n);
+
+    AddrFrame a{};
+    TEST_ASSERT_EQUAL(PARSE_OK,
+        parseAddrFrame(addrEncoded, n - 1, addrScratch, sizeof(addrScratch), &a));
+    TEST_ASSERT_EQUAL_UINT8(ADDR_ROW, a.type);
+    TEST_ASSERT_EQUAL_UINT8(1, a.row);
+    TEST_ASSERT_EQUAL_UINT8(1, a.pos);
+    TEST_ASSERT_EQUAL_UINT8(3, a.slot);
+    TEST_ASSERT_EQUAL_UINT8(2, a.rowLength);
+    TEST_ASSERT_NULL(a.rowLengths);
+}
+
+// The largest ADDR frame: 72 rows of one node, no zero bytes.
+// It must land exactly on MAX_ADDR_ENCODED_FRAME.
+void test_addr_trunk_worst_case_size(void) {
+    AddrTrunkData t{};
+    t.row = 1;
+    t.rowCount = MAX_ADDR_ROWS;
+    for (uint8_t i = 0; i < MAX_ADDR_ROWS; i++) t.rowLengths[i] = 1;
+
+    size_t n = buildAddrTrunk(t, addrEncoded, sizeof(addrEncoded));
+    TEST_ASSERT_EQUAL_UINT32(MAX_ADDR_ENCODED_FRAME, n);
+
+    AddrFrame a{};
+    TEST_ASSERT_EQUAL(PARSE_OK,
+        parseAddrFrame(addrEncoded, n - 1, addrScratch, sizeof(addrScratch), &a));
+    TEST_ASSERT_EQUAL_UINT8(1, a.slot);
+}
+
+// Each "No address" case from the slave README must give PARSE_ERR_LAYOUT.
+void test_addr_layout_errors(void) {
+    AddrFrame a{};
+    size_t n;
+
+    // More rows wired than configured: row >= rowCount.
+    AddrTrunkData t{};
+    t.row = 2; t.rowCount = 2; t.rowLengths[0] = 2; t.rowLengths[1] = 2;
+    n = buildAddrTrunk(t, addrEncoded, sizeof(addrEncoded));
+    TEST_ASSERT_EQUAL(PARSE_ERR_LAYOUT,
+        parseAddrFrame(addrEncoded, n - 1, addrScratch, sizeof(addrScratch), &a));
+
+    // A row of length 0.
+    t.row = 0; t.rowLengths[1] = 0;
+    n = buildAddrTrunk(t, addrEncoded, sizeof(addrEncoded));
+    TEST_ASSERT_EQUAL(PARSE_ERR_LAYOUT,
+        parseAddrFrame(addrEncoded, n - 1, addrScratch, sizeof(addrScratch), &a));
+
+    // More nodes in the layout than slots.
+    t.rowLengths[0] = 40; t.rowLengths[1] = 40;
+    n = buildAddrTrunk(t, addrEncoded, sizeof(addrEncoded));
+    TEST_ASSERT_EQUAL(PARSE_ERR_LAYOUT,
+        parseAddrFrame(addrEncoded, n - 1, addrScratch, sizeof(addrScratch), &a));
+
+    // Row longer than configured: pos >= rowLength.
+    AddrRowData r{ 0, 2, 2, 2 };
+    n = buildAddrRow(r, addrEncoded, sizeof(addrEncoded));
+    TEST_ASSERT_EQUAL(PARSE_ERR_LAYOUT,
+        parseAddrFrame(addrEncoded, n - 1, addrScratch, sizeof(addrScratch), &a));
+
+    // Slot past the last node.
+    r = AddrRowData{ 0, 1, TOTAL_MATRIX_NODES, 2 };
+    n = buildAddrRow(r, addrEncoded, sizeof(addrEncoded));
+    TEST_ASSERT_EQUAL(PARSE_ERR_LAYOUT,
+        parseAddrFrame(addrEncoded, n - 1, addrScratch, sizeof(addrScratch), &a));
+}
+
+void test_addr_none_round_trip(void) {
+    size_t n = buildAddrNone(addrEncoded, sizeof(addrEncoded));
+    TEST_ASSERT_NOT_EQUAL(0, n);
+
+    AddrFrame a{};
+    a.slot = 5;   // must be cleared by the parse
+    TEST_ASSERT_EQUAL(PARSE_OK,
+        parseAddrFrame(addrEncoded, n - 1, addrScratch, sizeof(addrScratch), &a));
+    TEST_ASSERT_EQUAL_UINT8(ADDR_NONE, a.type);
+    TEST_ASSERT_EQUAL_UINT8(0, a.slot);
+    TEST_ASSERT_NULL(a.rowLengths);
+}
+
+// buildAddrTrunk must refuse a row count it cannot send.
+void test_addr_trunk_bad_row_count_refused(void) {
+    AddrTrunkData t{};
+    t.rowCount = 0;
+    TEST_ASSERT_EQUAL(0, buildAddrTrunk(t, addrEncoded, sizeof(addrEncoded)));
+    t.rowCount = MAX_ADDR_ROWS + 1;
+    TEST_ASSERT_EQUAL(0, buildAddrTrunk(t, addrEncoded, sizeof(addrEncoded)));
+}
+
+// fieldId and fieldCount above MAX_WIDGET_FIELDS must be rejected.
+void test_widget_field_out_of_range_rejected(void) {
+    Frame f{};
+
+    WidgetUpdateData w{};
+    w.fieldId = MAX_WIDGET_FIELDS;
+    size_t n = buildFrame(CMD_WIDGET_UPDATE, 0, 0, &w, 2, encoded, sizeof(encoded));
+    TEST_ASSERT_EQUAL(PARSE_ERR_FIELD,
+        parseFrame(encoded, n - 1, scratch, sizeof(scratch), &f));
+
+    WidgetInitData wi{};
+    wi.fieldCount = MAX_WIDGET_FIELDS + 1;
+    n = buildFrame(CMD_WIDGET_INIT, 0, 0, &wi, sizeof(wi), encoded, sizeof(encoded));
+    TEST_ASSERT_EQUAL(PARSE_ERR_FIELD,
+        parseFrame(encoded, n - 1, scratch, sizeof(scratch), &f));
 }
 
 int main(int, char**) {
@@ -323,6 +513,7 @@ int main(int, char**) {
     RUN_TEST(test_cobs_worst_case_round_trip);
     RUN_TEST(test_widget_update_variable_length);
     RUN_TEST(test_widget_update_length_bounds);
+    RUN_TEST(test_widget_field_out_of_range_rejected);
 
     // Rejection paths
     RUN_TEST(test_corrupted_payload_fails_checksum);
@@ -339,6 +530,19 @@ int main(int, char**) {
     RUN_TEST(test_null_payload_refused);
     RUN_TEST(test_build_refuses_small_out_buffer);
     RUN_TEST(test_parse_refuses_small_scratch);
+
+    // Protocol version
+    RUN_TEST(test_version_mismatch_reported);
+    RUN_TEST(test_diagnostic_round_trip);
+    RUN_TEST(test_display_round_trip);
+
+    // ADDR chain
+    RUN_TEST(test_addr_trunk_round_trip);
+    RUN_TEST(test_addr_row_round_trip);
+    RUN_TEST(test_addr_trunk_worst_case_size);
+    RUN_TEST(test_addr_layout_errors);
+    RUN_TEST(test_addr_none_round_trip);
+    RUN_TEST(test_addr_trunk_bad_row_count_refused);
 
     return UNITY_END();
 }
